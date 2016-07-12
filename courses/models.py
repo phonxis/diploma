@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 class Subject(models.Model):
@@ -42,4 +44,14 @@ class Module(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Content(models.Model):
+    module = models.ForeignKey(Module, related_name="contents")
+    # связь с моделью contentType
+    content_type = models.ForeignKey(ContentType)
+    # сохранение PK связанного объекта
+    object_id = models.PositiveIntegerField()
+    # определение обобщенной связи
+    content_object = GenericForeignKey('content_type', 'object_id')
 
