@@ -51,7 +51,7 @@ class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
     """
 
     # указание полей для форм дочерних классов
-    fields = ['subject', 'title', 'slug', 'overview']
+    fields = ['subject', 'title', 'slug', 'description']
     # указание, куда будет перенаправлен пользователь
     # после подтверждения формы.
     # manage_course_list это имя URL в url.py
