@@ -2,33 +2,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<link rel="stylesheet" href="">
+    <meta charset="UTF-8">
+    <title>{% block title %}Educa{% endblock %}</title>
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
-	<header>
-		<a href="/">phonxis</a>
-		<ul>
-			{% if request.user.is_authenticated %}
-				<li>
-					<a href="{% url 'logout' %}">Logout</a>
-				</li>
-			{% else %}
-				<li>
-					<a href="{% url 'login' %}">Login</a>
-				</li>
-			{% endif %}
-		</ul>
-	</header>
-	<div id="content">
-		{% block content %}
-		{% endblock %}
-	</div>
-	<footer>
-		<div>
-			footer
-		</div>
-	</footer>
+    <header id="header">
+        <a href="/" class="logo">phonxis</a>
+        <ul class="menu">
+            {% if request.user.is_authenticated %}
+                <li>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'login' %}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </header>
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer>
+        <div>
+            footer
+        </div>
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            {% block domready %}
+            {% endblock %}
+        });
+    </script>
 </body>
 </html>

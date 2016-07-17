@@ -2,11 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import modelform_factory
 from django.apps import apps
+from django.db.models import Count
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from .models import Course, Module, Content
+from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
+from .models import Course, Module, Content, Subject
 from .forms import ModuleFormSet
 
 
@@ -205,9 +208,9 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
         # возвращает ModelForm для указаной model
         # со всеми полями кроме тех что указаны в exclude
         Form = modelform_factory(model, exclude=['owner'
-                                                'created',
-                                                'updated',
-                                                'order', 'owner'])
+                                                 'created',
+                                                 'updated',
+                                                 'order', 'owner'])
         return Form(*args, **kwargs)
 
     def dispatch(self, request, module_id, model_name, id=None):
@@ -220,13 +223,13 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
         # если не None, то объект будет обновлен, иначе будет создан новый
         if id:
             self.obj = get_object_or_404(self.model,
-                                        id=id,
-                                        owner=request.user)
+                                         id=id,
+                                         owner=request.user)
         # вызываем метод родителя
         return super(ContentCreateUpdateView, self).dispatch(request,
-                                                            module_id,
-                                                            model_name,
-                                                            id)
+                                                             module_id,
+                                                             model_name,
+                                                             id)
 
     def get(self, request, module_id, model_name, id=None):
         # возвращаем форму для изменения экземпляра контента при self.obj!=None.
@@ -238,9 +241,9 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
     def post(self, request, module_id, model_name, id=None):
         # возвращаем форму с данными и файлами
         form = self.get_form(self.model,
-                            instance=self.obj,
-                            data=request.POST,
-                            files=request.FILES)
+                             instance=self.obj,
+                             data=request.POST,
+                             files=request.FILES)
         if form.is_valid():
             # задаем владельцем контента текущего пользователя
             obj = form.save(commit=False)
@@ -270,6 +273,71 @@ class ModuleContentListView(TemplateResponseMixin, View):
 
     def get(self, request, module_id):
         module = get_object_or_404(Module,
-                                    id=module_id,
-                                    course__owner=request.user)
+                                   id=module_id,
+                                   course__owner=request.user)
         return self.render_to_response({'module': module})
+
+
+class ModuleOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+    """
+    CsrfExemptMixin освобождает запрос от csrf token'а.
+    JsonRequestResponseMixin - помещает правильно отформатированый
+    json запрос в request_json; также сериализирует response
+    """
+    def post(self, request):
+        for id, order in self.request_json.items():
+            Module.objects.filter(id=id,
+                                course__owner=request.user).update(order=order)
+        return self.render_json_response({'saved': 'OK'})
+
+
+class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+    """
+    CsrfExemptMixin освобождает запрос от csrf token'а.
+    JsonRequestResponseMixin - помещает правильно отформатированый
+    json запрос в request_json; также сериализирует response
+    """
+    def post(self, request):
+        for id, order in self.request_json.items():
+            print('id', id, ' -- ', order)
+        for id, order in self.request_json.items():
+            Content.objects.filter(id=id, module__course__owner=request.user).update(order=order)
+        return self.render_json_response({'saved': 'OK'})
+
+
+class CourseListView(TemplateResponseMixin, View):
+    """
+    Список всех курсов
+    """
+    model = Course
+    template_name = "courses/course/list.html"
+
+    def get(self, request, subject=None):
+        # возвращаем все subjects с количеством курсов для subject
+        subjects = Subject.objects.annotate(total_courses=Count('courses'))
+        # возвращаем все courses с количеством модулей для курса
+        courses = Course.objects.annotate(total_modules=Count('modules'))
+
+        if subject:
+            # если указан subject, фильтруем по нему все курсы
+            subject = get_object_or_404(Subject, slug=subject)
+            courses = courses.filter(subject=subject)
+
+        return self.render_to_response({'subjects': subjects,
+                                        'subject': subject,
+                                        'courses': courses})
+
+
+class CourseDetailView(DetailView):
+    """
+    Отображает единственный объект по его PK или по slug.
+    Этот объект присваивается к self.object
+    """
+    model = Course
+    template_name = "courses/course/detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CourseDetailView, self).get_context_data(**kwargs)
+        # довавляем в контект форму подписки на текущий объект курса
+        context['enroll_form'] = CourseEnrollForm(initial={'course': self.object})
+        return context

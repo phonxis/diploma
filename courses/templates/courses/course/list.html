@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+	{% if subject %}
+		{{ subject.title }} courses
+	{% else %}
+		All courses
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+<main>
+	<div class="section-nude-gray">
+		<div class="container">
+			<h3>
+				{% if subject %}
+					Курси {{ subject.title }}
+				{% else %}
+					Всі курси
+				{% endif %}
+			</h3>
+		</div>
+	</div>
+	
+	<div class="container lin">
+		<div class="contents">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3">
+						<h3>Теми</h3>
+						<ul id="modules">
+							<li {% if not subject %}class="selected"{% endif %}>
+								<a href="{% url 'course_list' %}">Всі</a>
+							</li>
+							{% for s in subjects %}
+								<li {% if subject == s %}class="selected"{% endif %}>
+									<a href="{% url 'subject_course_list' s.slug %}">
+										{{ s.title }}
+										<!-- total_courses это аннотация queryset во вьюхе CourseListView -->
+										<br /><span>{{ s.total_courses }} курси</span>
+									</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+
+					<div class="col-md-9 section-white courses">
+						<div class="module">
+							{% for course in courses %}
+								{% with subject=course.subject %}
+									<h3><a href="{% url 'course_detail' course.slug %}">{{ course.title }}</a></h3>
+									<p>
+										<a href="{% url 'subject_course_list' subject.slug %}">{{ subject }}</a>
+										<!-- total_modules это аннотация queryset во вьюхе CourseListView -->
+										{{ course.total_modules }} модулів.
+										{% if course.owner.get_full_name %}
+											Інструктор курсу: {{ course.owner.get_full_name }}
+										{% else %}
+											Інструктор курсу: {{ course.owner.username }}
+										{% endif %}
+									</p>
+								{% endwith %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}
