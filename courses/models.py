@@ -29,6 +29,9 @@ class Course(models.Model):
     # описание курса
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
+    students = models.ManyToManyField(User,
+                                      related_name="courses_joined",
+                                      blank=True)
 
     class Meta:
         ordering = ('-created',)
@@ -57,10 +60,10 @@ class Content(models.Model):
     # связь с моделью contentType
     content_type = models.ForeignKey(ContentType,
                                      limit_choices_to={
-                                        'model__in': ('file',
-                                                      'image',
-                                                      'text',
-                                                      'video')
+                                         'model__in': ('file',
+                                                       'image',
+                                                       'text',
+                                                       'video')
                                      })
     # сохранение PK связанного объекта
     object_id = models.PositiveIntegerField()
@@ -101,4 +104,3 @@ class Text(BaseContent):
 
 class Video(BaseContent):
     url = models.URLField()
-
