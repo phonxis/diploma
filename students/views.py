@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import CreateView, FormView
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from courses.models import Course
 from .forms import CourseEnrollForm
 
 
@@ -35,3 +38,40 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse_lazy('student_course_detail', args=[self.course.id])
+
+
+class StudentCourseListView(LoginRequiredMixin, ListView):
+    """
+    Список курсов на которые подписан студент
+    """
+    model = Course
+    template_name = "students/course/list.html"
+
+    def get_queryset(self):
+        queryset = super(StudentCourseListView, self).get_queryset()
+        return queryset.filter(students__in=[self.request.user])
+
+
+class StudentCourseDetailView(DetailView):
+    """
+    Отображение одного из курсов на которые подписан студент
+    """
+    model = Course
+    template_name = "students/course/detail.html"
+
+    def get_queryset(self):
+        queryset = super(StudentCourseDetailView, self).get_queryset()
+        return queryset.filter(students__in=[self.request.user])
+
+    def get_context_data(self, **kwargs):
+        context = super(StudentCourseDetailView, self).get_context_data(**kwargs)
+        course = self.get_object()
+
+        if 'module_id' in self.kwargs:
+            # если в параметрах вызова явно указан ид модуля
+            # то возвращаем этот модуль
+            context['module'] = course.modules.get(id=self.kwargs['module_id'])
+        else:
+            # иначе возвращаем первый модуль курса
+            context['module'] = course.modules.all()[0]
+        return context
