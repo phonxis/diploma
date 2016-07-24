@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'embed_video',
+    'memcache_status',
 
     # myapps
     'courses',
@@ -134,3 +135,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 from django.core.urlresolvers import reverse_lazy
 # куда будут перенаправлены студенты после аутентификации
 LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
+
+# CACHE
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}

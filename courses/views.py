@@ -8,6 +8,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.cache import cache
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from .models import Course, Module, Content, Subject
 from .forms import ModuleFormSet
@@ -315,16 +316,35 @@ class CourseListView(TemplateResponseMixin, View):
 
     def get(self, request, subject=None):
         # возвращаем все subjects с количеством курсов для subject
-        subjects = Subject.objects.annotate(total_courses=Count('courses'))
+        # пытаемся получить из кеша
+        subjects = cache.get('all_subjects')
+        if not subjects:
+            # если этого объекта нет в кеше, тогда заносим его туда
+            subjects = Subject.objects.annotate(total_courses=Count('courses'))
+            cache.set('all_subjects', subjects)
+
         # возвращаем все courses с количеством модулей для курса
         courses = Course.objects.annotate(total_modules=Count('modules'))
 
         if subject:
             # если указан subject, фильтруем по нему все курсы
             subject = get_object_or_404(Subject, slug=subject)
-            courses = courses.filter(subject=subject)
-
-        return self.render_to_response({'subjects': subjects,
+            # создаем ключ для кеша
+            key = 'subject_{}_courses'.format(subject.id)
+            subject_courses = cache.get(key)
+            if not subject_courses:
+                subject_courses = courses.filter(subject=subject)
+                cache.set(key, subject_courses)
+            return self.render_to_response({'subjects': subjects,
+                                        'subject': subject,
+                                        'courses': subject_courses})
+        else:
+            # возвращаем все курсы
+            courses = cache.get('all_courses')
+            if not courses:
+                # если нет в кеше, тогда заносим туда
+                cache.set('all_courses', courses)
+            return self.render_to_response({'subjects': subjects,
                                         'subject': subject,
                                         'courses': courses})
 
