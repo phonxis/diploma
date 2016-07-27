@@ -55,6 +55,13 @@ a.no-link {
   margin: 0;
 }
 
+.navbar .container {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
 .navlinks a {
   font-size: 18px;
   padding: 10px;
