@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth
 from django.conf import settings
 from django.conf.urls.static import static
-from courses.views import CourseListView
+from courses.views import CourseListView, IndexView
 
 
 urlpatterns = [
@@ -11,7 +11,8 @@ urlpatterns = [
     url(r'^accounts/login/$', auth.login, name="login"),
     url(r'^accounts/logout/$', auth.logout, name="logout"),
     url(r'^course/', include('courses.urls')),
-    url(r'^$', CourseListView.as_view(), name="course_list"),
+    #url(r'^$', CourseListView.as_view(), name="course_list"),
+    url(r'^$', IndexView.as_view(), name="index"),
     url(r'^students/', include('students.urls')),
 ]
 

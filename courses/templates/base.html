@@ -5,28 +5,33 @@
     <meta charset="UTF-8">
     <title>{% block title %}Educa{% endblock %}</title>
     <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="{% static 'css/base.css' %}"> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="{% static 'css/course_react.css' %}">
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
 </head>
 <body>
-    <header id="header">
-        <a href="/" class="logo">phonxis</a>
-        <ul class="menu">
+    <div class="navbar">
+        <h1>
+            <a href="/">phonxis</a>
+        </h1>
+        <div class="navliks">
             {% if request.user.is_authenticated %}
-                <li>
-                    <a href="{% url 'logout' %}">Logout</a>
-                </li>
+                <a href="{% url 'logout' %}" class="sign-in">
+                    <button class="dark-btn">Sign out</button>
+                </a>
             {% else %}
-                <li>
-                    <a href="{% url 'login' %}">Login</a>
-                </li>
+                <a href="{% url 'login' %}" class="sign-in">
+                    <button class="dark-btn">Sign in</button>
+                </a>
             {% endif %}
-        </ul>
-    </header>
-    <div id="content">
+        </div>
+    </div>
+    <div class="container">
         {% block content %}
         {% endblock %}
     </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script>

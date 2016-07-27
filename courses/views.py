@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.forms.models import modelform_factory
 from django.apps import apps
 from django.db.models import Count
+from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.base import TemplateResponseMixin, View
@@ -13,6 +14,10 @@ from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from .models import Course, Module, Content, Subject
 from .forms import ModuleFormSet
 from students.forms import CourseEnrollForm
+
+
+class IndexView(TemplateView):
+    template_name = "index.html"
 
 
 class OwnerMixin(object):

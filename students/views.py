@@ -7,12 +7,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from courses.models import Course
-from .forms import CourseEnrollForm
+from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm
 
 
 class StudentRegistrationView(CreateView):
     template_name = "students/student/registration.html"
-    form_class = UserCreationForm
+    form_class = UsersCreationForm
     success_url = reverse_lazy('student_course_list')
 
     def form_valid(self, form):
@@ -64,7 +64,8 @@ class StudentCourseDetailView(DetailView):
         return queryset.filter(students__in=[self.request.user])
 
     def get_context_data(self, **kwargs):
-        context = super(StudentCourseDetailView, self).get_context_data(**kwargs)
+        context = super(StudentCourseDetailView,
+                        self).get_context_data(**kwargs)
         course = self.get_object()
 
         if 'module_id' in self.kwargs:
