@@ -6,43 +6,49 @@
     <title>{% block title %}Educa{% endblock %}</title>
     <title>Document</title>
     <!-- <link rel="stylesheet" href="{% static 'css/base.css' %}"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'css/course_react.css' %}"> -->
     <!-- <link rel="stylesheet" href="{% static 'css/landing.css' %}"> -->
 </head>
 <body>
-<header class="navbar">
-        <div class="container">
-            <button class='navbar-toggle' data-target='.navbar-header-collapse' data-toggle='collapse' type='button'>
-              <span class='sr-only'>
-                Toggle navigation
-              </span>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-            </button>
-            <h1>
-                <a href="/" class="navbar-brand header-logo">phonxis</a>
-            </h1>
-            <div class="collapse navbar-collapse navbar-header-collapse nav-link">
-                <ul class="nav navbar-nav navbar-right">
-                    {% if request.user.is_authenticated %}
-                        <li>
-                            <a href="{% url 'logout' %}">Sign out</a>
-                        </li>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-lg">Sign in</a>
-                        <a href="{% url 'student_registration' %}" class="btn btn-primary pull-right btn-lg">Sign Up</a>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-</header>
+<header class="navbar navbar-default navbar-fixed-top">
     <div class="container">
-        {% block content %}
-        {% endblock %}
+
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">phonxis</a>
+            <button class='navbar-toggle collapsed' data-target='#navbar-main' data-toggle='collapse' aria-expanded='false' type="button">
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
+        </div>
+
+        <div class="navbar-collapse collapse" id="navbar-main" aria-expanded="false">
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'logout' %}">Sign out</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{% url 'login' %}">Sign in</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'student_registration' %}">Sign Up</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
+</header>
+
+<div class="content container">
+    {% block content %}
+    {% endblock %}
+</div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
