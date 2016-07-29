@@ -3,13 +3,14 @@ from django.contrib import admin
 from django.contrib.auth import views as auth
 from django.conf import settings
 from django.conf.urls.static import static
-from courses.views import CourseListView, IndexView
+from courses.views import CourseListView, IndexView, LoginView
 from students.forms import UsersLoginForm
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/login/$', auth.login, {'authentication_form': UsersLoginForm}, name="login"),
+    url(r'accounts/login/$', LoginView.as_view(), name="login"),
+    #url(r'^accounts/login/$', auth.login, {'authentication_form': UsersLoginForm}, name="login"),
     url(r'^accounts/logout/$', auth.logout, {'next_page': '/'}, name="logout"),
     url(r'^course/', include('courses.urls')),
     #url(r'^$', CourseListView.as_view(), name="course_list"),

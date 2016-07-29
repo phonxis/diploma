@@ -7,13 +7,19 @@ from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.base import TemplateResponseMixin, View
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.contrib.auth import REDIRECT_FIELD_NAME, login
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponseRedirect
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from .models import Course, Module, Content, Subject
 from .forms import ModuleFormSet
-from students.forms import CourseEnrollForm
+from students.forms import CourseEnrollForm, UsersLoginForm
 
 
 class IndexView(TemplateView):
@@ -367,3 +373,51 @@ class CourseDetailView(DetailView):
         # довавляем в контект форму подписки на текущий объект курса
         context['enroll_form'] = CourseEnrollForm(initial={'course': self.object})
         return context
+
+
+class LoginView(FormView):
+    # вьюха для авторизации пользователей
+    form_class = UsersLoginForm
+    redirect_field_name = REDIRECT_FIELD_NAME
+    template_name = "registration/login.html"
+
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form, request):
+        login(self.request, form.get_user())
+        return HttpResponseRedirect(self.get_success_url(request))
+
+    def get_success_url(self, request):
+        if request.user.has_perm('courses.add_course'):
+            # если пользователь имеет права на создания курса, значит это инструктор
+            return reverse_lazy('manage_course_list')
+        else:
+            # иначе студент
+            return reverse_lazy('student_course_list')
+
+    def set_test_cookie(self):
+        self.request.session.set_test_cookie()
+
+    def check_and_delete_test_cookie(self):
+        if self.request.session.test_cookie_worked():
+            self.request.session.delete_test_cookie()
+            return True
+        return False
+
+    def get(self, request, *args, **kwargs):
+        self.set_test_cookie()
+        return super(LoginView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid():
+            self.check_and_delete_test_cookie()
+            return self.form_valid(form, request)
+        else:
+            self.set_test_cookie()
+            return self.form_invalid(form)
+
