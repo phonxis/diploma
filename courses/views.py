@@ -26,6 +26,14 @@ class IndexView(TemplateView):
     template_name = "index.html"
 
 
+class InstructorMixin(PermissionRequiredMixin):
+    """
+    Миксин для предотвращения возможности студентам зайти на страницы
+    которые должны быть доступны только инструктору
+    """
+    permission_required = "courses.add_course"
+
+
 class OwnerMixin(object):
     """
     Миксин переопределяющий метод get_queryset
@@ -79,7 +87,7 @@ class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
     template_name = "courses/manage/course/form.html"
 
 
-class ManageCourseListView(OwnerCourseMixin, ListView):
+class ManageCourseListView(InstructorMixin, OwnerCourseMixin, ListView):
     """
     Используя наследование от OwnerCourseMixin, ListView
     этот класс также будет содержать все поля и методы из
@@ -123,7 +131,7 @@ class CourseDeleteView(PermissionRequiredMixin, OwnerCourseMixin, DeleteView):
     template_name = "courses/manage/course/delete.html"
 
 
-class CourseModuleUpdateView(TemplateResponseMixin, View):
+class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
     """
     Класс используется для добавления, обновления и удаления модулей
     определенного курса.
@@ -163,7 +171,7 @@ class CourseModuleUpdateView(TemplateResponseMixin, View):
                                         'formset': formset})
 
 
-class CourseModuleUpdateView(TemplateResponseMixin, View):
+class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
     """
     Класс используется для добавления, обновления и удаления модулей
     определенного курса.
@@ -203,7 +211,7 @@ class CourseModuleUpdateView(TemplateResponseMixin, View):
                                         'formset': formset})
 
 
-class ContentCreateUpdateView(TemplateResponseMixin, View):
+class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
     module = None
     model = None
     obj = None
@@ -269,7 +277,7 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
         return self.render_to_response({'form': form, 'object': self.obj})
 
 
-class ContentDeleteView(View):
+class ContentDeleteView(InstructorMixin, View):
     def post(self, request, id):
         content = get_object_or_404(Content,
                                     id=id,
@@ -281,7 +289,7 @@ class ContentDeleteView(View):
         return redirect('module_content_list', module.id)
 
 
-class ModuleContentListView(TemplateResponseMixin, View):
+class ModuleContentListView(InstructorMixin, TemplateResponseMixin, View):
     template_name = "courses/manage/module/content_list.html"
 
     def get(self, request, module_id):
