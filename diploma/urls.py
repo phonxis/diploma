@@ -13,7 +13,7 @@ urlpatterns = [
     #url(r'^accounts/login/$', auth.login, {'authentication_form': UsersLoginForm}, name="login"),
     url(r'^accounts/logout/$', auth.logout, {'next_page': '/'}, name="logout"),
     url(r'^course/', include('courses.urls')),
-    #url(r'^$', CourseListView.as_view(), name="course_list"),
+    url(r'^courses/$', CourseListView.as_view(), name="course_list"),
     url(r'^$', IndexView.as_view(), name="index"),
     url(r'^students/', include('students.urls')),
 ]
