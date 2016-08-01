@@ -29,6 +29,8 @@
         <div class="navbar-collapse collapse" id="navbar-main" aria-expanded="false">
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'course_list' %}">All Courses</a></li>
+                    <li><a href="{% url 'student_course_list' %}">My courses</a></li>
                     <li>
                         <a href="{% url 'logout' %}">Sign out</a>
                     </li>
