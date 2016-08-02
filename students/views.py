@@ -74,5 +74,9 @@ class StudentCourseDetailView(DetailView):
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
         else:
             # иначе возвращаем первый модуль курса
-            context['module'] = course.modules.all()[0]
+            try:
+                context['module'] = course.modules.all()[0]
+            except IndexError:
+                # ниодного модуля еще не было добавлено
+                pass
         return context
