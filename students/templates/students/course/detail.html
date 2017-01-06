@@ -42,6 +42,7 @@
 
 					<div class="col-md-9 section-white courses">
 						<div class="module">
+							{% if module %}
 							{% cache 300 module_contents module %}
 								{% for content in module.contents.all %}
 									{% with item=content.content_object %}
@@ -50,6 +51,7 @@
 									{% endwith %}
 								{% endfor %}
 							{% endcache %}
+							{% endif %}
 						</div>
 					</div>
 				</div>

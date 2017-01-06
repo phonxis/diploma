@@ -5,34 +5,56 @@
     <meta charset="UTF-8">
     <title>{% block title %}Educa{% endblock %}</title>
     <title>Document</title>
+    <!-- <link rel="stylesheet" href="{% static 'css/base.css' %}"> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/course_react.css' %}"> -->
+    <!-- <link rel="stylesheet" href="{% static 'css/landing.css' %}"> -->
 </head>
 <body>
-    <header id="header">
-        <a href="/" class="logo">phonxis</a>
-        <ul class="menu">
-            {% if request.user.is_authenticated %}
-                <li>
-                    <a href="{% url 'logout' %}">Logout</a>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{% url 'login' %}">Login</a>
-                </li>
-            {% endif %}
-        </ul>
-    </header>
-    <div id="content">
-        {% block content %}
-        {% endblock %}
-    </div>
-    <footer>
-        <div>
-            footer
+<header class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">phonxis</a>
+            <button class='navbar-toggle collapsed' data-target='#navbar-main' data-toggle='collapse' aria-expanded='false' type="button">
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
         </div>
-    </footer>
+
+        <div class="navbar-collapse collapse" id="navbar-main" aria-expanded="false">
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'course_list' %}">All Courses</a></li>
+                    <li><a href="{% url 'student_course_list' %}">My courses</a></li>
+                    <li>
+                        <a href="{% url 'logout' %}">Sign out</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{% url 'login' %}">Sign in</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'student_registration' %}">Sign Up</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</header>
+
+<div class="content container">
+    {% block content %}
+    {% endblock %}
+</div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
             {% block domready %}

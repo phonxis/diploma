@@ -34,7 +34,7 @@ modules</a></p>
             <div id="module-contents">
                 {% for content in module.contents.all %}
                     <div data-id="{{ content.id }}">
-                        {% with item=content.item %}
+                        {% with item=content.content_object %}
                             <p>{{ item }} ({{ item|name_of_model }})</p>
                             <a href="{% url 'update_module_content' module.id item|name_of_model item.id %}">Edit</a>
                             <form action="{% url 'delete_module_content' content.id %}" method="post">
@@ -93,7 +93,7 @@ modules</a></p>
             });
             $.ajax({
                 type: "POST",
-                url: "{% url 'order_contents' %}",
+                url: "{% url 'order_content' %}",
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 data: JSON.stringify(contents_order)
