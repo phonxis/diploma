@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'embed_video',
-    'memcache_status',
+    #'embed_video',
+    #'memcache_status',
 
     # myapps
     'courses',
@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     # должно быть после myapps, что бы отображался кастомный
     # logout template вместо logout template из админки
     'django.contrib.admin',
+
+    'social_django',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -87,10 +89,21 @@ WSGI_APPLICATION = 'diploma.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #'NAME': 'teauolye',
+        #'USER': 'teauolye',
+        #'PASSWORD': '_-yfBiO6L0nTk-yxb_tutGpwpBw2Pg78',
+        #'HOST': '',
+        #'PORT': ''
     }
 }
+
+import dj_database_url
+DATABASES['default'] = dj_database_url.parse('postgres://teauolye:_-yfBiO6L0nTk-yxb_tutGpwpBw2Pg78@horton.elephantsql.com:5432/teauolye',
+                                             conn_max_age=600)
 
 
 # Password validation
@@ -141,9 +154,9 @@ from django.core.urlresolvers import reverse_lazy
 LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
 
 # CACHE
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
+#CACHES = {
+#    'default': {
+#        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#        'LOCATION': '127.0.0.1:11211',
+#    }
+#}
