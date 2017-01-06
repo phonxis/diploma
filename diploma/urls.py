@@ -16,6 +16,9 @@ urlpatterns = [
     url(r'^courses/$', CourseListView.as_view(), name="course_list"),
     url(r'^$', IndexView.as_view(), name="index"),
     url(r'^students/', include('students.urls')),
+
+    # social auth
+    url(r'^social/', include('social_django.urls', namespace='social'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
