@@ -14,15 +14,15 @@
             </form>
 
             <a class="btn btn-lg btn-danger btn-block"
-               href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
+               href="{% url 'social:begin' 'facebook' %}">
                     Login with Facebook
             </a>
             <a class="btn btn-lg btn-danger btn-block"
-               href="{% url 'social:begin' 'vk-oauth2' %}?next={{ request.path }}">
+               href="{% url 'social:begin' 'vk-oauth2' %}">
                     Login with VK
             </a>
             <a class="btn btn-lg btn-danger btn-block"
-               href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">
+               href="{% url 'social:begin' 'google-oauth2' %}">
                     Login with Google
             </a>
 

@@ -188,14 +188,33 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.vk.VKOAuth2',
 
+    'students.auth_backend.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '85228042737-bm10of2jf7r4ti5d60c4ddbaovdf7s2f.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'znVv5zyLysvpzL5wvyK5O5D1'
 
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'locale': 'ru_RU',
+    'fields': 'id, name, email, picture',
+}
 SOCIAL_AUTH_FACEBOOK_KEY = '591899737662437'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'b8156b6c16875cd7596c7c48f33dbc27'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
@@ -203,7 +222,10 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_VK_OAUTH2_KEY = '5125866'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'KJ0h54VKKNfd9FDBK9Zo'
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+SOCIAL_AUTH_VK_OAUTH2_EXTRA_DATA = ['photo_200_orig']
+SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.5'
 
 #SOCIAL_AUTH_GITHUB_KEY = ''
 #SOCIAL_AUTH_GITHUB_SECRET = ''
 #SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
+
