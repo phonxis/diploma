@@ -31,6 +31,9 @@
                 {% if request.user.is_authenticated %}
                     <li><a href="{% url 'course_list' %}">All Courses</a></li>
                     <li><a href="{% url 'student_course_list' %}">My courses</a></li>
+
+                    <li><a href="{% url 'update_profile' %}">Profile</a></li>
+
                     <li>
                         <a href="{% url 'logout' %}">Sign out</a>
                     </li>

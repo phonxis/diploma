@@ -18,4 +18,9 @@ urlpatterns = [
     url(r'^course/(?P<pk>\d+)/(?P<module_id>\d+)/$',
         cache_page(60 * 30)(views.StudentCourseDetailView.as_view()),
         name="student_course_detail_module"),
+
+    # изменения данны профиля студентов
+    url(r'^profile/$',
+        views.update_profile,
+        name="update_profile"),
 ]

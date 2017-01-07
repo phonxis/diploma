@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from courses.models import Course
+from .models import Profile
 
 
 class CourseEnrollForm(forms.Form):
@@ -73,3 +74,16 @@ class UsersCreationForm(UserCreationForm):
                    'required': 'True'}
         )
     )
+
+
+# форма для изменения некоторых данных из User модели
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+# форма для изменения некоторых данных из Profile модели
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('date_of_birth',)

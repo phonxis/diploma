@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic.edit import CreateView, FormView
+from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from courses.models import Course
-from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm
+from .models import Profile
+from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm, ProfileEditForm, UserEditForm
 
 
 class StudentRegistrationView(CreateView):
@@ -21,6 +24,10 @@ class StudentRegistrationView(CreateView):
         cd = form.cleaned_data
         user = authenticate(username=cd['username'], password=cd['password1'])
         login(self.request, user)
+
+        # создание профиля для пользователя (для createsuperuser и social_auth не работает)
+        #profile = Profile.objects.create(user=user)
+
         return result
 
 
@@ -80,3 +87,33 @@ class StudentCourseDetailView(DetailView):
                 # ниодного модуля еще не было добавлено
                 pass
         return context
+
+
+@login_required
+@transaction.atomic
+def update_profile(request):
+    if request.method == 'POST':
+        # формы с подтвержденными данными пользователя, отображаются после submit формы
+        user_form = UserEditForm(data=request.POST, instance=request.user)
+        profile_form = ProfileEditForm(data=request.POST,
+                                       instance=request.user.profile,
+                                       #files=request.FILES
+                                       )
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+
+            #messages.success(request, 'Profile update successfully')
+        else:
+            pass
+            #messages.error(request, 'Correct errors')
+    else:
+        # отображение форм с данными из БД (которые были ранее сохранены)
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+
+    return render(request, 'students/student/edit_profile.html', {
+            'user_form': user_form,
+            'profile_form': profile_form
+        })
