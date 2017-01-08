@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.forms.models import modelform_factory
 from django.apps import apps
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
-from django.contrib.auth import REDIRECT_FIELD_NAME, login
+from django.contrib.auth import REDIRECT_FIELD_NAME, login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import User, Group, Permission
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -19,7 +20,7 @@ from django.http import HttpResponseRedirect
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from .models import Course, Module, Content, Subject
 from .forms import ModuleFormSet
-from students.forms import CourseEnrollForm, UsersLoginForm
+from students.forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm#, InstructorsCreationForm
 
 
 class IndexView(TemplateView):
@@ -429,3 +430,25 @@ class LoginView(FormView):
             self.set_test_cookie()
             return self.form_invalid(form)
 
+
+class InstructorRegistrationView(CreateView):
+    template_name = 'registration/registration.html'
+    form_class = UsersCreationForm #InstructorsCreationForm
+    #success_url = reverse_lazy('manage_course_list')
+
+    def form_valid(self, form):
+
+        # после ввода корректных данных в signup форму юзер будет залогинен
+        result = super(InstructorRegistrationView, self).form_valid(form)
+        cd = form.cleaned_data
+        user = authenticate(username=cd['username'], password=cd['password1'])
+        login(self.request, user)
+
+        return result
+
+    # каждого пользователя, который зарегистрировался по ссылке instructor_registration
+    # добавляем в группу Instructor
+    def get_success_url(self):
+        group = Group.objects.get(name='Instructor')
+        group.user_set.add(self.object)
+        return reverse('manage_course_list')

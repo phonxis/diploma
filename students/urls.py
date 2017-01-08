@@ -3,7 +3,7 @@ from django.views.decorators.cache import cache_page
 from . import views
 
 urlpatterns = [
-    url(r'^register/$',
+    url(r'^registration/$',
         views.StudentRegistrationView.as_view(),
         name="student_registration"),
     url(r'^enroll/$',

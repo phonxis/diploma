@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth
 from django.conf import settings
 from django.conf.urls.static import static
-from courses.views import CourseListView, IndexView, LoginView
+from courses.views import CourseListView, IndexView, LoginView, InstructorRegistrationView
 from students.forms import UsersLoginForm
 
 
@@ -16,6 +16,11 @@ urlpatterns = [
     url(r'^courses/$', CourseListView.as_view(), name="course_list"),
     url(r'^$', IndexView.as_view(), name="index"),
     url(r'^students/', include('students.urls')),
+
+    # регистрация преподавателей
+    url(r'^accounts/registration/$',
+        InstructorRegistrationView.as_view(),
+        name='instructor_registration'),
 
     # social auth
     url(r'^social/', include('social_django.urls', namespace='social'))

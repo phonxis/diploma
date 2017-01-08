@@ -16,7 +16,7 @@ class UsersLoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Username',
+                   'placeholder': 'Username or E-mail address',
                    'required': 'True'}
         )
     )
@@ -87,3 +87,44 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('date_of_birth',)
+
+# не используется----------------------------------------------------------
+class InstructorsCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email',)
+        widgets = {
+            'username': forms.TextInput(
+                    attrs={'class': 'form-control form-group',
+                           'placeholder': 'Username',
+                           'required': 'True'}
+            ),
+            'email': forms.TextInput(
+            attrs={'class': 'form-control form-group',
+                   'placeholder': 'Email address',
+                   'required': 'True'}
+            )
+        }
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control form-group',
+                   'placeholder': 'Password',
+                   'required': 'True'}
+        )
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control form-group',
+                   'placeholder': 'Confirm password',
+                   'required': 'True'}
+        )
+    )
+    '''group = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control form-group',
+                   'placeholder': '',
+                   'required': 'True',
+                   'value': 'Instructor'}
+        )
+    )'''
+# ---------------------------------------------------------------------------
