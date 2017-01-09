@@ -12,6 +12,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME, login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -449,6 +450,27 @@ class InstructorRegistrationView(CreateView):
     # каждого пользователя, который зарегистрировался по ссылке instructor_registration
     # добавляем в группу Instructor
     def get_success_url(self):
-        group = Group.objects.get(name='Instructor')
+        # Получаем из БД группу преподавателей
+        # При регистрации первого преподавателя, эта группа будет создана
+        group, created = Group.objects.get_or_create(name='Instructor')
+        if created:
+            # сохраняем группу, если до этого она не была создана
+            group.save()
+
+            # отфильтровываем нужные для группы преподавателей разрешения
+            # и добавляем их в эту группу (Group m2m relationship Permission)
+            [group.permissions.add(perm) for perm in Permission.objects.filter(
+                name__in=[
+                    'Can add content', 'Can change content', 'Can delete content',
+                    'Can add course', 'Can change course', 'Can delete course',
+                    'Can add file', 'Can change file', 'Can delete file',
+                    'Can add image', 'Can change image', 'Can delete image',
+                    'Can add module', 'Can change module', 'Can delete module',
+                    'Can add text', 'Can change text', 'Can delete text',
+                    'Can add video', 'Can change video', 'Can delete video',
+                ]
+            )]
+        # добавляем текущего пользователя в группу преподавателей
         group.user_set.add(self.object)
+
         return reverse('manage_course_list')
