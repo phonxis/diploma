@@ -1,4 +1,6 @@
 {% load staticfiles %}
+
+{% load user_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,8 +31,14 @@
         <div class="navbar-collapse collapse" id="navbar-main" aria-expanded="false">
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'course_list' %}">All Courses</a></li>
-                    <li><a href="{% url 'student_course_list' %}">My courses</a></li>
+                    {% if request.user|check_group %}
+                        <li><a href="{% url 'create_course' %}">Create new course</a></li>
+                        <li><a href="{% url 'manage_course_list' %}">My courses</a></li>
+                    {% else %}
+                        <li><a href="{% url 'course_list' %}">All Courses</a></li>
+                        <li><a href="{% url 'student_course_list' %}">My courses</a></li>
+                    {% endif %}
+                    
 
                     <li><a href="{% url 'update_profile' %}">Profile</a></li>
 
