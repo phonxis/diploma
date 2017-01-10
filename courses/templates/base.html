@@ -31,7 +31,7 @@
         <div class="navbar-collapse collapse" id="navbar-main" aria-expanded="false">
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
-                    {% if request.user|check_group %}
+                    {% if request.user|check_instructor_group %}
                         <li><a href="{% url 'create_course' %}">Create new course</a></li>
                         <li><a href="{% url 'manage_course_list' %}">My courses</a></li>
                     {% else %}
