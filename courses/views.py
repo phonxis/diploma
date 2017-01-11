@@ -295,7 +295,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                     # если id объекта не указан, создаем новый экземпляр video, file, image или text
                     Content.objects.create(module=self.module, content_object=obj)
                 return redirect('module_content_list', self.module.id)
-            obj.title = obj.data_field.name.split('/')[-1].split('.')[0]
+            obj.title = obj.data_field.name.split('/')[-1].split('.')[:-1]
             data = {'name': obj.title}
             obj.save()
 
