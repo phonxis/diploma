@@ -2,6 +2,10 @@
 
 {% load staticfiles %}
 
+{% block css_load_file %}
+    <link rel="stylesheet" href="{% static 'css/jquery.fileupload.css' %}">
+{% endblock %}
+
 {% block content %}
     <h1>
     {% if object %}
@@ -19,13 +23,30 @@
                 <p><input type="submit" value="Save content"></p>
             </form>
         {% else %}
-            <button type="button" class="btn btn-primary js-upload-photos">
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Add files...</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="data_field" multiple data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+        </span>
+        <br>
+        <br>
+
+        <!-- The global progress bar 
+        <div id="progress" class="progress">
+            <div class="progress-bar progress-bar-success"></div>
+        </div> -->
+
+        <!-- The container for the uploaded files -->
+        <div id="files" class="files"></div>
+
+            <!-- <button type="button" class="btn btn-primary js-upload-photos">
                 <span class="glyphicon glyphicon-cloud-upload"></span> Upload files
             </button>
 
             <input id="fileupload" type="file" name="data_field" multiple
                    style="display: none;"
-                   data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                   data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'> -->
 
             <a href="{% url 'module_content_list' module %}">go back</a>
         {% endif %}
@@ -36,7 +57,12 @@
 
 {% block js_load_file %}
     <script src="{% static 'js/jquery.ui.widget.js' %}"></script>
+    <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+    <script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
     <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>
     <script src="{% static 'js/jquery.fileupload.js' %}"></script>
+    <script src="{% static 'js/jquery.fileupload-process.js' %}"></script>
+    <script src="{% static 'js/jquery.fileupload-image.js' %}"></script>
+    <script src="{% static 'js/jquery.fileupload-validate.js' %}"></script>
     <script src="{% static 'js/basic-upload.js' %}"></script>
 {% endblock %}
