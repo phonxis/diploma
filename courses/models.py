@@ -97,16 +97,20 @@ class BaseContent(models.Model):
 
 
 class File(BaseContent):
-    file = models.FileField(upload_to="files")
+    #file = models.FileField(upload_to="files")
+    data_field = models.FileField(upload_to="files")
 
 
 class Image(BaseContent):
-    image = models.FileField(upload_to="images")
+    #image = models.FileField(upload_to="images")
+    data_field = models.FileField(upload_to="images")
 
 
 class Text(BaseContent):
-    text = models.TextField()
+    #text = models.TextField()
+    data_field = models.TextField()
 
 
 class Video(BaseContent):
-    url = models.URLField()
+    #url = models.URLField()
+    data_field = models.URLField()

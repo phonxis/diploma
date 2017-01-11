@@ -1,19 +1,42 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block content %}
-	<h1>
-	{% if object %}
-		Edit content "{{ object.title }}"
-	{% else %}
-		Add a new content
-	{% endif %}
-	</h1>
-	<div class="module">
-		<h2>Course info</h2>
-		<form action="" method="post" enctype="multipart/form-data">
-			{{ form.as_p }}
-			{% csrf_token %}
-			<p><input type="submit" value="Save content"></p>
-		</form>
-	</div>
+    <h1>
+    {% if object %}
+        Edit content "{{ object.title }}"
+    {% else %}
+        Add a new content
+    {% endif %}
+    </h1>
+    <div class="module">
+        <h2>Course info</h2>
+        {% if form %}
+            <form action="" method="post" enctype="multipart/form-data">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <p><input type="submit" value="Save content"></p>
+            </form>
+        {% else %}
+            <button type="button" class="btn btn-primary js-upload-photos">
+                <span class="glyphicon glyphicon-cloud-upload"></span> Upload files
+            </button>
+
+            <input id="fileupload" type="file" name="data_field" multiple
+                   style="display: none;"
+                   data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+
+            <a href="{% url 'module_content_list' module %}">go back</a>
+        {% endif %}
+    </div>
+
+
+{% endblock %}
+
+{% block js_load_file %}
+    <script src="{% static 'js/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'js/jquery.fileupload.js' %}"></script>
+    <script src="{% static 'js/basic-upload.js' %}"></script>
 {% endblock %}

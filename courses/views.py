@@ -17,7 +17,7 @@ from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from .models import Course, Module, Content, Subject
 from .forms import ModuleFormSet
@@ -230,10 +230,21 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
     def get_form(self, model, *args, **kwargs):
         # возвращает ModelForm для указаной model
         # со всеми полями кроме тех что указаны в exclude
-        Form = modelform_factory(model, exclude=['owner'
-                                                 'created',
-                                                 'updated',
-                                                 'order', 'owner'])
+        # print(model._meta.model_name)
+        if model._meta.model_name in ['text', 'video']:
+            # форма с полем title
+            Form = modelform_factory(model, exclude=['owner'
+                                                     'created',
+                                                     'updated',
+                                                     'order',
+                                                     'owner'])
+        else:
+            Form = modelform_factory(model, exclude=['owner'
+                                                     'created',
+                                                     'updated',
+                                                     'title',
+                                                     'order',
+                                                     'owner'])
         return Form(*args, **kwargs)
 
     def dispatch(self, request, module_id, model_name, id=None):
@@ -257,26 +268,48 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
     def get(self, request, module_id, model_name, id=None):
         # возвращаем форму для изменения экземпляра контента при self.obj!=None.
         # при None, будт возвращена форма для создания экземпляра контента.
-        form = self.get_form(self.model, instance=self.obj)
-        return self.render_to_response({'form': form,
-                                        'object': self.obj})
+        if model_name in ['text', 'video',]:
+            form = self.get_form(self.model, instance=self.obj)
+        else:
+            form = None
+        return self.render_to_response({
+                                        'form': form,
+                                        'module': module_id,
+                                        'object': self.obj,})
 
     def post(self, request, module_id, model_name, id=None):
         # возвращаем форму с данными и файлами
+        data = {'error': True, 'name': 'none'}
         form = self.get_form(self.model,
                              instance=self.obj,
                              data=request.POST,
                              files=request.FILES)
+        print(form.errors)
         if form.is_valid():
             # задаем владельцем контента текущего пользователя
             obj = form.save(commit=False)
             obj.owner = request.user
+            if model_name in ['text', 'video']:
+                obj.save()
+                if not id:
+                    # если id объекта не указан, создаем новый экземпляр video, file, image или text
+                    Content.objects.create(module=self.module, content_object=obj)
+                return redirect('module_content_list', self.module.id)
+            obj.title = obj.data_field.name.split('/')[-1].split('.')[0]
+            data = {'name': obj.title}
             obj.save()
+
+            # создать message для отображения уведомления что файл сохранен
+
             if not id:
-                # если id объекта не указан, создаем новый экземпляр
+                # если id объекта не указан, создаем новый экземпляр video, file, image или text
                 Content.objects.create(module=self.module, content_object=obj)
-            return redirect('module_content_list', self.module.id)
-        return self.render_to_response({'form': form, 'object': self.obj})
+            
+            #return redirect('module_content_list', self.module.id)
+            return JsonResponse(data)
+        #return self.render_to_response({'form': form, 'object': self.obj})
+        #data = {'error': True}
+        return JsonResponse(data)
 
 
 class ContentDeleteView(InstructorMixin, View):

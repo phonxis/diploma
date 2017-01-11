@@ -36,7 +36,9 @@ modules</a></p>
                     <div data-id="{{ content.id }}">
                         {% with item=content.content_object %}
                             <p>{{ item }} ({{ item|name_of_model }})</p>
+                            {% if item|name_of_model == 'text' or item|name_of_model == 'video' %}
                             <a href="{% url 'update_module_content' module.id item|name_of_model item.id %}">Edit</a>
+                            {% endif %}
                             <form action="{% url 'delete_module_content' content.id %}" method="post">
                                 <input type="submit" value="Delete">
                                 {% csrf_token %}
