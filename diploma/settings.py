@@ -25,7 +25,7 @@ SECRET_KEY = 'ckwliq4(n2v5da91bmtt(b@*yopp1%!$e@_rf5(rq@+mpzmosb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

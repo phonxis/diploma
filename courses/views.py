@@ -322,6 +322,7 @@ class ContentDeleteView(InstructorMixin, View):
         content.delete()
         # возвращаемся к списку контента модуля
         return redirect('module_content_list', module.id)
+        #return JsonResponse({"data": "ok"})
 
 
 class ModuleContentListView(InstructorMixin, TemplateResponseMixin, View):

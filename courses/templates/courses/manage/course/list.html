@@ -3,10 +3,10 @@
 {% block content %}
     <h1>Мои курсы</h1>
 
-    <div class="module">
+    <div class="module row">
         <!-- -->
         {% for course in object_list %}
-            <div class="course-info">
+            <!-- <div class="course-info">
                 <h3>{{ course.title }}</h3>
                 <p>
                     <a href="{% url 'edit_course' course.id %}">Изменить</a>
@@ -16,9 +16,28 @@
                         <a href="{% url 'module_content_list' course.modules.first.id %}">Manage contents</a>
                     {% endif %}
                 </p>
+            </div> -->
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">{{ course.title }}</h3>
+              </div>
+              <div class="panel-body">
+                <p>
+                    <a href="{% url 'edit_course' course.id %}">Изменить</a>
+                    <a href="{% url 'delete_course' course.id %}">Удалить</a>
+                    <a href="{% url 'update_course_module' course.id %}">Управление модулями</a>
+                    {% if course.modules.count > 0 %}
+                        <a href="{% url 'module_content_list' course.modules.first.id %}">Manage contents</a>
+                    {% endif %}
+                </p>
+              </div>
             </div>
+
+        </div>
         {% empty %}
-            <p>Вы еще несоздли ниодного курса.</p>
+            <p>Вы еще несоздали ниодного курса.</p>
         {% endfor %}
         <p>
             <a href="{% url 'create_course' %}">Создать новый курс</a>
