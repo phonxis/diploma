@@ -1,66 +1,76 @@
 {% extends "base.html" %}
 
 {% block title %}
-	{% if subject %}
-		{{ subject.title }} courses
-	{% else %}
-		All courses
-	{% endif %}
+    {% if subject %}
+        {{ subject.title }} courses
+    {% else %}
+        All courses
+    {% endif %}
 {% endblock %}
 
 {% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-dismissible alert-{{message.tags}}">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <p>{{ message|safe }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
 <main>
-	<div class="section-nude-gray">
-		<h3>
-			{% if subject %}
-				Курси {{ subject.title }}
-			{% else %}
-				Всі курси
-			{% endif %}
-		</h3>
-	</div>
+    <div class="section-nude-gray">
+        <h3>
+            {% if subject %}
+                Курси {{ subject.title }}
+            {% else %}
+                Всі курси
+            {% endif %}
+        </h3>
+    </div>
 
-	<div class="btn-group">
-		<div>Subjects:</div>
-		<a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-			{% if subject %}
-				{{ subject.title }}
-			{% else %}
-				Всі курси
-			{% endif %}
-			<span class="caret"></span>
-		</a>
-		<ul class="dropdown-menu">
-			<li><a href="{% url 'course_list' %}">All</a></li>
-			{% for subj in subjects %}
-			<li>
-				<a href="{% url 'subject_course_list' subj.slug %}">
-					<!-- total_courses это аннотация queryset во вьюхе CourseListView -->
-					{{ subj.title }}: <span>{{ subj.total_courses }} courses</span>
-				</a>
-			</li>
-			{% endfor %}
-		</ul>
-	</div>
+    <div class="btn-group">
+        <div>Subjects:</div>
+        <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            {% if subject %}
+                {{ subject.title }}
+            {% else %}
+                Всі курси
+            {% endif %}
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="{% url 'course_list' %}">All</a></li>
+            {% for subj in subjects %}
+            <li>
+                <a href="{% url 'subject_course_list' subj.slug %}">
+                    <!-- total_courses это аннотация queryset во вьюхе CourseListView -->
+                    {{ subj.title }}: <span>{{ subj.total_courses }} courses</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-	<div class="row">
-		{% for course in courses %}
-			{% with subject=course.subject %}
+    <div class="row">
+        {% for course in courses %}
+            {% with subject=course.subject %}
 
-				<div class="col-lg-3 col-md-4 col-sm-6">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h3 class="panel-title">{{ course.title }} <span class="label label-default"> {{ course.subject }}</span></h3>
-						</div>
-						<div class="panel-body">
-							Приступайте до вивчення матеріалу цього курсу прямо зараз!<br />
-							<a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail' course.id %}">Переглянути курс</a>
-						</div>
-					</div>
-				</div>
-			{% endwith %}
-		{% endfor %}
-	</div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ course.title }} <span class="label label-default"> {{ course.subject }}</span></h3>
+                        </div>
+                        <div class="panel-body">
+                            Приступайте до вивчення матеріалу цього курсу прямо зараз!<br />
+                            <a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail' course.id %}">Переглянути курс</a>
+                        </div>
+                    </div>
+                </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
 
 </main>
 {% endblock %}

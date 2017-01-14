@@ -230,3 +230,14 @@ SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.5'
 #SOCIAL_AUTH_GITHUB_SECRET = ''
 #SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
+
+# MESSAGES SETTINGS
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger'
+}

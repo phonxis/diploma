@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db import transaction
 from courses.models import Course
 from .models import Profile
@@ -104,10 +105,10 @@ def update_profile(request):
             user_form.save()
             profile_form.save()
 
-            #messages.success(request, 'Profile update successfully')
+            messages.success(request, 'Profile update successfully')
         else:
             pass
-            #messages.error(request, 'Correct errors')
+            messages.error(request, 'Correct errors')
     else:
         # отображение форм с данными из БД (которые были ранее сохранены)
         user_form = UserEditForm(instance=request.user)
