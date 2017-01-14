@@ -4,6 +4,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from slugify import slugify
 from .fields import OrderField
 
 
@@ -37,6 +40,11 @@ class Course(models.Model):
 
     class Meta:
         ordering = ('-created',)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Course, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title

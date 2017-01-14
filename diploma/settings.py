@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     #'embed_video',
     #'memcache_status',
+    'slugify',
 
     # myapps
     'courses',
