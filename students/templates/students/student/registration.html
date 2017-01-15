@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load bootstrap %}
+
 {% block title %}
 	Signup
 {% endblock %}
@@ -10,10 +12,11 @@
 		<div class="content">
 			<h1 class="text-center">Реєстрація</h1>
 			<form action="." class="register-form user-form" method="POST">
-				{{ form.username }}
+				<!-- {{ form.username }}
 				{{ form.email }}
 				{{ form.password1 }}
-				{{ form.password2 }}
+				{{ form.password2 }} -->
+				{{ form|bootstrap }}
 				{% csrf_token %}
 				<input type="hidden" name="next" value="{{ next }}" />
 				<input type="submit" class="btn btn-primary btn-hg btn-block" value="Зареєструватися" />

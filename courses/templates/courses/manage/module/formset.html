@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 
+{% load bootstrap %}
+
 {% block content %}
 
     <h1>Edit "{{ course.title }}"</h1>
     <div class="module">
         <h2>Course modules</h2>
         <form action="" method="post">
-            {{ formset }}
+            {{ formset|bootstrap }}
             {{ formset.management_form }}
             {% csrf_token %}
             <input type="submit" class="button" value="Save modules">

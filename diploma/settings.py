@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     #'embed_video',
     #'memcache_status',
     'slugify',
+    'bootstrapform',
 
     # myapps
     'courses',

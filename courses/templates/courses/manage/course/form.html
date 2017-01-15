@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load bootstrap %}
+
 {% block content %}
 
     <h1>
@@ -12,7 +14,7 @@
     <div>
         <h2>Информация о курсе</h2>
         <form action="." method="POST">
-            {{ form.as_p }}
+            {{ form|bootstrap }}
             {% csrf_token %}
             <p>
                 <input type="submit" value="Сохранить курс">

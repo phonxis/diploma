@@ -39,7 +39,7 @@ class UsersCreationForm(UserCreationForm):
                            'placeholder': 'Username',
                            'required': 'True'}
             ),
-            'email': forms.TextInput(
+            'email': forms.EmailInput(
             attrs={'class': 'form-control form-group',
                    'placeholder': 'Email address',
                    'required': 'True'}
@@ -128,7 +128,7 @@ class InstructorsCreationForm(UserCreationForm):
                            'placeholder': 'Username',
                            'required': 'True'}
             ),
-            'email': forms.TextInput(
+            'email': forms.EmailInput(
             attrs={'class': 'form-control form-group',
                    'placeholder': 'Email address',
                    'required': 'True'}
