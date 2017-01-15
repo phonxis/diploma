@@ -81,12 +81,41 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email')
+        widgets = {
+          'first_name': forms.TextInput(
+                attrs={
+                    'class': 'form-control form-group',
+                    'placeholder': 'First name',
+                }
+            ),
+          'last_name': forms.TextInput(
+                attrs={
+                    'class': 'form-control form-group',
+                    'placeholder': 'Last name'
+                }
+            ),
+          'email': forms.EmailInput(
+                attrs={
+                    'class': 'form-control form-group',
+                    'placeholder': 'Email',
+                    'required': 'True'
+                }
+            )
+        }
 
 # форма для изменения некоторых данных из Profile модели
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('date_of_birth',)
+        widgets = {
+            'date_of_birth': forms.DateInput(
+                attrs={
+                    'class': 'form-control form-group',
+                    'placeholder': 'Birthday date'
+                }
+            )
+        }
 
 # не используется----------------------------------------------------------
 class InstructorsCreationForm(UserCreationForm):
