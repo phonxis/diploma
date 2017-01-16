@@ -406,7 +406,7 @@ class CourseListView(TemplateResponseMixin, View):
 
 class CourseDetailView(DetailView):
     """
-    Отображает единственный объект по его PK или по slug.
+    Отображает единственный объект по его slug.
     Этот объект присваивается к self.object
     """
     model = Course
