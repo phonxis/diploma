@@ -55,7 +55,6 @@
 
     <div class="row">
         {% for course in courses %}
-            {% with subject=course.subject %}
 
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="panel panel-primary">
@@ -64,11 +63,11 @@
                         </div>
                         <div class="panel-body">
                             Приступайте до вивчення матеріалу цього курсу прямо зараз!<br />
-                            <a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail' course.id %}">Переглянути курс</a>
+                            <a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'course_detail' course.id %}">Переглянути курс</a>
                         </div>
                     </div>
                 </div>
-            {% endwith %}
+
         {% endfor %}
     </div>
 

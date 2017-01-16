@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^subject/(?P<subject>[\w-]+)/$',
         views.CourseListView.as_view(),
         name="subject_course_list"),
-    url(r'^(?P<slug>[\w-]+)/$',
+    url(r'^(?P<pk>\d+)/$',
         views.CourseDetailView.as_view(),
         name="course_detail"),
 ]
