@@ -3,32 +3,34 @@
 {% load bootstrap %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+<div class="content">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
 
-        <div class="content">
+            <div class="">
 
-            <h1 class="text-center">Edit profile</h1>
-            <form action='.' method='POST'>
-                {{ user_form|bootstrap }}
-                {{ profile_form|bootstrap }}
-                <!--{{ user_form.first_name }}
-                {{ user_form.first_name.errors }}
+                <h1 class="text-center">Edit profile</h1>
+                <form action='.' method='POST'>
+                    {{ user_form|bootstrap }}
+                    {{ profile_form|bootstrap }}
+                    <!--{{ user_form.first_name }}
+                    {{ user_form.first_name.errors }}
 
-                {{ user_form.last_name }}
-                {{ user_form.last_name.errors }}
+                    {{ user_form.last_name }}
+                    {{ user_form.last_name.errors }}
 
-                {{ user_form.email }}
-                {{ user_form.email.errors }}
+                    {{ user_form.email }}
+                    {{ user_form.email.errors }}
 
-                {{ profile_form.date_of_birth }}
-                {{ profile_form.date_of_birth.errors }} -->
-                {% csrf_token %}
-                <p><button type='submit' class="btn btn-primary btn-hg btn-block">Save</button></p>
-            </form>
+                    {{ profile_form.date_of_birth }}
+                    {{ profile_form.date_of_birth.errors }} -->
+                    {% csrf_token %}
+                    <p><button type='submit' class="btn btn-primary btn-hg btn-block">Save</button></p>
+                </form>
+
+            </div>
 
         </div>
-
     </div>
 </div>
 {% endblock %}

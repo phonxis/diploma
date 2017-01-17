@@ -3,32 +3,35 @@
 {% load bootstrap %}
 
 {% block title %}
-	Signup
+    Signup
 {% endblock %}
 
 {% block content %}
-<div class="row">
-	<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-		<div class="content">
-			<h1 class="text-center">Реєстрація</h1>
-			<form action="." class="register-form user-form" method="POST">
-				<!-- {{ form.username }}
-				{{ form.email }}
-				{{ form.password1 }}
-				{{ form.password2 }} -->
-				{{ form|bootstrap }}
-				{% csrf_token %}
-				<input type="hidden" name="next" value="{{ next }}" />
-				<input type="submit" class="btn btn-primary btn-hg btn-block" value="Зареєструватися" />
-			</form>
-			<p class="text-center">
-				Вже зареєстровані?
-				<a href="{% url 'login' %}">
-					Залогіньтесь зараз
-				</a>
-			</p>
-		</div>
-	</div>
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+            <div class="">
+                <h1 class="text-center">Реєстрація</h1>
+                <form action="." class="register-form user-form" method="POST">
+                    <!-- {{ form.username }}
+                    {{ form.email }}
+                    {{ form.password1 }}
+                    {{ form.password2 }} -->
+                    {{ form|bootstrap }}
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    <input type="submit" class="btn btn-primary btn-hg btn-block" value="Зареєструватися" />
+                </form>
+                <p class="text-center">
+                    Вже зареєстровані?
+                    <a href="{% url 'login' %}">
+                        Залогіньтесь зараз
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

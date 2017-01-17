@@ -3,7 +3,7 @@
 {% load bootstrap %}
 
 {% block content %}
-
+<div class="content">
     <h1>
         {% if object %}
             Изменение курса "{{ object.title }}"
@@ -21,4 +21,5 @@
             </p>
         </form>
     </div>
+</div>
 {% endblock %}

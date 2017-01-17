@@ -6,16 +6,7 @@
 
 {% block content %}
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-dismissible alert-{{message.tags}}">
-              <button type="button" class="close" data-dismiss="alert">&times;</button>
-              <p>{{ message|safe }}</p>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-<main>
+<div class="content">
     <div class="container">
         {% with subject=course.subject %}
             <h2>{{ object.title }}</h2>
@@ -43,5 +34,5 @@
             </div>
         {% endwith %}
     </div>
-</main>
+</div>
 {% endblock %}

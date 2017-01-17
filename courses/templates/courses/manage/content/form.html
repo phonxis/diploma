@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-
+<div class="content">
     <h1>
     {% if object %}
         Edit content "{{ object.title }}"
@@ -54,6 +54,7 @@
             <a href="{% url 'module_content_list' module %}">go back</a>
         {% endif %}
     </div>
+</div>
 
 
 {% endblock %}

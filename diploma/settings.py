@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'embed_video',
     #'memcache_status',
     'slugify',
+
+    # monkey patching in this app. commented help-text paragraph
     'bootstrapform',
 
     # myapps

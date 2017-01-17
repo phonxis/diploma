@@ -3,7 +3,7 @@
 {% load user_tags %}
 
 {% block content %}
-
+<div class="content">
     {% with course=module.course %}
         <h1>Course "{{ course.title }}"</h1>
         <div class="contents">
@@ -60,6 +60,7 @@ modules</a></p>
             </ul>
         </div>
     {% endwith %}
+</div>
 {% endblock %}
 
 {% block domready %}
