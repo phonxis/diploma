@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.db import transaction
 from courses.models import Course
 from .models import Profile
@@ -30,6 +31,11 @@ class StudentRegistrationView(CreateView):
         #profile = Profile.objects.create(user=user)
 
         return result
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect('/')
+        return super(StudentRegistrationView, self).get(request, *args, **kwargs)
 
 
 class StudentEnrollCourseView(LoginRequiredMixin, FormView):

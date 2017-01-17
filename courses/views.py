@@ -452,6 +452,8 @@ class LoginView(FormView):
         return False
 
     def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect('/')
         self.set_test_cookie()
         return super(LoginView, self).get(request, *args, **kwargs)
 
@@ -508,3 +510,8 @@ class InstructorRegistrationView(CreateView):
         group.user_set.add(self.object)
 
         return reverse('manage_course_list')
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect('/')
+        return super(InstructorRegistrationView, self).get(request, *args, **kwargs)
