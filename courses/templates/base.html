@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/simple-sidebar.css' %}"> -->
     <!-- <link rel="stylesheet" href="{% static 'css/course_react.css' %}"> -->
     <!-- <link rel="stylesheet" href="{% static 'css/landing.css' %}"> -->
     {% block css_load_file %}
@@ -63,14 +64,18 @@
     </div>
 </header>
 
+{% block sidebar_btn %}
 
-<div class="content container">
+{% endblock %}
+
+
+<main class="container">
 
     {% include "messages.html" %}
 
     {% block content %}
     {% endblock %}
-</div>
+</main>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
@@ -83,6 +88,9 @@
     </script>
     {% block js_load_file %}
     
+    {% endblock %}
+
+    {% block js_sidebar %}
     {% endblock %}
 </body>
 </html>

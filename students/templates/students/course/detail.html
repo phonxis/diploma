@@ -1,62 +1,67 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% load cache %}
 
 {% block title %}
-	{{ object.title }}
+    {{ object.title }}
+{% endblock %}
+
+{% block sidebar_btn %}
+<div class="sidebar-btn">
+    <button id="offcanvasleft" class="btn btn-xs" type="button" data-toggle="offcanvasleft">side</button>
+</div>
 {% endblock %}
 
 {% block content %}
-<main>
-	<div class="section-nude-gray">
-		<div class="container">
-			<h3>
-				{{ module.title }}
-			</h3>
-		</div>
-	</div>
+<div class="content">
 
-	<div class="container lin">
-		<div class="contents">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-3">
-						<h3>Модулі</h3>
-						<ul id="modules">
-							{% for m in object.modules.all %}
-								<li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>
-									<a href="{% url 'student_course_detail_module' object.id m.id %}">
-										<span>
-											Module
-											<span class="order">{{ m.order|add:1 }}</span>
-										</span>
-										<br />
-										{{ m.title }}
-									</a>
-								</li>
-							{% empty %}
-								<li>No modules yet.</li>
-							{% endfor %}
-						</ul>
-					</div>
+    <div class="row row-offcanvas row-offcanvas-left">
 
-					<div class="col-md-9 section-white courses">
-						<div class="module">
-							{% if module %}
-							{% cache 300 module_contents module %}
-								{% for content in module.contents.all %}
-									{% with item=content.content_object %}
-										<h2>{{ item.title }}</h2>
-										{{ item.render }}
-									{% endwith %}
-								{% endfor %}
-							{% endcache %}
-							{% endif %}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</main>
+        <div class="col-xs-6 col-md-3 sidebar-offcanvas" id="sidebarLeft" role="navigation">
+            <div id="sidebar-nav">
+                
+                <ul class="nav">
+                <li><h3>Модулі</h3></li>
+                {% for m in object.modules.all %}
+                    <li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>
+                        <a href="{% url 'student_course_detail_module' object.id m.id %}">
+                            <span>
+                                Module
+                                <span class="order">{{ m.order|add:1 }}</span>
+                            </span>
+                            <br />
+                            {{ m.title }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>No modules yet.</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div> <!-- end div.col-md-3-->
+
+        <div class="col-xs-12 col-md-9">
+            <div class="module">
+                {% if module %}
+                    <!--{% cache 300 module_contents module %}-->
+                    {% for content in module.contents.all %}
+                        {% with item=content.content_object %}
+                            {{ item.render }}
+                        {% endwith %}
+                    {% endfor %}
+                    <!--{% endcache %}-->
+                {% endif %}
+            </div> <!-- end div.module-->
+        </div> <!-- end div.col-md-9.section-white.courses-->
+    </div> <!-- end div.row-->
+
+</div> <!-- end div.content-->
+{% endblock %}
+
+{% block domready %}
+$('#offcanvasleft').click(function() {
+  $('.row-offcanvas-left').toggleClass('active');
+});
 {% endblock %}

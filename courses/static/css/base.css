@@ -1,3 +1,48 @@
-div.content.container {
-    margin-top: 100px;
+div.content {
+    margin-top: 60px;
 }
+@media (min-width: 768px){
+    #offcanvasleft {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar-btn {
+        min-height: 60px;
+        background-color: #d1d3d6;
+        margin-top: 60px;
+    }
+    div.content {
+        margin-top: 0px;
+    }
+}
+
+/* Off Canvas */
+@media screen and (max-width: 768px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
+  }
+
+  .row-offcanvas-left
+  #sidebarLeft {
+    left: -50%;
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%;
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    margin-left: 10px;
+  }
+  #offcanvasleft{margin-top:10px;}
+}
+
+
