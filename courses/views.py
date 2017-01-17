@@ -395,8 +395,8 @@ class CourseListView(TemplateResponseMixin, View):
                                         'courses': subject_courses})
         else:
             # возвращаем все курсы
-            courses = cache.get('all_courses')
-            if not courses:
+            all_courses = cache.get('all_courses')
+            if not all_courses:
                 # если нет в кеше, тогда заносим туда
                 cache.set('all_courses', courses)
             return self.render_to_response({'subjects': subjects,

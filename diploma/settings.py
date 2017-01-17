@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #'embed_video',
+    'embed_video',
     #'memcache_status',
     'slugify',
     'bootstrapform',
