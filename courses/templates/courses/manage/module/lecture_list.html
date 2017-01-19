@@ -31,49 +31,23 @@ modules</a></p>
         </div>
         <div class="module">
             <h2>Module {{ module.order|add:1 }}: {{ module.title }}</h2>
-            <h3>Lecture contents:</h3>
-            <!--<div id="module-contents">
-                {% for content in module.contents.all %}
-                    <div data-id="{{ content.id }}">
-                        {% with item=content.content_object %}
-                            <p>{{ item }} ({{ item|name_of_model }})</p>
-                            {% if item|name_of_model == 'text' or item|name_of_model == 'video' %}
-                            <a href="{% url 'update_module_content' module.id item|name_of_model item.id %}">Edit</a>
-                            {% endif %}
-                            <form action="{% url 'delete_module_content' content.id %}" method="post">
-                                <input type="submit" value="Delete">
-                                {% csrf_token %}
-                            </form>
-                        {% endwith %}
-                    </div>
-                {% empty %}
-                    <p>This module has no contents yet.</p>
-                {% endfor %}
-            </div>-->
+            <h3>Module lectures:</h3>
 
             {% for lecture in module.lectures.all %}
-                <p>{{ lecture.title }}</p>
+                <p>{{ lecture.title }} <a href="{% url 'update_lecture' module.id lecture.id %}"> update title</a></p>
             {% empty %}
                 <p>no lectures</p>
             {% endfor %}
             <hr>
             <p>add lecture</p>
             <p><a href="{% url 'create_lecture' module.id %}">create new lecture</a></p>
-            <hr>
-            <h3>Add new content:</h3>
-            <ul class="content-types">
-                <li><a href="{% url 'create_module_content' module.id 'text'%}">Text</a></li>
-                <li><a href="{% url 'create_module_content' module.id 'image' %}">Image</a></li>
-                <li><a href="{% url 'create_module_content' module.id 'video' %}">Video</a></li>
-                <li><a href="{% url 'create_module_content' module.id 'file' %}">File</a></li>
-            </ul>
         </div>
     {% endwith %}
 </div>
 {% endblock %}
 
 {% block domready %}
-    //делаем список #modules сортируемым
+//делаем список #modules сортируемым
     $('#modules').sortable({
         // этот ивент вызывается когда прекращена сортировка
         stop: function(event, ui) {
@@ -91,6 +65,27 @@ modules</a></p>
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 data: JSON.stringify(modules_order)
+            });
+        }
+    });
+    //делаем div'и #module-contents сортируемым
+    $('#module-contents').sortable({
+        // этот ивент вызывается когда прекращена сортировка
+        stop: function(event, ui) {
+            // объект со списком индексов элементов
+            contents_order = {};
+            $('#module-contents').children().each(function(index) {
+                // добавляем в объект-словарь
+                contents_order[$(this).data('id')] = $(this).index();
+            });
+            $.ajax({
+                type: "POST",
+                url: "{% url 'order_content' %}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(contents_order)
+            }).error(function(e) {
+                console.log(e);
             });
         }
     });

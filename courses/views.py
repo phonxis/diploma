@@ -19,8 +19,8 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect, JsonResponse
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
-from .models import Course, Module, Content, Subject
-from .forms import ModuleFormSet
+from .models import Course, Module, Content, Subject, Lecture
+from .forms import ModuleFormSet, LectureForm
 from students.forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm#, InstructorsCreationForm
 
 
@@ -133,6 +133,47 @@ class CourseDeleteView(PermissionRequiredMixin, OwnerCourseMixin, DeleteView):
     template_name = "courses/manage/course/delete.html"
 
 
+'''class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
+    """
+    Класс используется для добавления, обновления и удаления модулей
+    определенного курса.
+    --------------------
+    TemplateResponseMixin используется для отображения templates, для него
+    обязательно нужно указывать template_name или реализовать
+    метод get_template_names; имеет метод render_to_response
+    для отображения context в template
+    --------------------
+    View реализует метод dispatch, который анализирует response на метод запроса
+    и в зависимости от его типа отправляет его нужному методу (get(), post()...)
+    """
+    template_name = "courses/manage/module/formset.html"
+    course = None
+
+    def get_formset(self, data=None):
+        return ModuleFormSet(instance=self.course, data=data)
+
+    def dispatch(self, request, pk):
+        # ищем определенный курс текущего пользователя
+        self.course = get_object_or_404(Course, id=pk, owner=request.user)
+        return super(CourseModuleUpdateView, self).dispatch(request, pk)
+
+    def get(self, request, *args, **kwargs):
+        # создаем пустой formset
+        formset = self.get_formset()
+        return self.render_to_response({'course': self.course,
+                                        'formset': formset})
+
+    def post(self, request, *args, **kwargs):
+        # создаем formset с данными
+        formset = self.get_formset(data=request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('manage_course_list')
+        return self.render_to_response({'course': self.course,
+                                        'formset': formset})
+'''
+
+
 class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
     """
     Класс используется для добавления, обновления и удаления модулей
@@ -173,47 +214,51 @@ class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                         'formset': formset})
 
 
-class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
-    """
-    Класс используется для добавления, обновления и удаления модулей
-    определенного курса.
-    --------------------
-    TemplateResponseMixin используется для отображения templates, для него
-    обязательно нужно указывать template_name или реализовать
-    метод get_template_names; имеет метод render_to_response
-    для отображения context в template
-    --------------------
-    View реализует метод dispatch, который анализирует response на метод запроса
-    и в зависимости от его типа отправляет его нужному методу (get(), post()...)
-    """
-    template_name = "courses/manage/module/formset.html"
-    course = None
+class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
+    model = Lecture
+    template_name = "courses/manage/lecture/form.html"
+    module = None
+    obj = None
 
-    def get_formset(self, data=None):
-        return ModuleFormSet(instance=self.course, data=data)
+    def dispatch(self, request, module_id, lecture_id=None):
+        self.module = get_object_or_404(Module,
+                                        id=module_id,
+                                        course__owner=request.user)
+        if lecture_id:
+            self.obj = get_object_or_404(self.model,
+                                         id=lecture_id,
+                                         module__course__owner=request.user)
+        return super(LectureCreateUpdateView, self).dispatch(request,
+                                                             module_id,
+                                                             lecture_id)
 
-    def dispatch(self, request, pk):
-        # ищем определенный курс текущего пользователя
-        self.course = get_object_or_404(Course, id=pk, owner=request.user)
-        return super(CourseModuleUpdateView, self).dispatch(request, pk)
+    def get(self, request, module_id, lecture_id=None):
+        form = LectureForm(instance=self.obj)
 
-    def get(self, request, *args, **kwargs):
-        # создаем пустой formset
-        formset = self.get_formset()
-        return self.render_to_response({'course': self.course,
-                                        'formset': formset})
+        return self.render_to_response({
+                'form': form,
+                'module': module_id,
+                'lecture': lecture_id,
+                'object': self.obj
+            })
 
-    def post(self, request, *args, **kwargs):
-        # создаем formset с данными
-        formset = self.get_formset(data=request.POST)
-        if formset.is_valid():
-            formset.save()
-            return redirect('manage_course_list')
-        return self.render_to_response({'course': self.course,
-                                        'formset': formset})
+    def post(self, request, module_id, lecture_id):
+        form = LectureForm(instance=self.obj, data=request.POST)
+
+        if form.is_valid():
+            new_obj = form.save(commit=False)
+            new_obj.module = self.module
+            new_obj.save()
+            print('NICE NICE NICE NICE NICE NICE NICE')
+            return redirect('module_content_list', self.module.id)
+
+        else:
+            print('FAIL FAIL FAIL FAIL FAIL FAIL FAIL FAIL')
+            return self.render_to_response({'form': form})
 
 
 class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
+    lecture = None
     module = None
     model = None
     obj = None
@@ -247,11 +292,14 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                                      'owner'])
         return Form(*args, **kwargs)
 
-    def dispatch(self, request, module_id, model_name, id=None):
-        # получаем модуль с которым будет асоциирован объект
+    def dispatch(self, request, module_id, lecture_id, model_name, id=None):
         self.module = get_object_or_404(Module,
                                         id=module_id,
                                         course__owner=request.user)
+
+        self.lecture = get_object_or_404(Lecture,
+                                        id=lecture_id)
+
         # получаем модель которая будет соответсвотать типу контента
         self.model = self.get_model(model_name)
         # если не None, то объект будет обновлен, иначе будет создан новый
@@ -262,10 +310,11 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
         # вызываем метод родителя
         return super(ContentCreateUpdateView, self).dispatch(request,
                                                              module_id,
+                                                             lecture_id,
                                                              model_name,
                                                              id)
 
-    def get(self, request, module_id, model_name, id=None):
+    def get(self, request, module_id, lecture_id, model_name, id=None):
         # возвращаем форму для изменения экземпляра контента при self.obj!=None.
         # при None, будт возвращена форма для создания экземпляра контента.
         if model_name in ['text', 'video',]:
@@ -274,10 +323,11 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             form = None
         return self.render_to_response({
                                         'form': form,
-                                        'module': module_id,
+                                        'lecture': lecture_id,
+                                        'module':module_id,
                                         'object': self.obj,})
 
-    def post(self, request, module_id, model_name, id=None):
+    def post(self, request, module_id, lecture_id, model_name, id=None):
         # возвращаем форму с данными и файлами
         data = {'error': True, 'name': 'none'}
         form = self.get_form(self.model,
@@ -293,8 +343,9 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                 obj.save()
                 if not id:
                     # если id объекта не указан, создаем новый экземпляр video, file, image или text
-                    Content.objects.create(module=self.module, content_object=obj)
-                return redirect('module_content_list', self.module.id)
+                    Content.objects.create(lecture=self.lecture, content_object=obj)
+                #return redirect('module_content_list', self.module.id)
+                return redirect('update_lecture', self.module.id, self.lecture.id)
             obj.title = "_".join(obj.data_field.name.split('/')[-1].split('.')[:-1])
             data = {'name': obj.title}
             obj.save()
@@ -303,7 +354,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
 
             if not id:
                 # если id объекта не указан, создаем новый экземпляр video, file, image или text
-                Content.objects.create(module=self.module, content_object=obj)
+                Content.objects.create(lecture=self.lecture, content_object=obj)
             
             #return redirect('module_content_list', self.module.id)
             return JsonResponse(data)
@@ -326,7 +377,7 @@ class ContentDeleteView(InstructorMixin, View):
 
 
 class ModuleContentListView(InstructorMixin, TemplateResponseMixin, View):
-    template_name = "courses/manage/module/content_list.html"
+    template_name = "courses/manage/module/lecture_list.html"
 
     def get(self, request, module_id):
         module = get_object_or_404(Module,
@@ -348,6 +399,13 @@ class ModuleOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
         return self.render_json_response({'saved': 'OK'})
 
 
+class LectureOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+    def post(self, request):
+        for id, order in self.request_json.items():
+            Lecture.objects.filter(id=id, module__course__owner=request.user).update(order=order)
+        return self.render_json_response({'saved': 'OK'})
+
+
 class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
     """
     CsrfExemptMixin освобождает запрос от csrf token'а.
@@ -358,7 +416,9 @@ class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
         for id, order in self.request_json.items():
             print('id', id, ' -- ', order)
         for id, order in self.request_json.items():
-            Content.objects.filter(id=id, module__course__owner=request.user).update(order=order)
+            Content.objects.filter(id=id,
+                                   #lecture__module__course__owner=request.user).update(order=order)
+                                   owner=request.user).update(order=order)
         return self.render_json_response({'saved': 'OK'})
 
 

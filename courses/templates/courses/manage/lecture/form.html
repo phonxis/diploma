@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% load bootstrap %}
+
+{% load user_tags %}
+
+{% block content %}
+<div class="content">
+    <h1>
+    {% if object %}
+        Edit lecture "{{ object.title }}"
+    {% else %}
+        Add a new lecture
+    {% endif %}
+    </h1>
+    <div class="module">
+        <h2>Lecture info</h2>
+            <form action="" method="post" enctype="multipart/form-data">
+                {{ form|bootstrap }}
+                {% csrf_token %}
+                <p><input type="submit" value="Save lecture"></p>
+            </form>
+    </div>
+
+    <div class="module">
+            <h2>Module {{ object.order|add:1 }}: {{ object.title }}</h2>
+            <h3>Lecture contents:</h3>
+            <div id="module-contents">
+                {% for content in object.contents.all %}
+                    <div data-id="{{ content.id }}">
+                        {% with item=content.content_object %}
+                            <p>{{ item }} ({{ item|name_of_model }})</p>
+                            {% if item|name_of_model == 'text' or item|name_of_model == 'video' %}
+                            <a href="{% url 'update_module_content' module lecture item|name_of_model item.id %}">Edit</a>
+                            {% endif %}
+                            <form action="{% url 'delete_module_content' content.id %}" method="post">
+                                <input type="submit" value="Delete">
+                                {% csrf_token %}
+                            </form>
+                        {% endwith %}
+                    </div>
+                {% empty %}
+                    <p>This lecture has no contents yet.</p>
+                {% endfor %}
+            </div>
+
+            <hr>
+            <h3>Add new content:</h3>
+            <ul class="content-types">
+                <li><a href="{% url 'create_module_content' module lecture 'text'%}">Text</a></li>
+                <li><a href="{% url 'create_module_content' module lecture 'image' %}">Image</a></li>
+                <li><a href="{% url 'create_module_content' module lecture 'video' %}">Video</a></li>
+                <li><a href="{% url 'create_module_content' module lecture 'file' %}">File</a></li>
+            </ul>
+        </div>
+</div>
+
+
+{% endblock %}
+
+{% block domready %}
+    //делаем div'и #module-contents сортируемым
+    $('#module-contents').sortable({
+        // этот ивент вызывается когда прекращена сортировка
+        stop: function(event, ui) {
+            // объект со списком индексов элементов
+            contents_order = {};
+            $('#module-contents').children().each(function(index) {
+                // добавляем в объект-словарь
+                contents_order[$(this).data('id')] = $(this).index();
+            });
+            $.ajax({
+                type: "POST",
+                url: "{% url 'order_content' %}",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(contents_order)
+            }).error(function(e) {
+                console.log(e);
+            });
+        }
+    });
+{% endblock %}

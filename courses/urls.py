@@ -18,12 +18,34 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/module/$',
         views.CourseModuleUpdateView.as_view(),
         name="update_course_module"),
-    url(r'^module/(?P<module_id>\d+)/content/(?P<model_name>\w+)/create/$',
+
+    #url(r'^module/(?P<module_id>\d+)/content/(?P<model_name>\w+)/create/$',
+    #    views.ContentCreateUpdateView.as_view(),
+    #    name="create_module_content"),
+
+    #url(r'^module/(?P<module_id>\d+)/content/(?P<model_name>\w+)/(?P<id>\d+)/$',
+    #    views.ContentCreateUpdateView.as_view(),
+    #    name="update_module_content"),
+
+
+    # create lecture
+    url(r'^module/(?P<module_id>\d+)/lecture/create/$',
+        views.LectureCreateUpdateView.as_view(),
+        name="create_lecture"),
+    # update lecture
+    url(r'module/(?P<module_id>\d+)/lecture/(?P<lecture_id>\d+)/$',
+        views.LectureCreateUpdateView.as_view(),
+        name="update_lecture"),
+    # create lecture content
+    url(r'^module/(?P<module_id>\d+)/lecture/(?P<lecture_id>\d+)/content/(?P<model_name>\w+)/create/$',
         views.ContentCreateUpdateView.as_view(),
         name="create_module_content"),
-    url(r'^module/(?P<module_id>\d+)/content/(?P<model_name>\w+)/(?P<id>\d+)/$',
+    # update lecture content
+    url(r'^module/(?P<module_id>\d+)/lecture/(?P<lecture_id>\d+)/content/(?P<model_name>\w+)/(?P<id>\d+)/$',
         views.ContentCreateUpdateView.as_view(),
         name="update_module_content"),
+
+
     url(r'^content/(?P<id>\d+)/delete/$',
         views.ContentDeleteView.as_view(),
         name="delete_module_content"),

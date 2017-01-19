@@ -65,8 +65,20 @@ class Module(models.Model):
         return "{}. {}".format(self.order, self.title)
 
 
+class Lecture(models.Model):
+    module = models.ForeignKey(Module, related_name="lectures")
+    title = models.CharField(max_length=100)
+    order = OrderField(blank=True, for_fields=['module'])
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.title
+
+
 class Content(models.Model):
-    module = models.ForeignKey(Module, related_name="contents")
+    lecture = models.ForeignKey(Lecture, related_name="contents")
     # связь с моделью contentType
     content_type = models.ForeignKey(ContentType,
                                      limit_choices_to={
@@ -80,7 +92,7 @@ class Content(models.Model):
     # определение обобщенной связи
     content_object = GenericForeignKey('content_type', 'object_id')
     order = OrderField(blank=True,
-                       for_fields=['module'])
+                       for_fields=['lecture'])
 
     class Meta:
         ordering = ['order']
