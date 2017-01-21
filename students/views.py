@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.db import transaction
-from courses.models import Course
+from courses.models import Course, Module
 from .models import Profile
 from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm, ProfileEditForm, UserEditForm
 
@@ -86,10 +86,43 @@ class StudentCourseDetailView(DetailView):
             # если в параметрах вызова явно указан ид модуля
             # то возвращаем этот модуль
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
+            print(context['module'])
         else:
             # иначе возвращаем первый модуль курса
             try:
                 context['module'] = course.modules.all()[0]
+            except IndexError:
+                # ниодного модуля еще не было добавлено
+                pass
+        return context
+
+
+class StudentModuleDetailView(DetailView):
+    model = Module
+    template_name = "students/course/lecture.html"
+
+    #def get_queryset(self):
+    #    queryset = super(StudentModuleDetailView, self).get_queryset()
+    #    print(queryset)
+    #    return queryset.filter(course__students__in=[self.request.user])
+
+    def get_context_data(self, **kwargs):
+        context = super(StudentModuleDetailView,
+                        self).get_context_data(**kwargs)
+        module = self.get_object()
+
+        context['course'] = module.course.id
+
+        if 'lecture_id' in self.kwargs:
+            print(self.kwargs)
+            # если в параметрах вызова явно указан ид модуля
+            # то возвращаем этот модуль
+            context['lecture'] = module.lectures.get(id=self.kwargs['lecture_id'])
+            #print(context['lecture'].contents)
+        else:
+            # иначе возвращаем первый модуль курса
+            try:
+                context['lecture'] = module.lectures.all()[0]
             except IndexError:
                 # ниодного модуля еще не было добавлено
                 pass

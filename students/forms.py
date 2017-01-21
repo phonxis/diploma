@@ -14,6 +14,7 @@ class CourseEnrollForm(forms.Form):
 
 class UsersLoginForm(AuthenticationForm):
     username = forms.CharField(
+        label='Username',
         widget=forms.TextInput(
             attrs={'class': 'form-control form-group',
                    'placeholder': 'Username or E-mail address',
@@ -21,6 +22,7 @@ class UsersLoginForm(AuthenticationForm):
         )
     )
     password = forms.CharField(
+        label='Password',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
                    'placeholder': 'Password',
@@ -30,22 +32,6 @@ class UsersLoginForm(AuthenticationForm):
 
 
 class UsersCreationForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ('username', 'email',)
-        widgets = {
-            'username': forms.TextInput(
-                    attrs={'class': 'form-control form-group',
-                           'placeholder': 'Username',
-                           'required': 'True'}
-            ),
-            'email': forms.EmailInput(
-            attrs={'class': 'form-control form-group',
-                   'placeholder': 'Email address',
-                   'required': 'True'}
-            )
-        }
-
     '''username = forms.CharField(
         widget=forms.TextInput(
             attrs={'class': 'form-control form-group',
@@ -61,6 +47,7 @@ class UsersCreationForm(UserCreationForm):
         )
     )'''
     password1 = forms.CharField(
+        label='Password',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
                    'placeholder': 'Password',
@@ -68,12 +55,29 @@ class UsersCreationForm(UserCreationForm):
         )
     )
     password2 = forms.CharField(
+        label='Confirm password',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
                    'placeholder': 'Confirm password',
                    'required': 'True'}
         )
     )
+
+    class Meta:
+        model = User
+        fields = ('username', 'email',)
+        widgets = {
+            'username': forms.TextInput(
+                    attrs={'class': 'form-control form-group',
+                           'placeholder': 'Username',
+                           'required': 'True'}
+            ),
+            'email': forms.EmailInput(
+            attrs={'class': 'form-control form-group',
+                   'placeholder': 'Email address',
+                   'required': 'True'}
+            )
+        }
 
 
 # форма для изменения некоторых данных из User модели
@@ -116,9 +120,37 @@ class ProfileEditForm(forms.ModelForm):
                 }
             )
         }
+        labels = {
+            'date_of_birth': "Birthday date"
+        }
 
 # не используется----------------------------------------------------------
 class InstructorsCreationForm(UserCreationForm):
+    password1 = forms.CharField(
+        #label='Password',
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control form-group',
+                   'placeholder': 'Password',
+                   'required': 'True'}
+        )
+    )
+    password2 = forms.CharField(
+        #label='Confirm password',
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control form-group',
+                   'placeholder': 'Confirm password',
+                   'required': 'True'}
+        )
+    )
+    '''group = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control form-group',
+                   'placeholder': '',
+                   'required': 'True',
+                   'value': 'Instructor'}
+        )
+    )'''
+
     class Meta:
         model = User
         fields = ('username', 'email',)
@@ -134,26 +166,10 @@ class InstructorsCreationForm(UserCreationForm):
                    'required': 'True'}
             )
         }
-    password1 = forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={'class': 'form-control form-group',
-                   'placeholder': 'Password',
-                   'required': 'True'}
-        )
-    )
-    password2 = forms.CharField(
-        widget=forms.PasswordInput(
-            attrs={'class': 'form-control form-group',
-                   'placeholder': 'Confirm password',
-                   'required': 'True'}
-        )
-    )
-    '''group = forms.CharField(
-        widget=forms.TextInput(
-            attrs={'class': 'form-control form-group',
-                   'placeholder': '',
-                   'required': 'True',
-                   'value': 'Instructor'}
-        )
-    )'''
+        labels = {
+            'username': "Username",
+            'email': 'E-mail',
+            'password1': 'Password',
+            'password2': 'Confirm password'
+        }
 # ---------------------------------------------------------------------------

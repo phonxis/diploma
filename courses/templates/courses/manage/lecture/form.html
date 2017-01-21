@@ -24,18 +24,19 @@
             </form>
     </div>
 
-    <div class="module">
-            <h2>Module {{ object.order|add:1 }}: {{ object.title }}</h2>
+    {% if lecture %}
+    <div class="lecture">
+            <h2>Lecture {{ object.order|add:1 }}: {{ object.title }}</h2>
             <h3>Lecture contents:</h3>
-            <div id="module-contents">
+            <div id="lecture-contents">
                 {% for content in object.contents.all %}
                     <div data-id="{{ content.id }}">
                         {% with item=content.content_object %}
                             <p>{{ item }} ({{ item|name_of_model }})</p>
                             {% if item|name_of_model == 'text' or item|name_of_model == 'video' %}
-                            <a href="{% url 'update_module_content' module lecture item|name_of_model item.id %}">Edit</a>
+                            <a href="{% url 'update_lecture_content' module lecture item|name_of_model item.id %}">Edit</a>
                             {% endif %}
-                            <form action="{% url 'delete_module_content' content.id %}" method="post">
+                            <form action="{% url 'delete_lecture_content' content.id %}" method="post">
                                 <input type="submit" value="Delete">
                                 {% csrf_token %}
                             </form>
@@ -47,27 +48,28 @@
             </div>
 
             <hr>
-            <h3>Add new content:</h3>
-            <ul class="content-types">
-                <li><a href="{% url 'create_module_content' module lecture 'text'%}">Text</a></li>
-                <li><a href="{% url 'create_module_content' module lecture 'image' %}">Image</a></li>
-                <li><a href="{% url 'create_module_content' module lecture 'video' %}">Video</a></li>
-                <li><a href="{% url 'create_module_content' module lecture 'file' %}">File</a></li>
-            </ul>
+                <h3>Add new content:</h3>
+                <ul class="content-types">
+                    <li><a href="{% url 'create_lecture_content' module lecture 'text'%}">Text</a></li>
+                    <li><a href="{% url 'create_lecture_content' module lecture 'image' %}">Image</a></li>
+                    <li><a href="{% url 'create_lecture_content' module lecture 'video' %}">Video</a></li>
+                    <li><a href="{% url 'create_lecture_content' module lecture 'file' %}">File</a></li>
+                </ul>
         </div>
+        {% endif %}
 </div>
 
 
 {% endblock %}
 
 {% block domready %}
-    //делаем div'и #module-contents сортируемым
-    $('#module-contents').sortable({
+    //делаем div'и #lecture-contents сортируемым
+    $('#lecture-contents').sortable({
         // этот ивент вызывается когда прекращена сортировка
         stop: function(event, ui) {
             // объект со списком индексов элементов
             contents_order = {};
-            $('#module-contents').children().each(function(index) {
+            $('#lecture-contents').children().each(function(index) {
                 // добавляем в объект-словарь
                 contents_order[$(this).data('id')] = $(this).index();
             });

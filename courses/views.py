@@ -224,6 +224,7 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
         self.module = get_object_or_404(Module,
                                         id=module_id,
                                         course__owner=request.user)
+        # если указан lecture_id то возвращаем объект
         if lecture_id:
             self.obj = get_object_or_404(self.model,
                                          id=lecture_id,
@@ -249,11 +250,9 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             new_obj = form.save(commit=False)
             new_obj.module = self.module
             new_obj.save()
-            print('NICE NICE NICE NICE NICE NICE NICE')
-            return redirect('module_content_list', self.module.id)
+            return redirect('module_lecture_list', self.module.id)
 
         else:
-            print('FAIL FAIL FAIL FAIL FAIL FAIL FAIL FAIL')
             return self.render_to_response({'form': form})
 
 
@@ -372,11 +371,11 @@ class ContentDeleteView(InstructorMixin, View):
         content.content_object.delete()
         content.delete()
         # возвращаемся к списку контента модуля
-        return redirect('module_content_list', module.id)
+        return redirect('module_lecture_list', module.id)
         #return JsonResponse({"data": "ok"})
 
 
-class ModuleContentListView(InstructorMixin, TemplateResponseMixin, View):
+class ModuleLectureListView(InstructorMixin, TemplateResponseMixin, View):
     template_name = "courses/manage/module/lecture_list.html"
 
     def get(self, request, module_id):

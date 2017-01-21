@@ -11,7 +11,7 @@
             <ul id="modules">
                 {% for m in course.modules.all %}
                     <li data-id="{{ m.id }}" {% if m == module %} class="selected"{% endif %}>
-                        <a href="{% url 'module_content_list' m.id %}">
+                        <a href="{% url 'module_lecture_list' m.id %}">
                             <span>
                                 Module <span class="order">{{ m.order|add:1 }}</span>
                             </span>
@@ -26,7 +26,7 @@
             <p><a href="{% url 'update_course_module' course.id %}">Edit
 modules</a></p>
             {% if course.modules.count > 0 %}
-                <a href="{% url 'module_content_list' course.modules.first.id %}">Manage contents</a>
+                <a href="{% url 'module_lecture_list' course.modules.first.id %}">Manage contents</a>
             {% endif %}
         </div>
         <div class="module">

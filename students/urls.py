@@ -26,4 +26,9 @@ urlpatterns = [
     url(r'^profile/$',
         views.update_profile,
         name="update_profile"),
+
+    # отображение контента лекций
+    url(r'^course/(?P<course_id>\d+)/(?P<pk>\d+)/(?P<lecture_id>\d+)/$',
+        views.StudentModuleDetailView.as_view(),
+        name="lecture_detail"),
 ]

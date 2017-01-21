@@ -11,7 +11,7 @@
             <ul id="modules">
                 {% for m in course.modules.all %}
                     <li data-id="{{ m.id }}" {% if m == module %} class="selected"{% endif %}>
-                        <a href="{% url 'module_content_list' m.id %}">
+                        <a href="{% url 'module_lecture_list' m.id %}">
                             <span>
                                 Module <span class="order">{{ m.order|add:1 }}</span>
                             </span>
@@ -26,18 +26,21 @@
             <p><a href="{% url 'update_course_module' course.id %}">Edit
 modules</a></p>
             {% if course.modules.count > 0 %}
-                <a href="{% url 'module_content_list' course.modules.first.id %}">Manage contents</a>
+                <a href="{% url 'module_lecture_list' course.modules.first.id %}">Manage contents</a>
             {% endif %}
         </div>
         <div class="module">
             <h2>Module {{ module.order|add:1 }}: {{ module.title }}</h2>
             <h3>Module lectures:</h3>
 
+            <ul id="lectures">
             {% for lecture in module.lectures.all %}
-                <p>{{ lecture.title }} <a href="{% url 'update_lecture' module.id lecture.id %}"> update title</a></p>
+                <li data-id="{{ lecture.id }}">{{ lecture.title }} <a href="{% url 'update_lecture' module.id lecture.id %}"> update lecture/add content</a></li>
             {% empty %}
-                <p>no lectures</p>
+                <li>no lectures</li>
             {% endfor %}
+            </ul>
+
             <hr>
             <p>add lecture</p>
             <p><a href="{% url 'create_lecture' module.id %}">create new lecture</a></p>
@@ -69,21 +72,21 @@ modules</a></p>
         }
     });
     //делаем div'и #module-contents сортируемым
-    $('#module-contents').sortable({
+    $('#lectures').sortable({
         // этот ивент вызывается когда прекращена сортировка
         stop: function(event, ui) {
             // объект со списком индексов элементов
-            contents_order = {};
-            $('#module-contents').children().each(function(index) {
+            lectures_order = {};
+            $('#lectures').children().each(function(index) {
                 // добавляем в объект-словарь
-                contents_order[$(this).data('id')] = $(this).index();
+                lectures_order[$(this).data('id')] = $(this).index();
             });
             $.ajax({
                 type: "POST",
-                url: "{% url 'order_content' %}",
+                url: "{% url 'order_lecture' %}",
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
-                data: JSON.stringify(contents_order)
+                data: JSON.stringify(lectures_order)
             }).error(function(e) {
                 console.log(e);
             });
