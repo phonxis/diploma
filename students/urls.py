@@ -22,7 +22,7 @@ urlpatterns = [
         views.StudentCourseDetailView.as_view(),
         name="student_course_detail_module"),
 
-    url(r'^course/(?P<pk>\d+)/lecture-(?P<lecture_id>\d+)/$',
+    url(r'^course/(?P<pk>\d+)/(?P<module_id>\d+)/lecture-(?P<lecture_id>\d+)/$',
         #cache_page(60 * 30)(views.StudentCourseDetailView.as_view()),
         views.StudentCourseDetailView.as_view(),
         name="student_course_detail_module_lecture"),

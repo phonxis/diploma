@@ -110,11 +110,13 @@ class StudentCourseDetailView(DetailView):
                         self).get_context_data(**kwargs)
         course = self.get_object()
 
-        if 'module_id' in self.kwargs:
+        if 'module_id' in self.kwargs and not 'lecture_id' in self.kwargs:
             # если в параметрах вызова явно указан ид модуля
             # то возвращаем этот модуль
             context['module'] = course.modules.get(id=self.kwargs['module_id'])
             print(context['module'])
+        elif 'lecture_id' in self.kwargs and 'module_id' in self.kwargs:
+            context['lecture'] = Lecture.objects.get(id=self.kwargs['lecture_id'])
         else:
             # иначе возвращаем первый модуль курса
             try:

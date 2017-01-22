@@ -26,7 +26,7 @@
                 <li><h3>Модулі</h3></li>
                 {% for m in object.modules.all %}
                     <li>
-                        <a href="{% url 'detailed_module' %}" data-id="{{ m.id }}" class="module">
+                        <a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">
                             <span>
                                 Module
                                 <span class="order">{{ m.order|add:1 }}</span>
@@ -36,7 +36,7 @@
                         </a>
                     </li>
                     {% for lec in m.lectures.all %}
-                        <li><a href="{% url 'detailed_lecture' %}" data-id="{{ lec.id }}" class="lecture">{{ lec.title }}</a></li>
+                        <li><a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}" data-id="{{ lec.id }}" class="lecture">{{ lec.title }}</a></li>
                     {% endfor %}
                 {% empty %}
                     <li>No modules yet.</li>
@@ -76,37 +76,38 @@
 $('#offcanvasleft').click(function() {
   $('.row-offcanvas-left').toggleClass('active');
 });
-$('a.module').click(function(e) {
-    e.preventDefault();
-    var module_id = $(this).data('id');
-    console.log($(this).attr('href'));
-    console.log(module_id);
-    $.ajax({
-        type: 'GET',
-        url: $(this).attr('href'),
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        data: {'module_id': module_id},
-        success: function(data) {
-            console.log(data);
-        }
-    });
-});
 
-$('a.lecture').click(function(e) {
-    e.preventDefault();
-    var lecture_id = $(this).data('id');
-    console.log($(this).attr('href'));
-    console.log(lecture_id);
-    $.ajax({
-        type: 'GET',
-        url: $(this).attr('href'),
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        data: {'lecture_id': lecture_id},
-        success: function(data) {
-            console.log(data);
-        }
-    });
-});
+//$('a.module').click(function(e) {
+//    e.preventDefault();
+//    var module_id = $(this).data('id');
+//    console.log($(this).attr('href'));
+//    console.log(module_id);
+//    $.ajax({
+//        type: 'GET',
+//        url: $(this).attr('href'),
+//        contentType: 'application/json; charset=utf-8',
+//        dataType: 'json',
+//        data: {'module_id': module_id},
+//        success: function(data) {
+//            console.log(data);
+//        }
+//    });
+//});
+
+//$('a.lecture').click(function(e) {
+//    e.preventDefault();
+//    var lecture_id = $(this).data('id');
+//    console.log($(this).attr('href'));
+//    console.log(lecture_id);
+//    $.ajax({
+//        type: 'GET',
+//        url: $(this).attr('href'),
+//        contentType: 'application/json; charset=utf-8',
+//        dataType: 'json',
+//        data: {'lecture_id': lecture_id},
+//        success: function(data) {
+//            console.log(data);
+//        }
+//    });
+//});
 {% endblock %}
