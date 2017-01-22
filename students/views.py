@@ -1,16 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.base import TemplateResponseMixin, View
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseRedirect, JsonResponse
 from django.db import transaction
-from courses.models import Course, Module
+from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
+from courses.models import Course, Module, Lecture, Content
 from .models import Profile
 from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm, ProfileEditForm, UserEditForm
 
@@ -64,6 +66,32 @@ class StudentCourseListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super(StudentCourseListView, self).get_queryset()
         return queryset.filter(students__in=[self.request.user])
+
+
+class ModuleDetail(JsonRequestResponseMixin, View):
+
+    def get(self, request):
+        module_id = request.GET['module_id']
+        print(module_id)
+        module = Module.objects.filter(id=module_id).values()#.values_list
+        lectures = Lecture.objects.filter(module_id=module_id).values()
+        print(module)
+        print(lectures)
+        resp = {'module': list(module), 'lectures': list(lectures)}
+        return self.render_json_response(resp)
+
+
+class LectureDetail(JsonRequestResponseMixin, View):
+
+    def get(self, request):
+        lecture_id = request.GET['lecture_id']
+        print(lecture_id)
+        lecture = Lecture.objects.filter(id=lecture_id).values()#.values_list
+        content = Content.objects.filter(lecture_id=lecture_id).values()
+        print(lecture)
+        print(content)
+        resp = {'lecture': list(lecture), 'content': list(content)}
+        return self.render_json_response(resp)
 
 
 class StudentCourseDetailView(DetailView):
