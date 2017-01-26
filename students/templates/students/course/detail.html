@@ -21,72 +21,93 @@
 
         <div class="col-xs-6 col-md-3 sidebar-offcanvas" id="sidebarLeft" role="navigation">
             <div id="sidebar-nav">
-                
+
                 <ul class="nav" id="modules">
-                <li><h3>Модулі</h3></li>
-                <li><div class="progress">
-                  <div class="progress-bar" style="width: {{ lectures_completed }}%;"></div>
-                </div></li>
-                <li>{{ lectures_completed|floatformat:"0" }} %</li>
+
+                <li>
+                    <h3>Модулі</h3>
+                </li>
+
+                <!-- прогресс бар -->
+                <li>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {{ lectures_completed }}%;"></div>
+                    </div>
+                </li>
+                <li>
+                    {{ lectures_completed|floatformat:"0" }} %
+                </li>
+                <!-- прогресс бар -->
+
+                <!-- отображаем меню курса и содержание курса -->
                 {% if modules %}
                     <li>Curriculum</li>
                     <li>about course</li>
                     <li>about teacher</li>
                 {% else %}
-
-
-                {% for m in object.modules.all %}
-                    <li>
-                        <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
+                    <!-- цикл по модулям -->
+                    {% for m in object.modules.all %}
+                        <li>
+                            <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
                             <span>
-                                Module
-                                <span class="order">{{ m.order|add:1 }}</span>
+                                Module <span class="order">{{ m.order|add:1 }}</span>
                             </span>
                             <br />
                             {{ m.title }}
-                        <!--</a>-->
-                    </li>
-                    {% for lec in m.lectures.all %}
-                        <li><a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}?prev-lecture={{lecture.id}}" data-id="{{ lec.id }}" class="lecture">{{ lec.title }}</a></li>
+                            <!--</a>-->
+                        </li>
+                        <!-- цикл по лекциям -->
+                        {% for lec in m.lectures.all %}
+                            <li>
+                                <a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}?prev-lecture={{lecture.id}}" data-id="{{ lec.id }}" class="lecture">
+                                    {{ lec.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% empty %}
+                        <li>No modules yet.</li>
                     {% endfor %}
-                {% empty %}
-                    <li>No modules yet.</li>
-                {% endfor %}
-
                 {% endif %}
-                </ul>
-            </div>
+                </ul><!-- end .nav-->
+            </div><!-- end .sidebar-nav -->
         </div> <!-- end div.col-md-3-->
 
         <div class="col-xs-12 col-md-9">
             <div class="">
-                {% if module %}
-                    <!--{% cache 300 module_contents module %}-->
+                <!--{% if module %}
+                    {% cache 300 module_contents module %}
                     {% for lec in module.lectures.all %}
-                        <!--{% with item=content.content_object %}
+                        {% with item=content.content_object %}
                             {{ item.render }}
-                        {% endwith %}-->
+                        {% endwith %}
                         <p><a href="{% url 'lecture_detail' object.id module.id lec.id %}">{{ lec.title }}</a></p>
                     {% endfor %}
-                    <!--{% endcache %}-->
-                {% endif %}
+                    {% endcache %}
+                {% endif %}-->
 
+                <!-- отображение лекции -->
                 {% if lecture %}
+
+                    <!-- ссылка на следующую лекцию -->
                     {% if next_lecture %}
                         <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}" class="btn">next</a>
                     {% endif %}
 
+                    <!-- ссылка на страницу окончания курса -->
                     {% if complete_course %}
                         <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}">next</a>
                     {% endif %}
 
+                    <!-- отображение контента лекции -->
                     {% for content in lecture.contents.all %}
                         {% with item=content.content_object %}
                             {{ item.render }}
                         {% endwith %}
                     {% endfor %}
+
                 {% endif %}
 
+                <!-- отображение содержания курса -->
                 {% if modules %}
                     {% for m in object.modules.all %}
                         <p>{{ m.title }}</p>
@@ -110,37 +131,4 @@ $('#offcanvasleft').click(function() {
   $('.row-offcanvas-left').toggleClass('active');
 });
 
-//$('a.module').click(function(e) {
-//    e.preventDefault();
-//    var module_id = $(this).data('id');
-//    console.log($(this).attr('href'));
-//    console.log(module_id);
-//    $.ajax({
-//        type: 'GET',
-//        url: $(this).attr('href'),
-//        contentType: 'application/json; charset=utf-8',
-//        dataType: 'json',
-//        data: {'module_id': module_id},
-//        success: function(data) {
-//            console.log(data);
-//        }
-//    });
-//});
-
-//$('a.lecture').click(function(e) {
-//    e.preventDefault();
-//    var lecture_id = $(this).data('id');
-//    console.log($(this).attr('href'));
-//    console.log(lecture_id);
-//    $.ajax({
-//        type: 'GET',
-//        url: $(this).attr('href'),
-//        contentType: 'application/json; charset=utf-8',
-//        dataType: 'json',
-//        data: {'lecture_id': lecture_id},
-//        success: function(data) {
-//            console.log(data);
-//        }
-//    });
-//});
 {% endblock %}
