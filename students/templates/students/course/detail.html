@@ -24,23 +24,36 @@
                 
                 <ul class="nav" id="modules">
                 <li><h3>Модулі</h3></li>
+                <li><div class="progress">
+                  <div class="progress-bar" style="width: {{ lectures_completed }}%;"></div>
+                </div></li>
+                <li>{{ lectures_completed|floatformat:"0" }} %</li>
+                {% if modules %}
+                    <li>Curriculum</li>
+                    <li>about course</li>
+                    <li>about teacher</li>
+                {% else %}
+
+
                 {% for m in object.modules.all %}
                     <li>
-                        <a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">
+                        <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
                             <span>
                                 Module
                                 <span class="order">{{ m.order|add:1 }}</span>
                             </span>
                             <br />
                             {{ m.title }}
-                        </a>
+                        <!--</a>-->
                     </li>
                     {% for lec in m.lectures.all %}
-                        <li><a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}" data-id="{{ lec.id }}" class="lecture">{{ lec.title }}</a></li>
+                        <li><a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}?prev-lecture={{lecture.id}}" data-id="{{ lec.id }}" class="lecture">{{ lec.title }}</a></li>
                     {% endfor %}
                 {% empty %}
                     <li>No modules yet.</li>
                 {% endfor %}
+
+                {% endif %}
                 </ul>
             </div>
         </div> <!-- end div.col-md-3-->
@@ -59,11 +72,31 @@
                 {% endif %}
 
                 {% if lecture %}
+                    {% if next_lecture %}
+                        <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}" class="btn">next</a>
+                    {% endif %}
+
+                    {% if complete_course %}
+                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}">next</a>
+                    {% endif %}
+
                     {% for content in lecture.contents.all %}
                         {% with item=content.content_object %}
                             {{ item.render }}
                         {% endwith %}
                     {% endfor %}
+                {% endif %}
+
+                {% if modules %}
+                    {% for m in object.modules.all %}
+                        <p>{{ m.title }}</p>
+                        {% for lec in m.lectures.all %}
+                            <p><a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}">{{ lec.title }}</a></p>
+                        {% endfor %}
+                    {% empty %}
+
+                    {% endfor %}
+
                 {% endif %}
             </div> <!-- end div.module-->
         </div> <!-- end div.col-md-9.section-white.courses-->

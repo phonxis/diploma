@@ -134,3 +134,18 @@ class Text(BaseContent):
 class Video(BaseContent):
     #url = models.URLField()
     data_field = models.URLField()
+
+
+class StudentLectureComplete(models.Model):
+    student = models.ForeignKey(User)
+    course = models.ForeignKey(Course)
+    lecture = models.ForeignKey(Lecture, related_name="student_completed_lecture")
+    #next_lecture = models.ForeignKey(Lecture, related_name="student_next_lecture")
+    completed = models.BooleanField(default=False)
+    date_completed = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "user:{} course:{} lecture:{} date:{}".format(self.student.email,
+                                                             self.course.id,
+                                                             self.lecture.id,
+                                                             self.date_completed)
