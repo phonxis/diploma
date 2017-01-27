@@ -59,7 +59,8 @@
                         <!-- цикл по лекциям -->
                         {% for lec in m.lectures.all %}
                             <li>
-                                <a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}?prev-lecture={{lecture.id}}" data-id="{{ lec.id }}" class="lecture">
+                                <!-- добавлен id модуля для формирования ссылки на последнюю пройденую лекцию -->
+                                <a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}" data-id="{{ lec.id }}" class="lecture">
                                     {{ lec.title }}
                                 </a>
                             </li>
@@ -90,7 +91,7 @@
 
                     <!-- ссылка на следующую лекцию -->
                     {% if next_lecture %}
-                        <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}" class="btn">next</a>
+                        <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}" class="btn">next</a>
                     {% endif %}
 
                     <!-- ссылка на страницу окончания курса -->

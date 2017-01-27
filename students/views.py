@@ -65,6 +65,7 @@ class StudentCourseListView(LoginRequiredMixin, ListView):
     """
     model = Course
     template_name = "students/course/list.html"
+    queryset = Course.objects.prefetch_related('completed_course_lectures_by_student')
 
     def get_queryset(self):
         queryset = super(StudentCourseListView, self).get_queryset()
@@ -175,16 +176,20 @@ class StudentCourseDetailView(DetailView):
         context = self.get_context_data(object=self.object)
         # получаем id лекции
         completed_lecture = request.GET.get('prev-lecture', None)
+        prev_module = request.GET.get('prev-module', None)
 
-        if 'lecture_id' in self.kwargs and 'module_id' in self.kwargs and completed_lecture:
+        if 'lecture_id' in self.kwargs and 'module_id' in self.kwargs and completed_lecture and prev_module:
             # если указано id лекции и модуля и получено id пройденой лекции
             # то получаем следующие объекты из БД:
             student = User.objects.get(id=request.user.id)# студент
             lecture = Lecture.objects.get(id=int(completed_lecture))# пройденая лекция
+            module = Module.objects.get(id=int(prev_module))# модуль последне пройденой лекции
             lecture_complete, created = StudentLectureComplete.objects.get_or_create(student=student,
                                                                                      course=self.object,
+                                                                                     module=module,
                                                                                      lecture=lecture,
-                                                                                     completed=True)
+                                                                                     completed=True,
+                                                                                     last=False)
             if created:
                 # сохраняем пройденую лекцию
                 lecture_complete.save()
@@ -214,12 +219,15 @@ class CourseCompleted(View):
             # то получаем следующие объекты:
             student = User.objects.get(id=request.user.id)# студент который прошел курс 
             lecture = Lecture.objects.get(id=int(last_lecture))# последняя лекция курса
+            module = Module.objects.get(id=int(prev_module))# последний модуль курса
             course = Course.objects.get(id=prev_course)# курс, который был пройден
             # проверяем, был ли ранее пройден студентом этот курс
             lecture_complete, created = StudentLectureComplete.objects.get_or_create(student=student,
                                                                                      course=course,
+                                                                                     module=module,
                                                                                      lecture=lecture,
-                                                                                     completed=True)
+                                                                                     completed=True,
+                                                                                     last=True)
 
             if created:
                 # сохраняем, если раньше студент не оканчивал этот курс

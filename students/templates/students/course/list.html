@@ -25,7 +25,20 @@
 						</div>
 						<div class="panel-body">
 							Приступайте до вивчення матеріалу цього курсу прямо зараз!<br />
-							<a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail' course.id %}">Переглянути курс</a>
+							
+							<!--{{ course.completed_course_lectures_by_student.latest.lecture_id }}-->
+							{% if course.completed_course_lectures_by_student.latest.last %}
+								<!-- если курс біл полностью пройден, отобразить эту ссылку-->
+								<a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail' course.id %}">Переглянути пройдений курс</a>
+							{% else %}
+								{% if course.completed_course_lectures_by_student.latest.lecture_id %}
+									<!-- если есть хотя бы одна пройденая лекция, отобразить ссылку для продолжения курса на последней пройденой лекции-->
+									<a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail_module_lecture' course.id course.completed_course_lectures_by_student.latest.module_id course.completed_course_lectures_by_student.latest.lecture_id %}">Продовжити вивчення курсу</a>
+								{% else %}
+									<!-- если ни одна лекция до этого не была пройдена, отобразить ссылку начала курса-->
+									<a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail' course.id %}">Приступити до вивчення</a>
+								{% endif %}
+							{% endif %}
 						</div>
 					</div>
 				</div>

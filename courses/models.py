@@ -38,6 +38,12 @@ class Course(models.Model):
                                       related_name="courses_joined",
                                       blank=True)
 
+    def get_completed(self):
+        if self.completed_course_lectures_by_student:
+            c = self.completed_course_lectures_by_student.first()
+            print(c, c.date_completed)
+            return "{}".format(c.date_completed)
+
     class Meta:
         ordering = ('-created',)
 
@@ -137,12 +143,21 @@ class Video(BaseContent):
 
 
 class StudentLectureComplete(models.Model):
-    student = models.ForeignKey(User)
-    course = models.ForeignKey(Course)
+    student = models.ForeignKey(User, related_name="completed_course_lectures")
+    course = models.ForeignKey(Course, related_name="completed_course_lectures_by_student")
+    # в модель добавлен модуль для формирования ссылки на последнюю пройденую лекцию в шаблоне списка курсов студента
+    module = models.ForeignKey(Module, related_name="completed_module_lectures")
     lecture = models.ForeignKey(Lecture, related_name="student_completed_lecture")
     #next_lecture = models.ForeignKey(Lecture, related_name="student_next_lecture")
     completed = models.BooleanField(default=False)
+    # добавлено last field для обозначения была ли эта лекция последней в пройденом курсе
+    last = models.BooleanField(default=False)
     date_completed = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-date_completed',)
+        # указываем по какому полю будет будет определятся последняя запись
+        get_latest_by = "date_completed"
 
     def __str__(self):
         return "user:{} course:{} lecture:{} date:{}".format(self.student.email,
