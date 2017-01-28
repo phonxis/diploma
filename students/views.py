@@ -111,7 +111,10 @@ class StudentCourseDetailView(DetailView):
 
     def get_queryset(self):
         queryset = super(StudentCourseDetailView, self).get_queryset()
-        return queryset.filter(students__in=[self.request.user])
+        # когда написано следующая строка
+        # return queryset.filter(students__in=[self.request.user])
+        # возникает ошибка in get_prep_value return(value) not be SimpleLazyObject
+        return queryset.filter(students__in=[self.request.user.id])
 
     def get_context_data(self, **kwargs):
         context = super(StudentCourseDetailView,
