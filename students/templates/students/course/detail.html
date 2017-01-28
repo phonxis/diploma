@@ -8,18 +8,25 @@
     {{ object.title }}
 {% endblock %}
 
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+
 {% block sidebar_btn %}
-<div class="sidebar-btn">
+<!--<div class="sidebar-btn">
     <button id="offcanvasleft" class="btn btn-xs" type="button" data-toggle="offcanvasleft">side</button>
-</div>
+</div>-->
+
 {% endblock %}
 
 {% block content %}
 <div class="content-side">
 
-    <div class="row row-offcanvas row-offcanvas-left">
+    <div class="row content-body">
 
-        <div class="col-xs-6 col-md-3 sidebar-offcanvas" id="sidebarLeft" role="navigation">
+        <div class="col-xs-6 col-md-3" id="sidebarLeft" role="navigation">
             <div id="sidebar-nav">
 
                 <ul class="nav" id="modules">
@@ -73,7 +80,7 @@
             </div><!-- end .sidebar-nav -->
         </div> <!-- end div.col-md-3-->
 
-        <div class="col-xs-12 col-md-9">
+        <div class="col-xs-12 col-md-9" id="main-content">
             <div class="">
                 <!--{% if module %}
                     {% cache 300 module_contents module %}
@@ -88,15 +95,16 @@
 
                 <!-- отображение лекции -->
                 {% if lecture %}
+                    <p><button class="btn-hamburger"></button></p>
 
                     <!-- ссылка на следующую лекцию -->
                     {% if next_lecture %}
-                        <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}" class="btn">next</a>
+                        <p><a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}" class="btn">next</a></p>
                     {% endif %}
 
                     <!-- ссылка на страницу окончания курса -->
                     {% if complete_course %}
-                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}">next</a>
+                        <p><a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}">next</a></p>
                     {% endif %}
 
                     <!-- отображение контента лекции -->
@@ -110,6 +118,7 @@
 
                 <!-- отображение содержания курса -->
                 {% if modules %}
+                    <p><button class="btn-hamburger"></button></p>
                     {% for m in object.modules.all %}
                         <p>{{ m.title }}</p>
                         {% for lec in m.lectures.all %}
@@ -121,7 +130,7 @@
 
                 {% endif %}
             </div> <!-- end div.module-->
-            {% include "disqus.html" %}
+            <!--{% include "disqus.html" %}-->
         </div> <!-- end div.col-md-9.section-white.courses-->
     </div> <!-- end div.row-->
 
@@ -132,8 +141,43 @@
 {% endblock %}
 
 {% block domready %}
-$('#offcanvasleft').click(function() {
-  $('.row-offcanvas-left').toggleClass('active');
-});
+//$('#offcanvasleft').click(function() {
+//  $('.row-offcanvas-left').toggleClass('active');
+//});
 
+{% endblock %}
+
+
+{% block extra_js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
+    <script>
+      var slideout = new Slideout({
+        'panel': document.getElementById('main-content'),
+        'menu': document.getElementById('sidebarLeft'),
+        'padding': 256,
+        'tolerance': 70
+      });
+
+      // Toggle button
+      document.querySelector('.btn-hamburger').addEventListener('click', function() {
+        slideout.toggle();
+      });
+
+      function close(eve) {
+          eve.preventDefault();
+          slideout.close();
+        }
+
+        slideout
+          .on('beforeopen', function() {
+            this.panel.classList.add('panel-open');
+          })
+          .on('open', function() {
+            this.panel.addEventListener('click', close);
+          })
+          .on('beforeclose', function() {
+            this.panel.classList.remove('panel-open');
+            this.panel.removeEventListener('click', close);
+          });
+    </script>
 {% endblock %}

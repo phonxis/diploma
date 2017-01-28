@@ -18,9 +18,12 @@
     <!-- <link rel="stylesheet" href="{% static 'css/landing.css' %}"> -->
     {% block css_load_file %}
     {% endblock %}
+
+    {% block extra_css %}
+    {% endblock %}
 </head>
 <body>
-<header class="navbar navbar-default navbar-fixed-top">
+<header class="navbar navbar-default"><!--navbar-fixed-top-->
     <div class="container">
 
         <div class="navbar-header">
@@ -91,6 +94,9 @@
     {% endblock %}
 
     {% block js_sidebar %}
+    {% endblock %}
+
+    {% block extra_js %}
     {% endblock %}
 </body>
 </html>
