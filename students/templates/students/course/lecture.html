@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% load cache %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block sidebar_btn %}
+<div class="sidebar-btn">
+    <button id="offcanvasleft" class="btn btn-xs" type="button" data-toggle="offcanvasleft">side</button>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="content-side">
+
+    <div class="row row-offcanvas row-offcanvas-left">
+
+        <div class="col-xs-6 col-md-3 sidebar-offcanvas" id="sidebarLeft" role="navigation">
+            <div id="sidebar-nav">
+                
+                <ul class="nav">
+                <li><h3>Модулі</h3></li>
+                {% for lecture in object.lectures.all %}
+                    <li data-id="{{ lecture.id }}">
+                        <a href="{% url 'lecture_detail' course object.id lecture.id %}">
+                            <span>
+                                Lecture
+                            </span>
+                            {{ lecture.title }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>No lectures yet.</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div> <!-- end div.col-md-3-->
+
+        <div class="col-xs-12 col-md-9">
+            <div class="lecture-content">
+                {% if lecture %}
+                    <!--{% cache 300 module_contents module %}-->
+                    {% for content in lecture.contents.all %}
+                        {% with item=content.content_object %}
+                            {{ item.render }}
+                        {% endwith %}
+                    {% endfor %}
+                    <!--{% endcache %}-->
+                {% endif %}
+            </div> <!-- end div.module-->
+        </div> <!-- end div.col-md-9.section-white.courses-->
+    </div> <!-- end div.row-->
+
+</div> <!-- end div.content-->
+{% endblock %}
+
+{% block domready %}
+$('#offcanvasleft').click(function() {
+  $('.row-offcanvas-left').toggleClass('active');
+});
+{% endblock %}

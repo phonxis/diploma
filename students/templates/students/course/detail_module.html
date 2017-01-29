@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% load cache %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block sidebar_btn %}
+<div class="sidebar-btn">
+    <button id="offcanvasleft" class="btn btn-xs" type="button" data-toggle="offcanvasleft">side</button>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="content-side">
+
+    <div class="row row-offcanvas row-offcanvas-left">
+
+        <div class="col-xs-6 col-md-3 sidebar-offcanvas" id="sidebarLeft" role="navigation">
+            <div id="sidebar-nav">
+                
+                <ul class="nav">
+                <li><h3>Модулі</h3></li>
+                {% for m in object.modules.all %}
+                    <li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>
+                        <a href="{% url 'student_course_detail_module' object.id m.id %}">
+                            <span>
+                                Module
+                                <span class="order">{{ m.order|add:1 }}</span>
+                            </span>
+                            <br />
+                            {{ m.title }}
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>No modules yet.</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div> <!-- end div.col-md-3-->
+
+        <div class="col-xs-12 col-md-9">
+            <div class="module">
+                {% if module %}
+                    <!--{% cache 300 module_contents module %}-->
+                    {% for lecture in module.lectures.all %}
+                        <!--{% with item=content.content_object %}
+                            {{ item.render }}
+                        {% endwith %}-->
+                        <p><a href="{% url 'lecture_detail' object.id module.id lecture.id %}">{{ lecture.title }}</a></p>
+                    {% endfor %}
+                    <!--{% endcache %}-->
+                {% endif %}
+            </div> <!-- end div.module-->
+        </div> <!-- end div.col-md-9.section-white.courses-->
+    </div> <!-- end div.row-->
+
+</div> <!-- end div.content-->
+{% endblock %}
+
+{% block domready %}
+$('#offcanvasleft').click(function() {
+  $('.row-offcanvas-left').toggleClass('active');
+});
+{% endblock %}

@@ -51,7 +51,7 @@
                    style="display: none;"
                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'> -->
 
-            <a href="{% url 'module_content_list' module %}">go back</a>
+            <a href="{% url 'update_lecture' module lecture %}">go back</a>
         {% endif %}
     </div>
 </div>

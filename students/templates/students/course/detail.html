@@ -8,60 +8,176 @@
     {{ object.title }}
 {% endblock %}
 
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+
 {% block sidebar_btn %}
-<div class="sidebar-btn">
+<!--<div class="sidebar-btn">
     <button id="offcanvasleft" class="btn btn-xs" type="button" data-toggle="offcanvasleft">side</button>
-</div>
+</div>-->
+
 {% endblock %}
 
 {% block content %}
 <div class="content-side">
 
-    <div class="row row-offcanvas row-offcanvas-left">
+    <div class="row content-body">
 
-        <div class="col-xs-6 col-md-3 sidebar-offcanvas" id="sidebarLeft" role="navigation">
+        <div class="col-xs-6 col-md-3" id="sidebarLeft" role="navigation">
             <div id="sidebar-nav">
-                
-                <ul class="nav">
-                <li><h3>Модулі</h3></li>
-                {% for m in object.modules.all %}
-                    <li data-id="{{ m.id }}" {% if m == module %}class="selected"{% endif %}>
-                        <a href="{% url 'student_course_detail_module' object.id m.id %}">
+
+                <ul class="nav" id="modules">
+
+                <li>
+                    <h3>Модулі</h3>
+                </li>
+
+                <!-- прогресс бар -->
+                <li>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {{ lectures_completed }}%;"></div>
+                    </div>
+                </li>
+                <li>
+                    {{ lectures_completed|floatformat:"0" }} %
+                </li>
+                <!-- прогресс бар -->
+
+                <!-- отображаем меню курса и содержание курса -->
+                {% if modules %}
+                    <li>Curriculum</li>
+                    <li>about course</li>
+                    <li>about teacher</li>
+                {% else %}
+                    <!-- цикл по модулям -->
+                    {% for m in object.modules.all %}
+                        <li>
+                            <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
                             <span>
-                                Module
-                                <span class="order">{{ m.order|add:1 }}</span>
+                                Module <span class="order">{{ m.order|add:1 }}</span>
                             </span>
                             <br />
                             {{ m.title }}
-                        </a>
-                    </li>
-                {% empty %}
-                    <li>No modules yet.</li>
-                {% endfor %}
-                </ul>
-            </div>
+                            <!--</a>-->
+                        </li>
+                        <!-- цикл по лекциям -->
+                        {% for lec in m.lectures.all %}
+                            <li>
+                                <!-- добавлен id модуля для формирования ссылки на последнюю пройденую лекцию -->
+                                <a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}" data-id="{{ lec.id }}" class="lecture">
+                                    {{ lec.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% empty %}
+                        <li>No modules yet.</li>
+                    {% endfor %}
+                {% endif %}
+                </ul><!-- end .nav-->
+            </div><!-- end .sidebar-nav -->
         </div> <!-- end div.col-md-3-->
 
-        <div class="col-xs-12 col-md-9">
-            <div class="module">
-                {% if module %}
-                    <!--{% cache 300 module_contents module %}-->
-                    {% for content in module.contents.all %}
+        <div class="col-xs-12 col-md-9" id="main-content">
+            <div class="">
+                <!--{% if module %}
+                    {% cache 300 module_contents module %}
+                    {% for lec in module.lectures.all %}
+                        {% with item=content.content_object %}
+                            {{ item.render }}
+                        {% endwith %}
+                        <p><a href="{% url 'lecture_detail' object.id module.id lec.id %}">{{ lec.title }}</a></p>
+                    {% endfor %}
+                    {% endcache %}
+                {% endif %}-->
+
+                <!-- отображение лекции -->
+                {% if lecture %}
+                    <p><button class="btn-hamburger"></button></p>
+
+                    <!-- ссылка на следующую лекцию -->
+                    {% if next_lecture %}
+                        <p><a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}" class="btn">next</a></p>
+                    {% endif %}
+
+                    <!-- ссылка на страницу окончания курса -->
+                    {% if complete_course %}
+                        <p><a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}">next</a></p>
+                    {% endif %}
+
+                    <!-- отображение контента лекции -->
+                    {% for content in lecture.contents.all %}
                         {% with item=content.content_object %}
                             {{ item.render }}
                         {% endwith %}
                     {% endfor %}
-                    <!--{% endcache %}-->
+
+                {% endif %}
+
+                <!-- отображение содержания курса -->
+                {% if modules %}
+                    <p><button class="btn-hamburger"></button></p>
+                    {% for m in object.modules.all %}
+                        <p>{{ m.title }}</p>
+                        {% for lec in m.lectures.all %}
+                            <p><a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}">{{ lec.title }}</a></p>
+                        {% endfor %}
+                    {% empty %}
+
+                    {% endfor %}
+
                 {% endif %}
             </div> <!-- end div.module-->
+            <!--{% include "disqus.html" %}-->
         </div> <!-- end div.col-md-9.section-white.courses-->
     </div> <!-- end div.row-->
 
 </div> <!-- end div.content-->
+
+
+
 {% endblock %}
 
 {% block domready %}
-$('#offcanvasleft').click(function() {
-  $('.row-offcanvas-left').toggleClass('active');
-});
+//$('#offcanvasleft').click(function() {
+//  $('.row-offcanvas-left').toggleClass('active');
+//});
+
+{% endblock %}
+
+
+{% block extra_js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
+    <script>
+      var slideout = new Slideout({
+        'panel': document.getElementById('main-content'),
+        'menu': document.getElementById('sidebarLeft'),
+        'padding': 256,
+        'tolerance': 70
+      });
+
+      // Toggle button
+      document.querySelector('.btn-hamburger').addEventListener('click', function() {
+        slideout.toggle();
+      });
+
+      function close(eve) {
+          eve.preventDefault();
+          slideout.close();
+        }
+
+        slideout
+          .on('beforeopen', function() {
+            this.panel.classList.add('panel-open');
+          })
+          .on('open', function() {
+            this.panel.addEventListener('click', close);
+          })
+          .on('beforeclose', function() {
+            this.panel.classList.remove('panel-open');
+            this.panel.removeEventListener('click', close);
+          });
+    </script>
 {% endblock %}

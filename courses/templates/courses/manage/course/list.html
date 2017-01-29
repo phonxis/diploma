@@ -14,7 +14,7 @@
                     <a href="{% url 'delete_course' course.id %}">Удалить</a>
                     <a href="{% url 'update_course_module' course.id %}">Управление модулями</a>
                     {% if course.modules.count > 0 %}
-                        <a href="{% url 'module_content_list' course.modules.first.id %}">Manage contents</a>
+                        <a href="{% url 'module_lecture_list' course.modules.first.id %}">Manage contents</a>
                     {% endif %}
                 </p>
             </div> -->
@@ -30,7 +30,7 @@
                     <a href="{% url 'delete_course' course.id %}">Удалить</a>
                     <a href="{% url 'update_course_module' course.id %}">Управление модулями</a>
                     {% if course.modules.count > 0 %}
-                        <a href="{% url 'module_content_list' course.modules.first.id %}">Manage contents</a>
+                        <a href="{% url 'module_lecture_list' course.modules.first.id %}">Manage contents</a>
                     {% endif %}
                 </p>
               </div>

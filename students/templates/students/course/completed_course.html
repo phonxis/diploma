@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="content-side">
+        <h1>Nice work</h1>
+        <h2>Course {{ course.title }} full completed</h2>
+        <p>Look to other <a href="{% url 'course_list' %}">courses</a>.</p>
+    </div>
+{% endblock %}
