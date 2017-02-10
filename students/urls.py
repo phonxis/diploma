@@ -25,6 +25,16 @@ urlpatterns = [
         views.StudentCourseDetailView.as_view(),
         name="student_course_detail"),
 
+    #
+    #url(r'courses/(?P<pk>\d+)/curriculum/$',
+    #    views.course_curriculum,
+    #    name="student_course_curriculum"),
+
+    # about курса
+    url(r'courses/(?P<pk>\d+)/about/$',
+        views.course_about,
+        name="student_course_about"),
+
     # отображение модуля курса
     url(r'^courses/(?P<pk>\d+)/modules/(?P<module_id>\d+)/$',
         #cache_page(60 * 30)(views.StudentCourseDetailView.as_view()),
@@ -32,7 +42,7 @@ urlpatterns = [
         name="student_course_detail_module"),
 
     # лекция курса
-    url(r'^course/(?P<pk>\d+)/modules/(?P<module_id>\d+)/lectures/(?P<lecture_id>\d+)/$',
+    url(r'^courses/(?P<pk>\d+)/modules/(?P<module_id>\d+)/lectures/(?P<lecture_id>\d+)/$',
         #cache_page(60 * 30)(views.StudentCourseDetailView.as_view()),
         views.StudentCourseDetailView.as_view(),
         name="student_course_detail_module_lecture"),

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content-side">
+  <div class="row content-body">
+    <div class="col-xs-6 col-md-3" id="sidebarLeft" role="navigation">
+      <div id="sidebar-nav">
+        <ul class="nav" id="modules">
+          <li><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></li>
+          <li><a href="{% url 'student_course_about' object.id %}">about course</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-md-9" id="main-content">
+      <p>about</p>
+      {% include "disqus.html" %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+$('#load-comments').click(function() {
+  $(this).hide();
+  var d = document, s = d.createElement('script');
+  s.src = '//knuba.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})
+</script>
+{% endblock %}

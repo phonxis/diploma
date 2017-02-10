@@ -306,3 +306,17 @@ def update_profile(request):
             'user_form': user_form,
             'profile_form': profile_form
         })
+
+
+def course_curriculum(request, pk):
+    return render(request, 'students/course/curriculum.html')
+
+def course_about(request, pk):
+    # получаем курс
+    course = Course.objects.get(id=pk)
+    # получаем владельца курса
+    owner = User.objects.get(id=course.owner.id)
+
+    return render(request, 'students/course/about.html', {'object': course,
+                                                          'owner': owner})
+
