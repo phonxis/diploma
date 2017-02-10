@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'embed_video',
     #'memcache_status',
     'slugify',
+    'rest_framework',
+    'nested_admin',
 
     # monkey patching in this app. commented help-text paragraph
     'bootstrapform',
@@ -244,3 +246,13 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger'
 }
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+

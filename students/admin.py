@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
+from nested_admin import NestedModelAdmin, NestedTabularInline
 from .models import Profile
+from courses.models import Quiz, Question, Answer
 
 
 admin.site.unregister(User)
@@ -13,3 +15,17 @@ class UserAdmin(admin.ModelAdmin):
     inlines = [ProfileInline,]
 
 admin.site.register(User, UserAdmin)
+
+
+class AnswerInline(NestedTabularInline):
+    model = Answer
+
+class QuestionInline(NestedTabularInline):
+    model = Question
+    inlines = [AnswerInline]
+
+class QuizInline(NestedModelAdmin):
+    model = Quiz
+    inlines = [QuestionInline]
+
+admin.site.register(Quiz, QuizInline)

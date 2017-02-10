@@ -3,8 +3,14 @@ from django.contrib import admin
 from django.contrib.auth import views as auth
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import routers
 from courses.views import CourseListView, IndexView, LoginView, InstructorRegistrationView
 from students.forms import UsersLoginForm
+from courses.viewsets import QuizViewSet
+
+
+router = routers.DefaultRouter()
+router.register(r'quizes', QuizViewSet)
 
 
 urlpatterns = [
@@ -23,7 +29,11 @@ urlpatterns = [
         name='instructor_registration'),
 
     # social auth
-    url(r'^social/', include('social_django.urls', namespace='social'))
+    url(r'^social/', include('social_django.urls', namespace='social')),
+    # for nested_admin app
+    url(r'^nested_admin/', include('nested_admin.urls')),
+    # api urls
+    url(r'api/', include(router.urls)),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
