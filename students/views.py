@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponseRedirect, JsonResponse
 from django.db import transaction
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
-from courses.models import Course, Module, Lecture, Content, StudentLectureComplete
+from courses.models import Course, Module, Lecture, Content, StudentLectureComplete, Quiz
 from .models import Profile
 from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm, ProfileEditForm, UserEditForm
 
@@ -158,6 +158,12 @@ class StudentCourseDetailView(DetailView):
                     context['next_lecture'] = None
                     # указываем что курс был полностью пройден
                     context['complete_course'] = True
+        #else if 'quiz_id' in self.kwargs and 'module_id' in self.kwargs:
+        #
+        #    try:
+        #        context['quiz'] = Quiz.objects.filter(module__id=context['module_id']).values('id')[0]
+        #    except Exception:
+        #        context['quiz'] = None
         else:
             # если id модуля и лекции не указаны
             # то будет отображатся содержание курса
