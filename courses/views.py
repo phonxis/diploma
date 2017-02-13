@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.forms.models import modelform_factory
+from django.forms.models import modelform_factory, inlineformset_factory
 from django.apps import apps
 from django.db.models import Count, Q
 from django.views.generic import TemplateView
@@ -19,8 +19,9 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect, JsonResponse
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
-from .models import Course, Module, Content, Subject, Lecture
-from .forms import ModuleFormSet, LectureForm
+from nested_formset import nestedformset_factory
+from .models import Course, Module, Content, Subject, Lecture, Quiz, Question, Answer
+from .forms import ModuleFormSet, LectureForm, QuizForm
 from students.forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm#, InstructorsCreationForm
 
 
@@ -574,3 +575,57 @@ class InstructorRegistrationView(CreateView):
         if request.user.is_authenticated():
             return HttpResponseRedirect('/')
         return super(InstructorRegistrationView, self).get(request, *args, **kwargs)
+
+
+class CreateQuizView(InstructorMixin, CreateView):
+    model = Quiz
+    fields = '__all__'
+    template_name = 'courses/manage/quiz/form.html'
+
+    def get(self, request, module_id):
+        form = QuizForm()
+        return render(request, self.template_name, {
+            'form': form,
+        })
+
+    def post(self, request, module_id):
+        module = get_object_or_404(Module,
+                                        id=int(module_id),
+                                        course__owner=request.user)
+        form = QuizForm(data=request.POST)
+
+        if form.is_valid():
+            new_obj = form.save(commit=False)
+            new_obj.module = module
+            new_obj.save()
+            return redirect('module_lecture_list', module.id)
+
+        else:
+            return render(request, self.template_name, {'form': form})
+
+
+class UpdateQuizView(InstructorMixin, UpdateView):
+    model = Quiz
+    fields ='__all__'
+
+    def get_template_names(self):
+        return ['courses/manage/quiz/formset.html']
+
+    def get_form_class(self):
+        return nestedformset_factory(
+            Quiz,
+            Question,
+            nested_formset=inlineformset_factory(
+                Question,
+                Answer,
+                fields=['answer', 'correct'],
+                extra=1,
+                can_delete=True
+            ),
+            extra=1,
+            fields=['question',]
+        )
+
+    def get_success_url(self):
+        return reverse_lazy('module_lecture_list', kwargs={'module_id': self.kwargs['module_id']})
+        #return reverse_lazy('manage_course_list')

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load bootstrap %}
+
+{% load staticfiles %}
+
+{% block content %}
+<div class="content">
+    <h1>Edit </h1>
+    <div class="module">
+        <form action="." method="post" id="for-form">
+            {{ form.management_form }}
+            {% for question in form %}
+                <div class="question">
+                    {{ question.as_p }}
+                    {{ question.nested.management_form }}
+                </div>
+                
+
+                {% for answer in question.nested %}
+                    <div class="answer">
+                        {{ answer.as_p }}
+                        {{ answer.management_form }}
+                    </div>
+                    
+                {% endfor %}
+                <hr>
+            {% endfor %}
+            {% csrf_token %}
+            <input type="submit" class="button" value="Save">
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+<script type="text/javascript">
+    $(function() {
+        $('.question').formset({
+            prefix: 'question-form'
+        });
+        $('.answer').formset({
+            prefix: 'answer-form'
+        });
+    })
+</script>
+{% endblock %}

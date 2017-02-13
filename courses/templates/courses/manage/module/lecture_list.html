@@ -41,9 +41,23 @@ modules</a></p>
             {% endfor %}
             </ul>
 
+
+            <ul id='quizes'>
+                {% for quiz in module.quizes.all %}
+                    <li data-id="{{ quiz.id }}">{{ quiz.title }}<a href="{% url 'update_quiz' module.id quiz.id %}">update quiz</a></li>
+                {% empty %}
+                    <li>no quizes</li>
+                {% endfor %}
+            </ul>
+
             <hr>
             <p>add lecture</p>
             <p><a href="{% url 'create_lecture' module.id %}">create new lecture</a></p>
+
+            <hr>
+            <p>add quiz</p>
+            <p><a href="{% url 'create_quiz' module.id %}">create new quiz</a></p>
+
         </div>
     {% endwith %}
 </div>
