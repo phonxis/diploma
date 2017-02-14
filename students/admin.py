@@ -17,15 +17,15 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 
 
-class AnswerInline(NestedTabularInline):
+class AnswerInline(admin.TabularInline):
     model = Answer
 
-class QuestionInline(NestedTabularInline):
+class QuestionInline(admin.ModelAdmin):
     model = Question
     inlines = [AnswerInline]
 
-class QuizInline(NestedModelAdmin):
-    model = Quiz
-    inlines = [QuestionInline]
+#class QuizInline(NestedModelAdmin):
+#    model = Quiz
+#    inlines = [QuestionInline]
 
-admin.site.register(Quiz, QuizInline)
+admin.site.register(Question, QuestionInline)

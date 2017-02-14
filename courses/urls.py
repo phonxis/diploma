@@ -71,11 +71,11 @@ urlpatterns = [
         name="course_detail"),
 
 
-    url(r'^module/(?P<module_id>\d+)/quiz/create/$',
-        views.CreateQuizView.as_view(),
-        name="create_quiz"),
+    #url(r'^module/(?P<module_id>\d+)/quiz/create/$',
+    #    views.CreateQuizView.as_view(),
+    #    name="create_quiz"),
 
-    url(r'^module/(?P<module_id>\d+)/quiz/(?P<pk>\d+)/$',
-        views.UpdateQuizView.as_view(),
-        name="update_quiz"),
+    #url(r'^module/(?P<module_id>\d+)/quiz/(?P<pk>\d+)/$',
+    #    views.UpdateQuizView.as_view(),
+    #    name="update_quiz"),
 ]

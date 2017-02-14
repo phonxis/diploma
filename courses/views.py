@@ -21,7 +21,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from nested_formset import nestedformset_factory
 from .models import Course, Module, Content, Subject, Lecture, Quiz, Question, Answer
-from .forms import ModuleFormSet, LectureForm, QuizForm
+from .forms import ModuleFormSet, LectureForm, QuestionForm, AnswerForm
 from students.forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm#, InstructorsCreationForm
 
 
@@ -267,7 +267,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
     def get_model(self, model_name):
         # если имя модели соответствует одному из имен моделей контента
         # вернуть модель для app_label и model_name
-        if model_name in ['text', 'file', 'image', 'video']:
+        if model_name in ['text', 'file', 'image', 'video', 'question']:
             return apps.get_model(app_label="courses", model_name=model_name)
         # если модель нам не подходит
         return None
@@ -278,18 +278,23 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
         # print(model._meta.model_name)
         if model._meta.model_name in ['text', 'video']:
             # форма с полем title
-            Form = modelform_factory(model, exclude=['owner'
+            Form = modelform_factory(model, exclude=['owner',
                                                      'created',
                                                      'updated',
-                                                     'order',
-                                                     'owner'])
+                                                     'order'])
+        elif model._meta.model_name in ['question']:
+            Form = modelform_factory(model,
+                                    exclude=['owner',
+                                             'title',
+                                             'created',
+                                             'updated',
+                                             'order'])
         else:
-            Form = modelform_factory(model, exclude=['owner'
+            Form = modelform_factory(model, exclude=['owner',
                                                      'created',
                                                      'updated',
                                                      'title',
-                                                     'order',
-                                                     'owner'])
+                                                     'order'])
         return Form(*args, **kwargs)
 
     def dispatch(self, request, module_id, lecture_id, model_name, id=None):
@@ -317,7 +322,12 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
     def get(self, request, module_id, lecture_id, model_name, id=None):
         # возвращаем форму для изменения экземпляра контента при self.obj!=None.
         # при None, будт возвращена форма для создания экземпляра контента.
+        answer_form = None
         if model_name in ['text', 'video',]:
+            form = self.get_form(self.model, instance=self.obj)
+        elif model_name in ['question']:
+            lecture_obj = Lecture.objects.get(id=lecture_id)
+            answer_form = AnswerForm(instance=self.obj)
             form = self.get_form(self.model, instance=self.obj)
         else:
             form = None
@@ -325,6 +335,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                         'form': form,
                                         'lecture': lecture_id,
                                         'module':module_id,
+                                        'answer_form': answer_form,
                                         'object': self.obj,})
 
     def post(self, request, module_id, lecture_id, model_name, id=None):
@@ -339,7 +350,19 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             # задаем владельцем контента текущего пользователя
             obj = form.save(commit=False)
             obj.owner = request.user
-            if model_name in ['text', 'video']:
+            if model_name in ['question']:
+                answer_form = AnswerForm(request.POST, instance=self.obj)
+                if answer_form.is_valid():
+                    obj.save()
+                    answer_form.instance = obj
+                    answer_form.save()
+                else:
+                    print(answer_form.errors)
+                if not id:
+                    # если id объекта не указан, создаем новый экземпляр video, file, image или text
+                    Content.objects.create(lecture=self.lecture, content_object=obj)
+                return redirect('update_lecture', self.module.id, self.lecture.id)
+            elif model_name in ['text', 'video']:
                 obj.save()
                 if not id:
                     # если id объекта не указан, создаем новый экземпляр video, file, image или text
@@ -576,7 +599,7 @@ class InstructorRegistrationView(CreateView):
             return HttpResponseRedirect('/')
         return super(InstructorRegistrationView, self).get(request, *args, **kwargs)
 
-
+'''
 class CreateQuizView(InstructorMixin, CreateView):
     model = Quiz
     fields = '__all__'
@@ -629,3 +652,4 @@ class UpdateQuizView(InstructorMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('module_lecture_list', kwargs={'module_id': self.kwargs['module_id']})
         #return reverse_lazy('manage_course_list')
+'''

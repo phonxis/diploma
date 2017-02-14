@@ -91,7 +91,8 @@ class Content(models.Model):
                                          'model__in': ('file',
                                                        'image',
                                                        'text',
-                                                       'video')
+                                                       'video',
+                                                       'question')
                                      })
     # сохранение PK связанного объекта
     object_id = models.PositiveIntegerField()
@@ -107,7 +108,7 @@ class Content(models.Model):
 class BaseContent(models.Model):
     owner = models.ForeignKey(User,
                               related_name="%(class)s_related")
-    title = models.CharField(max_length=250)
+    title = models.CharField(max_length=250, default='')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -166,18 +167,18 @@ class StudentLectureComplete(models.Model):
                                                              self.date_completed)
 
 
-class Quiz(models.Model):
-    module = models.ForeignKey(Module, related_name="quizes")
-    title = models.CharField(max_length=200)
-    order = OrderField(blank=True, for_fields=['module'])
+class Quiz(BaseContent):
+    data_field = models.TextField(max_length=200)# 
+    #module = models.ForeignKey(Module, related_name="quizes")
+    #title = models.CharField(max_length=200)
+    #order = OrderField(blank=True, for_fields=['module'])
 
-    def __str__(self):
-        return self.title
+    #def __str__(self):
+    #    return self.title
 
 
-class Question(models.Model):
-    quiz = models.ForeignKey(Quiz, related_name="questions")
-    question = models.CharField(max_length=200)
+class Question(BaseContent):
+    question = models.CharField(max_length=250)
 
     def __str__(self):
         return self.question

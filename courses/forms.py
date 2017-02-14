@@ -1,6 +1,6 @@
 from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
-from .models import Course, Module, Lecture, Quiz
+from .models import Course, Module, Lecture, Quiz, Question, Answer
 
 ModuleFormSet = inlineformset_factory(Course,
                                       Module,
@@ -24,16 +24,22 @@ class LectureForm(forms.ModelForm):
         }
 
 
-class QuizForm(forms.ModelForm):
+class QuestionForm(forms.ModelForm):
     class Meta:
-        model = Quiz
-        fields = ('title',)
+        model = Question
+        fields = ('question',)
         widgets = {
-            'title': forms.TextInput(
+            'question': forms.TextInput(
                 attrs={
                     'class': 'form-control form-group',
-                    'placeholder': 'Title of quiz',
+                    'placeholder': 'Question',
                     'required': 'True'
                 }
             )
         }
+
+AnswerForm = inlineformset_factory(Question,
+                                   Answer,
+                                   fields=['answer', 'correct'],
+                                   extra=1,
+                                   can_delete=True)
