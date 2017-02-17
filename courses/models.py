@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.db.models.signals import post_save
@@ -179,6 +179,7 @@ class Quiz(BaseContent):
 
 class Question(BaseContent):
     question = models.CharField(max_length=250)
+    #cont = GenericRelation(Content)
 
     def __str__(self):
         return self.question

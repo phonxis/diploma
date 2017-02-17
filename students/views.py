@@ -127,10 +127,20 @@ class StudentCourseDetailView(DetailView):
         #    context['module'] = course.modules.get(id=self.kwargs['module_id'])
         #    print(context['module'])
 
+        context['questions'] = []
+
         if 'lecture_id' in self.kwargs and 'module_id' in self.kwargs:
             # если в URL указываются id лекции и модуля
             # то нужно вернуть указаную лекцию из указаного модуля
             context['lecture'] = Lecture.objects.get(id=self.kwargs['lecture_id'])
+
+            # получаем контент текущей лекции
+            lecture_content = Content.objects.filter(lecture__id=self.kwargs['lecture_id'])
+            for content in lecture_content:
+                # если в лекции есть тестовый вопрос
+                if content.content_type.name == 'question':
+                    # добавляем в контекст id вопроса
+                    context['questions'].append(content.object_id)
 
             context['module_id'] = self.kwargs['module_id']
 
@@ -158,12 +168,6 @@ class StudentCourseDetailView(DetailView):
                     context['next_lecture'] = None
                     # указываем что курс был полностью пройден
                     context['complete_course'] = True
-        #else if 'quiz_id' in self.kwargs and 'module_id' in self.kwargs:
-        #
-        #    try:
-        #        context['quiz'] = Quiz.objects.filter(module__id=context['module_id']).values('id')[0]
-        #    except Exception:
-        #        context['quiz'] = None
         else:
             # если id модуля и лекции не указаны
             # то будет отображатся содержание курса

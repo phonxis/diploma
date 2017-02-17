@@ -106,12 +106,24 @@
                         <p><a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}">next</a></p>
                     {% endif %}
 
-                    <!-- отображение контента лекции -->
-                    {% for content in lecture.contents.all %}
-                        {% with item=content.content_object %}
-                            {{ item.render }}
-                        {% endwith %}
-                    {% endfor %}
+                    {% if questions %}
+                        <!-- отображаем вопросы теста -->
+                        <div id="content">
+                            <h3 id="question"></h3>
+                            <div id="choices"></div>
+                            <p><button id="submit"></button></p>
+                            <p id="score"></p>
+                        </div>
+                    {% else %}
+
+                        <!-- отображение контента лекции -->
+                        {% for content in lecture.contents.all %}
+                            {% with item=content.content_object %}
+                                {{ item.render }}
+                            {% endwith %}
+                        {% endfor %}
+
+                    {% endif %}
 
                 {% endif %}
 
@@ -141,48 +153,41 @@
 
 {% endblock %}
 
-{% block domready %}
-//$('#offcanvasleft').click(function() {
-//  $('.row-offcanvas-left').toggleClass('active');
-//});
-
-{% endblock %}
-
 
 {% block extra_js %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
-    <script>
-      var slideout = new Slideout({
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
+<script>
+    var slideout = new Slideout({
         'panel': document.getElementById('main-content'),
         'menu': document.getElementById('sidebarLeft'),
         'padding': 256,
         'tolerance': 70
-      });
+    });
 
-      // Toggle button
-      document.querySelector('.btn-hamburger').addEventListener('click', function() {
+    // Toggle button
+    document.querySelector('.btn-hamburger').addEventListener('click', function() {
         slideout.toggle();
-      });
+    });
 
-      function close(eve) {
-          eve.preventDefault();
-          slideout.close();
-        }
+    function close(eve) {
+        eve.preventDefault();
+        slideout.close();
+    }
 
-        slideout
-          .on('beforeopen', function() {
+    slideout
+        .on('beforeopen', function() {
             this.panel.classList.add('panel-open');
-          })
-          .on('open', function() {
+        })
+        .on('open', function() {
             this.panel.addEventListener('click', close);
-          })
-          .on('beforeclose', function() {
+        })
+        .on('beforeclose', function() {
             this.panel.classList.remove('panel-open');
             this.panel.removeEventListener('click', close);
-          });
-    </script>
-    <script type="text/javascript">
+        });
+</script>
 
+<script type="text/javascript">
 /**
 *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
 *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
@@ -217,5 +222,153 @@ $('#load-comments').click(function() {
 //s.setAttribute('data-timestamp', +new Date());
 //(d.head || d.body).appendChild(s);
 //})();
-    </script>
+</script>
+
+{% if questions %}
+
+<!-- js код для отображения вопросов теста -->
+ <script type="text/javascript">
+
+$(function () {
+    // id вопросов для текущей лекции
+    var ids = {{ questions }}
+    
+    //var url = 'api/lectures/' + {{ lecture.id }} + '/'
+    //jQuery.get(url, function(data) {
+    //    console.log(data);
+    //})
+
+// url api-запроса
+var questions_url = 'api1/' + ids.join(',');
+var quiz_data;
+// получаем вопросы
+jQuery.ajax({
+    type: "get",
+    async: false, // без этого data не сохраняется в переменной quiz_data
+    url: questions_url,
+    dataType: "json",
+    success: function(data) {
+        quiz_data = data;
+    }
+
+});
+
+// контейнеры в которые будут отображатся данные
+var content=$('content'),
+    questionContainer = $("question"),
+    choicesContainer = $("choices"),
+    scoreContainer = $("score"),
+    submitBtn = $("submit");
+
+var currentQuestion = 0,
+    score = 0,
+    askingQuestion = true;
+
+var quizLength = ids.length;
+
+// сокращенная функция к document.getElementById
+function $(id) {
+    return document.getElementById(id);
+}
+
+function askQuestion() {
+    var choices = quiz_data[currentQuestion].answers,
+        choicesHTML = "",
+        choicesLength = choices.length;
+
+    // формируем ответы на вопросы
+    for (var i = 0; i < choicesLength; i++) {
+        choicesHTML += "<input type='radio' name='quiz" +
+        currentQuestion + "' id='choice" + (i + 1) + "' " +
+        'value="' + choices[i].answer + '">' +
+        " <label for='choice" + (i + 1) + "'>" +
+        choices[i].answer +
+        "</label><br>";
+    }
+
+    // выводит текст вопроса
+    questionContainer.textContent = "Q" + (currentQuestion + 1) + ". " +
+        quiz_data[currentQuestion].question;
+
+    // выводим ответы на вопросы
+    choicesContainer.innerHTML = choicesHTML;
+
+    // задаем сообщение о количестве правильных ответов
+    if (currentQuestion === 0) {
+        scoreContainer.textContent = "Score: " + score + " right answers out of " +
+            quizLength + " possible.";
+        submitBtn.textContent = "Submit Answer";
+    }
+  }
+
+function checkAnswer() {
+  // ответил ли пользователь на вопрос?
+  if (askingQuestion) {
+    submitBtn.textContent = "Next Question";
+    askingQuestion = false;
+
+    var userpick, // какой ответ выбрал пользователь
+        userpick_index,// индекс пользовательского ответа
+        correctIndex,// индекс правильного ответа
+        radios = document.getElementsByName("quiz" + currentQuestion),
+        radiosLength = radios.length;// количество ответов
+
+    for (var i = 0; i < radiosLength; i++) {
+        // проверяем какой из ответов был выбран
+        if (radios[i].checked) {
+            userpick = radios[i].value;
+            userpick_index = i;
+        }
+
+        // получаем индекс правильного ответа
+        if (quiz_data[currentQuestion].answers[i].correct) {
+            correctIndex = i;
+        }
+    }
+
+    // закрашиваем правильный ответ в зеленый, не правильный в красный
+    var labels = document.getElementsByTagName('label');
+    var labelStyle = labels[correctIndex].style;
+    labelStyle.fontWeight = "bold";
+    if (userpick_index == correctIndex) {
+      score++;
+      labelStyle.color = "green";
+    } else {
+      labelStyle.color = "green";
+      labels[userpick_index].style.color = 'red';
+    }
+
+    scoreContainer.textContent = "Score: " + score + " right answers out of " +
+        quizLength + " possible.";
+
+  } else {
+    // указываем что пользователь хочет перейти к след вопросу
+    askingQuestion = true;
+    submitBtn.textContent = "Submit Answer";
+    // если есть след вопрос
+    if (currentQuestion < quizLength - 1) {
+        currentQuestion++;
+        askQuestion();
+    } else {
+        // отображаем результат ели больше нет вопросов
+        showFinalResults();
+    }
+  }
+}
+
+function showFinalResults() {
+    content.innerHTML = "<h2>You've completed the quiz!</h2>" +
+        "<h2>Below are your results:</h2>" +
+        "<h2>" + score + " out of " + quizLength + " questions, " +
+        Math.round(score / quizLength * 100) + "%<h2>";
+}
+
+window.addEventListener("load", askQuestion, false);
+submitBtn.addEventListener("click", checkAnswer, false);
+});
+
+</script>
+
+{% endif %}
+
 {% endblock %}

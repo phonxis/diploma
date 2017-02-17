@@ -20,7 +20,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect, JsonResponse
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from nested_formset import nestedformset_factory
-from .models import Course, Module, Content, Subject, Lecture, Quiz, Question, Answer
+from .models import Course, Module, Content, Subject, Lecture
 from .forms import ModuleFormSet, LectureForm, QuestionForm, AnswerForm
 from students.forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm#, InstructorsCreationForm
 
@@ -134,46 +134,6 @@ class CourseDeleteView(PermissionRequiredMixin, OwnerCourseMixin, DeleteView):
     template_name = "courses/manage/course/delete.html"
 
 
-'''class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
-    """
-    Класс используется для добавления, обновления и удаления модулей
-    определенного курса.
-    --------------------
-    TemplateResponseMixin используется для отображения templates, для него
-    обязательно нужно указывать template_name или реализовать
-    метод get_template_names; имеет метод render_to_response
-    для отображения context в template
-    --------------------
-    View реализует метод dispatch, который анализирует response на метод запроса
-    и в зависимости от его типа отправляет его нужному методу (get(), post()...)
-    """
-    template_name = "courses/manage/module/formset.html"
-    course = None
-
-    def get_formset(self, data=None):
-        return ModuleFormSet(instance=self.course, data=data)
-
-    def dispatch(self, request, pk):
-        # ищем определенный курс текущего пользователя
-        self.course = get_object_or_404(Course, id=pk, owner=request.user)
-        return super(CourseModuleUpdateView, self).dispatch(request, pk)
-
-    def get(self, request, *args, **kwargs):
-        # создаем пустой formset
-        formset = self.get_formset()
-        return self.render_to_response({'course': self.course,
-                                        'formset': formset})
-
-    def post(self, request, *args, **kwargs):
-        # создаем formset с данными
-        formset = self.get_formset(data=request.POST)
-        if formset.is_valid():
-            formset.save()
-            return redirect('manage_course_list')
-        return self.render_to_response({'course': self.course,
-                                        'formset': formset})
-'''
-
 
 class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
     """
@@ -283,6 +243,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                                      'updated',
                                                      'order'])
         elif model._meta.model_name in ['question']:
+            # форма с полем question
             Form = modelform_factory(model,
                                     exclude=['owner',
                                              'title',
@@ -290,6 +251,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                              'updated',
                                              'order'])
         else:
+            # форма для загрузки файлов и изображений
             Form = modelform_factory(model, exclude=['owner',
                                                      'created',
                                                      'updated',
@@ -327,9 +289,12 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             form = self.get_form(self.model, instance=self.obj)
         elif model_name in ['question']:
             lecture_obj = Lecture.objects.get(id=lecture_id)
+            # inline форма для добавления ответов к вопросу
             answer_form = AnswerForm(instance=self.obj)
+            # форма для добавдения вопроса
             form = self.get_form(self.model, instance=self.obj)
         else:
+            # для загрузки файлов и изображений django форма не нужна
             form = None
         return self.render_to_response({
                                         'form': form,
@@ -350,25 +315,30 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             # задаем владельцем контента текущего пользователя
             obj = form.save(commit=False)
             obj.owner = request.user
+
             if model_name in ['question']:
                 answer_form = AnswerForm(request.POST, instance=self.obj)
                 if answer_form.is_valid():
+                    # сохраняем объект question
                     obj.save()
+                    # добавляем question как parent для объектов answer
                     answer_form.instance = obj
                     answer_form.save()
                 else:
                     print(answer_form.errors)
                 if not id:
-                    # если id объекта не указан, создаем новый экземпляр video, file, image или text
+                    # если id объекта не указан, создаем новый экземпляр question
                     Content.objects.create(lecture=self.lecture, content_object=obj)
                 return redirect('update_lecture', self.module.id, self.lecture.id)
+
             elif model_name in ['text', 'video']:
                 obj.save()
                 if not id:
-                    # если id объекта не указан, создаем новый экземпляр video, file, image или text
+                    # если id объекта не указан, создаем новый экземпляр video или text
                     Content.objects.create(lecture=self.lecture, content_object=obj)
                 #return redirect('module_content_list', self.module.id)
                 return redirect('update_lecture', self.module.id, self.lecture.id)
+
             obj.title = "_".join(obj.data_field.name.split('/')[-1].split('.')[:-1])
             data = {'name': obj.title}
             obj.save()
@@ -376,7 +346,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             # создать message для отображения уведомления что файл сохранен
 
             if not id:
-                # если id объекта не указан, создаем новый экземпляр video, file, image или text
+                # если id объекта не указан, создаем новый экземпляр file или image
                 Content.objects.create(lecture=self.lecture, content_object=obj)
             
             #return redirect('module_content_list', self.module.id)
@@ -390,8 +360,8 @@ class ContentDeleteView(InstructorMixin, View):
     def post(self, request, id):
         content = get_object_or_404(Content,
                                     id=id,
-                                    module__course__owner=request.user)
-        module = content.module
+                                    lecture__module__course__owner=request.user)
+        module = content.lecture.module
         content.content_object.delete()
         content.delete()
         # возвращаемся к списку контента модуля
@@ -599,57 +569,3 @@ class InstructorRegistrationView(CreateView):
             return HttpResponseRedirect('/')
         return super(InstructorRegistrationView, self).get(request, *args, **kwargs)
 
-'''
-class CreateQuizView(InstructorMixin, CreateView):
-    model = Quiz
-    fields = '__all__'
-    template_name = 'courses/manage/quiz/form.html'
-
-    def get(self, request, module_id):
-        form = QuizForm()
-        return render(request, self.template_name, {
-            'form': form,
-        })
-
-    def post(self, request, module_id):
-        module = get_object_or_404(Module,
-                                        id=int(module_id),
-                                        course__owner=request.user)
-        form = QuizForm(data=request.POST)
-
-        if form.is_valid():
-            new_obj = form.save(commit=False)
-            new_obj.module = module
-            new_obj.save()
-            return redirect('module_lecture_list', module.id)
-
-        else:
-            return render(request, self.template_name, {'form': form})
-
-
-class UpdateQuizView(InstructorMixin, UpdateView):
-    model = Quiz
-    fields ='__all__'
-
-    def get_template_names(self):
-        return ['courses/manage/quiz/formset.html']
-
-    def get_form_class(self):
-        return nestedformset_factory(
-            Quiz,
-            Question,
-            nested_formset=inlineformset_factory(
-                Question,
-                Answer,
-                fields=['answer', 'correct'],
-                extra=1,
-                can_delete=True
-            ),
-            extra=1,
-            fields=['question',]
-        )
-
-    def get_success_url(self):
-        return reverse_lazy('module_lecture_list', kwargs={'module_id': self.kwargs['module_id']})
-        #return reverse_lazy('manage_course_list')
-'''

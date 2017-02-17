@@ -6,11 +6,13 @@ from django.conf.urls.static import static
 from rest_framework import routers
 from courses.views import CourseListView, IndexView, LoginView, InstructorRegistrationView
 from students.forms import UsersLoginForm
-from courses.viewsets import QuizViewSet
+from courses.viewsets import QuestionViewSet, LectureViewSet, ContentViewSet, QuestionList
 
 
 router = routers.DefaultRouter()
-router.register(r'quizes', QuizViewSet)
+router.register(r'questions', QuestionViewSet)
+router.register(r'lectures', LectureViewSet)
+router.register(r'contents', ContentViewSet)
 
 
 urlpatterns = [
@@ -34,6 +36,7 @@ urlpatterns = [
     url(r'^nested_admin/', include('nested_admin.urls')),
     # api urls
     url(r'api/', include(router.urls)),
+    url(r'api1/(?P<ids>.+)/$', QuestionList.as_view()),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
