@@ -21,6 +21,10 @@
 
     {% block extra_css %}
     {% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
 </head>
 <body>
 <header class="navbar navbar-default"><!--navbar-fixed-top-->
@@ -80,15 +84,10 @@
     {% endblock %}
 </main>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            {% block domready %}
-            {% endblock %}
-        });
-    </script>
+    
+    
     {% block js_load_file %}
     
     {% endblock %}
@@ -98,5 +97,11 @@
 
     {% block extra_js %}
     {% endblock %}
+    <script>
+        $(document).ready(function() {
+            {% block domready %}
+            {% endblock %}
+        });
+    </script>
 </body>
 </html>

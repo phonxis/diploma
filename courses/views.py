@@ -20,6 +20,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect, JsonResponse
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from nested_formset import nestedformset_factory
+from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 from .models import Course, Module, Content, Subject, Lecture
 from .forms import ModuleFormSet, LectureForm, QuestionForm, AnswerForm
 from students.forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm#, InstructorsCreationForm
@@ -236,8 +237,14 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
         # возвращает ModelForm для указаной model
         # со всеми полями кроме тех что указаны в exclude
         # print(model._meta.model_name)
-        if model._meta.model_name in ['text', 'video']:
-            # форма с полем title
+        if model._meta.model_name in ['text']:
+            # форма с полем title и data_field
+            Form = modelform_factory(model, exclude=['owner',
+                                                     'created',
+                                                     'updated',
+                                                     'order'],) #widgets={'data_field': SummernoteWidget()})
+        elif model._meta.model_name in ['video']:
+            # форма с полем title и data_field
             Form = modelform_factory(model, exclude=['owner',
                                                      'created',
                                                      'updated',

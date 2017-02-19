@@ -37,6 +37,9 @@ urlpatterns = [
     # api urls
     url(r'api/', include(router.urls)),
     url(r'api1/(?P<ids>.+)/$', QuestionList.as_view()),
+
+    # for WYSIWYG
+    url(r'^summernote/', include('django_summernote.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
