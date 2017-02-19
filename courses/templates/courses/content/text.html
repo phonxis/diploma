@@ -1,2 +1,4 @@
 <h2>{{ item.title }}</h2>
+{% autoescape off %}
 {{ item.data_field|linebreaks|safe }}
+{% endautoescape %}

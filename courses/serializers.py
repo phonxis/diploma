@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from .models import Quiz, Question, Answer
+from .models import Question, Answer, Lecture, Content
 
 
 class AnswerSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Answer
         fields = ('question', 'answer', 'correct')
@@ -13,12 +14,19 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('quiz', 'question', 'answers')
+        fields = ('id', 'question', 'answers')
 
 
-class QuizSerializer(serializers.ModelSerializer):
-    questions = QuestionSerializer(many=True, read_only=True)
+class ContentSerializer(serializers.ModelSerializer):
+    content_type = serializers.CharField(source="content_type.name")
+    class Meta:
+        model = Content
+        fields = ('id', 'content_type', 'object_id', 'lecture')
+
+
+class LectureSerializer(serializers.HyperlinkedModelSerializer):
+    contents = ContentSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Quiz
-        fields = ('id', 'title', 'questions')
+        model = Lecture
+        fields = ('title', 'order', 'contents')

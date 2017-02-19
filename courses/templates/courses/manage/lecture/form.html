@@ -33,7 +33,7 @@
                     <div data-id="{{ content.id }}">
                         {% with item=content.content_object %}
                             <p>{{ item }} ({{ item|name_of_model }})</p>
-                            {% if item|name_of_model == 'text' or item|name_of_model == 'video' %}
+                            {% if item|name_of_model == 'text' or item|name_of_model == 'video' or item|name_of_model == 'question' %}
                             <a href="{% url 'update_lecture_content' module lecture item|name_of_model item.id %}">Edit</a>
                             {% endif %}
                             <form action="{% url 'delete_lecture_content' content.id %}" method="post">
@@ -54,6 +54,7 @@
                     <li><a href="{% url 'create_lecture_content' module lecture 'image' %}">Image</a></li>
                     <li><a href="{% url 'create_lecture_content' module lecture 'video' %}">Video</a></li>
                     <li><a href="{% url 'create_lecture_content' module lecture 'file' %}">File</a></li>
+                    <li><a href="{% url 'create_lecture_content' module lecture 'question' %}">Question for quiz</a></li>
                 </ul>
         </div>
         {% endif %}
