@@ -11,6 +11,8 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css">-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/atom-one-dark.css' %}">
 {% endblock %}
 
 
@@ -224,6 +226,7 @@ $('#load-comments').click(function() {
 //})();
 </script>
 
+<script type="text/javascript" src="{% static 'js/prism.js' %}"></script>
 {% if questions %}
 
 <!-- js код для отображения вопросов теста -->
@@ -369,6 +372,13 @@ submitBtn.addEventListener("click", checkAnswer, false);
 
 </script>
 
+{% else %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script type="text/javascript">
+    $('pre').each(function(i, block) {
+  hljs.highlightBlock(block);
+});
+</script>
 {% endif %}
 
 {% endblock %}
