@@ -27,12 +27,12 @@ class LectureForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ('question',)
+        fields = ('data_field',)
         widgets = {
-            'question': forms.TextInput(
+            'data_field': forms.TextInput(
                 attrs={
                     'class': 'form-control form-group',
-                    'placeholder': 'Question',
+                    'placeholder': 'additional data for question',
                     'required': 'True'
                 }
             )

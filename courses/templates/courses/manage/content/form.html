@@ -83,6 +83,7 @@
 {% endblock %}
 
 {% block domready %}
+console.log('{{ model_name }}');
 $('#id_data_field').trumbowyg({
     btnsAdd: ['preformatted'],
     btns: [

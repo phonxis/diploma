@@ -178,11 +178,10 @@ class Quiz(BaseContent):
 
 
 class Question(BaseContent):
-    question = models.CharField(max_length=250)
-    #cont = GenericRelation(Content)
+    data_field = models.TextField(default='') # set DEFAULT
 
-    def __str__(self):
-        return self.question
+    #def __str__(self):
+    #    return self.question ###################################################
 
 
 class Answer(models.Model):

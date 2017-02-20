@@ -250,10 +250,10 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                                      'updated',
                                                      'order'])
         elif model._meta.model_name in ['question']:
-            # форма с полем question
+            # форма с полем data_field и title
             Form = modelform_factory(model,
                                     exclude=['owner',
-                                             'title',
+                                             #'title',
                                              'created',
                                              'updated',
                                              'order'])
@@ -308,7 +308,8 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                         'lecture': lecture_id,
                                         'module':module_id,
                                         'answer_form': answer_form,
-                                        'object': self.obj,})
+                                        'object': self.obj,
+                                        'model_name': model_name})
 
     def post(self, request, module_id, lecture_id, model_name, id=None):
         # возвращаем форму с данными и файлами
