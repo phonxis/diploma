@@ -112,6 +112,7 @@
                         <!-- отображаем вопросы теста -->
                         <div id="content">
                             <h3 id="question"></h3>
+                            <div id="additional-data"></div>
                             <div id="choices"></div>
                             <p><button id="submit"></button></p>
                             <p id="score"></p>
@@ -226,7 +227,6 @@ $('#load-comments').click(function() {
 //})();
 </script>
 
-{% if questions %}
 
 <!-- js код для отображения вопросов теста -->
  <script type="text/javascript">
@@ -259,6 +259,7 @@ jQuery.ajax({
 // контейнеры в которые будут отображатся данные
 var content=$('content'),
     questionContainer = $("question"),
+    additionalData = $("additional-data"),
     choicesContainer = $("choices"),
     scoreContainer = $("score"),
     submitBtn = $("submit");
@@ -292,6 +293,9 @@ function askQuestion() {
     // выводит текст вопроса
     questionContainer.textContent = "Q" + (currentQuestion + 1) + ". " +
         quiz_data[currentQuestion].title;
+
+    //
+    additionalData.innerHTML = quiz_data[currentQuestion].data_field;
 
     // выводим ответы на вопросы
     choicesContainer.innerHTML = choicesHTML;
@@ -372,13 +376,12 @@ submitBtn.addEventListener("click", checkAnswer, false);
 
 </script>
 
-{% else %}
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
 <script type="text/javascript">
     $('pre').each(function(i, block) {
   hljs.highlightBlock(block);
 });
 </script>
-{% endif %}
+
 
 {% endblock %}
