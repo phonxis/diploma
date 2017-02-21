@@ -16,15 +16,32 @@
 {% endblock %}
 
 
+
 {% block sidebar_btn %}
-<!--<div class="sidebar-btn">
-    <button id="offcanvasleft" class="btn btn-xs" type="button" data-toggle="offcanvasleft">side</button>
-</div>-->
 
 {% endblock %}
 
+
+
 {% block content %}
-<div class="content-side">
+<div>
+<button class="btn-hamburger"></button>
+<button class="next-obj-side">
+        <!-- ссылка на следующую лекцию -->
+                    {% if next_lecture %}
+                        <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}">next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                    {% endif %}
+
+                    <!-- ссылка на страницу окончания курса -->
+                    {% if complete_course %}
+                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" >next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                    {% endif %}
+</button>
+
+</div>
+
+
+<div class="content-side container" data-slideout-ignore>
 
     <div class="row content-body">
 
@@ -96,17 +113,18 @@
 
                 <!-- отображение лекции -->
                 {% if lecture %}
-                    <p><button class="btn-hamburger"></button></p>
 
-                    <!-- ссылка на следующую лекцию -->
-                    {% if next_lecture %}
-                        <p><a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}" class="btn">next</a></p>
-                    {% endif %}
+                    <div class="next-obj">
+                        <!-- ссылка на следующую лекцию -->
+                        {% if next_lecture %}
+                            <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}">next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        {% endif %}
 
-                    <!-- ссылка на страницу окончания курса -->
-                    {% if complete_course %}
-                        <p><a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}">next</a></p>
-                    {% endif %}
+                        <!-- ссылка на страницу окончания курса -->
+                        {% if complete_course %}
+                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" >next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        {% endif %}
+                    </div>
 
                     {% if questions %}
                         <!-- отображаем вопросы теста -->
@@ -166,6 +184,8 @@
         'padding': 256,
         'tolerance': 70
     });
+
+    //slideout.disableTouch();
 
     // Toggle button
     document.querySelector('.btn-hamburger').addEventListener('click', function() {
@@ -228,6 +248,7 @@ $('#load-comments').click(function() {
 </script>
 
 
+{% if questions %}
 <!-- js код для отображения вопросов теста -->
  <script type="text/javascript">
 
@@ -375,6 +396,7 @@ submitBtn.addEventListener("click", checkAnswer, false);
 });
 
 </script>
+{% endif %}
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
 <script type="text/javascript">

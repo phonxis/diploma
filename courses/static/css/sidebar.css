@@ -5,7 +5,7 @@
         z-index: 0;
         width: 256px;
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+
         display: none;
       }
 
@@ -32,6 +32,7 @@
 
   outline:none;
   background: url('assets/menu.png') no-repeat center;
+  background-size: contain;
   width: 50px;
   height: 50px;
 }
