@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'nested_admin',
     # WYSIWYG
-    'django_summernote',
+    #'django_summernote',
+
+    'avatar',
 
     # monkey patching in this app. commented help-text paragraph
     'bootstrapform',

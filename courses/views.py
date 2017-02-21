@@ -20,7 +20,6 @@ from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect, JsonResponse
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from nested_formset import nestedformset_factory
-from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 from .models import Course, Module, Content, Subject, Lecture
 from .forms import ModuleFormSet, LectureForm, QuestionForm, AnswerForm
 from students.forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm#, InstructorsCreationForm

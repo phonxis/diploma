@@ -2,6 +2,10 @@
 
 {% load bootstrap %}
 
+{% load avatar_tags %}
+
+{% load staticfiles %}
+
 {% block content %}
 <div class="content">
     <div class="row">
@@ -28,6 +32,12 @@
                     <p><button type='submit' class="btn btn-primary btn-hg btn-block">Save</button></p>
                 </form>
 
+                {% if request.user|has_avatar %}
+                {% avatar user 65 %}
+                {% else %}
+                <img src="{% static 'img/default_avatar.png' %}" width="65px">
+                {% endif %}
+                <a href="{% url 'avatar_change' %}">Change your avatar</a>
             </div>
 
         </div>
