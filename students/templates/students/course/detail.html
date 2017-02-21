@@ -26,6 +26,7 @@
 {% block content %}
 <div>
 <button class="btn-hamburger"></button>
+{% if lecture %}
 <button class="next-obj-side">
         <!-- ссылка на следующую лекцию -->
                     {% if next_lecture %}
@@ -37,11 +38,12 @@
                         <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" >next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
                     {% endif %}
 </button>
+{% endif %}
 
 </div>
 
 
-<div class="content-side container" data-slideout-ignore>
+<div class="content-side" data-slideout-ignore>
 
     <div class="row content-body">
 
@@ -150,7 +152,18 @@
 
                 <!-- отображение содержания курса -->
                 {% if modules %}
-                    <p><button class="btn-hamburger"></button></p>
+                    <div class="next-obj">
+                        <!-- ссылка на следующую лекцию -->
+                        {% if next_lecture %}
+                            <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}">next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        {% endif %}
+
+                        <!-- ссылка на страницу окончания курса -->
+                        {% if complete_course %}
+                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" >next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        {% endif %}
+                    </div>
+
                     {% for m in object.modules.all %}
                         <p>{{ m.title }}</p>
                         {% for lec in m.lectures.all %}
