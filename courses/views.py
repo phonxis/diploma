@@ -77,7 +77,7 @@ class OwnerCourseMixin(OwnerMixin, LoginRequiredMixin):
 
 class OwnerCourseEditMixin(OwnerCourseMixin, OwnerEditMixin):
     """
-    Миксин который должен использоватся в классах изменяющиюх
+    Миксин который должен использоваться в классах изменяющих
     или создающих объекты модели Course
     """
 
@@ -289,7 +289,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
 
     def get(self, request, module_id, lecture_id, model_name, id=None):
         # возвращаем форму для изменения экземпляра контента при self.obj!=None.
-        # при None, будт возвращена форма для создания экземпляра контента.
+        # при None, будет возвращена форма для создания экземпляра контента.
         answer_form = None
         if model_name in ['text', 'video',]:
             form = self.get_form(self.model, instance=self.obj)
@@ -297,7 +297,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             lecture_obj = Lecture.objects.get(id=lecture_id)
             # inline форма для добавления ответов к вопросу
             answer_form = AnswerForm(instance=self.obj)
-            # форма для добавдения вопроса
+            # форма для добавления вопроса
             form = self.get_form(self.model, instance=self.obj)
         else:
             # для загрузки файлов и изображений django форма не нужна
@@ -389,7 +389,7 @@ class ModuleLectureListView(InstructorMixin, TemplateResponseMixin, View):
 class ModuleOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
     """
     CsrfExemptMixin освобождает запрос от csrf token'а.
-    JsonRequestResponseMixin - помещает правильно отформатированый
+    JsonRequestResponseMixin - помещает правильно отформатированный
     json запрос в request_json; также сериализирует response
     """
     def post(self, request):
@@ -409,7 +409,7 @@ class LectureOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
 class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
     """
     CsrfExemptMixin освобождает запрос от csrf token'а.
-    JsonRequestResponseMixin - помещает правильно отформатированый
+    JsonRequestResponseMixin - помещает правильно отформатированный
     json запрос в request_json; также сериализирует response
     """
     def post(self, request):
@@ -474,7 +474,7 @@ class CourseDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CourseDetailView, self).get_context_data(**kwargs)
-        # довавляем в контект форму подписки на текущий объект курса
+        # добавляем в контект форму подписки на текущий объект курса
         context['enroll_form'] = CourseEnrollForm(initial={'course': self.object})
         return context
 
