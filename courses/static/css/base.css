@@ -1,3 +1,6 @@
+html, body, main {
+    height: 100%;
+}
 div.content, div.content-side {
     margin-right: auto;
     margin-left: auto;
@@ -132,4 +135,184 @@ div.content, div.content-side {
 [data-tip]:hover:after {
     display:block;
 }
-/*-------- end tooltip ---------*/
+
+.navbar {
+    background-color: #2E3951;
+
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.waves-effect {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 1;
+}
+
+.jumbotron {
+
+    background: url('../img/landing_background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 100%;
+    opacity: 0.9;
+    margin-bottom: 0px;
+    box-shadow: inset 0px 0px 10px black;
+}
+
+.full-bg-image {
+    background-color: rgba(0,0,0,.7);
+}
+
+.hr-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+  margin-top: 45px;
+  margin-bottom: 45px;
+}
+
+.hr-block hr {
+
+  width: 100%;
+  border-color: #000;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+
+.hr-block h2 {
+    margin: 0px 10px 0px 10px;
+    white-space: nowrap;
+}
+
+.see-all {
+    margin: 10px 0px 10px 0px;
+    height: 25px;
+}
+.see-all-courses {
+    float: right;
+}
+
+.btn-floating {
+  display: inline-block;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  width: 37px;
+  height: 37px;
+  line-height: 37px;
+  padding: 0;
+  background-color: #aa66cc;
+  border-radius: 50%;
+  transition: .3s;
+  cursor: pointer;
+  vertical-align: middle;
+  margin: 10px;
+  background-color: #2E3951;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+
+.btn-floating:hover {
+    box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+}
+
+.btn-floating i {
+  width: inherit;
+  display: inline-block;
+  text-align: center;
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 37px;
+}
+
+.btn-floating:before {
+  border-radius: 0;
+}
+
+.btn-floating.btn-large {
+  width: 55.5px;
+  height: 55.5px;
+}
+
+.btn-floating.btn-large i {
+  line-height: 55.5px;
+}
+
+.btn-floating.btn-small {
+  height: 47px;
+  width: 47px;
+  line-height: 0;
+}
+
+.btn-floating.btn-small .fa, .btn-floating.btn-small .material-icons {
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+button.btn-floating {
+  border: none;
+}
+
+
+.card-label {
+    margin-bottom: -22px;
+    margin-top: 0;
+    z-index: 10;
+    position: relative;
+    font-size: 1.64rem;
+}
+.elegant-card {
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+.elegant-card .card-label .label {
+    border-radius: 0;
+    font-weight: 300;
+    padding: .2em .6em .3em;
+}
+.rgba-black-light {
+    background-color: rgba(0,0,0,.3);
+    font-size: 100%;
+}
+.elegant-card .btn-floating {
+    margin: -2.1em 2em;
+    float: right;
+}
+.elegant-card .card-content {
+    padding: 2em;
+    color: #666;
+    background-color: #fff;
+}
+.card-content hr {
+    margin: 10px 0px 10px 0px;
+}
+.elegant-card .card-footer {
+    background-color: #3E4551;
+    height: 50px;
+    color: #fff;
+    text-align: center;
+    font-size: 15px;
+}
+.elegant-card .card-footer ul {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.list-inline {
+    padding-left: 0;
+    margin-left: -5px;
+    list-style: none;
+}

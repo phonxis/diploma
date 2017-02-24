@@ -8,10 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Educa{% endblock %}</title>
     <title>Document</title>
-    <!-- <link rel="stylesheet" href="{% static 'css/base.css' %}"> -->
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"> 
+
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/mdb.css' %}">-->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'css/simple-sidebar.css' %}"> -->
     <!-- <link rel="stylesheet" href="{% static 'css/course_react.css' %}"> -->
@@ -23,15 +26,24 @@
     {% endblock %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!--<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script> -->
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script>
+    var ww = new WOW();
+    ww.init();
+    </script>
+
+    <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script type="text/javascript" src="{% static 'js/tether.min.js' %}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>-->
+
 </head>
 <body>
 <header class="navbar navbar-default"><!--navbar-fixed-top-->
-    <div class="container">
+<div class="container">
 
         <div class="navbar-header">
-            <a href="/" class="navbar-brand">phonxis</a>
+            <a href="/" class="navbar-brand">AwesomenessEdu</a>
             <button class='navbar-toggle collapsed' data-target='#navbar-main' data-toggle='collapse' aria-expanded='false' type="button">
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
@@ -80,14 +92,15 @@
 
     {% include "messages.html" %}
 
-    {% block content %}
-    {% endblock %}
+{% block content %}
+
+{% endblock %}
 </main>
 
     
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     
-    
+
     {% block js_load_file %}
     
     {% endblock %}
@@ -103,5 +116,7 @@
             {% endblock %}
         });
     </script>
+
+    <!--<script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>-->
 </body>
 </html>
