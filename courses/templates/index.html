@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block title %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/base-landing.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="jumbotron">
-  <div class="welcome rgba-black-light">
+  <div class="welcome rgba-black-light fadeIn animated">
     <h1>Оволодій новими знаннями</h1>
     <h1>з AwesomenessEdu</h1>
-    <button class="btn btn-success">Приєднатися безкоштовно</button>
+    <button class="btn btn-success fadeIn wow">Приєднатися безкоштовно</button>
   </div>
 </div>
 
@@ -121,14 +127,16 @@
 </div>
 
 <div class="container reg-now">
-  <div class="welcome rgba-black-light">
+  <div class="welcome rgba-black-light fadeIn wow">
     <h1>Навчайся будь-де та будь-коли</h1>
     <h3>Почни саме зараз</h3>
     <button class="btn btn-success">Зареєструватись</button>
   </div>
 </div>
 
+{% block footer%}
 <footer class="landing-footer">
   <div class="container">&copy; 2017 AwesomenessEdu <div class="footer-social">Twitter</div></div>
 </footer>
+{% endblock %}
 {% endblock %}

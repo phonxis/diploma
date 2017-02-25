@@ -1,10 +1,16 @@
-html,body, main {
+html,body {
     height: 100%;
 }
 
 body {
     background-color: #f4f4ef;
 }
+
+.content {
+    min-height: calc(100vh - 110px);;
+    /*margin-bottom: -50px;*/
+}
+
 div.content, div.content-side {
     margin-right: auto;
     margin-left: auto;
@@ -149,19 +155,7 @@ div.content, div.content-side {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
-.waves-effect {
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  z-index: 1;
-}
-
-.jumbotron {
+/*.jumbotron {
     background: url('../img/landing_background.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -175,18 +169,18 @@ div.content, div.content-side {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
+}*/
 
-.full-bg-image {
+/*.full-bg-image {
     background: url('../img/landing_background.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
     min-height: 100%;
-}
+}*/
 
-.hr-block {
+/*.hr-block {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -206,16 +200,16 @@ div.content, div.content-side {
 .hr-block h2 {
     margin: 0px 10px 0px 10px;
     white-space: nowrap;
-}
+}*/
 
-.see-all {
+/*.see-all {
     margin: 10px 0px 10px 0px;
     height: 25px;
 }
 .see-all-courses {
     float: right;
     padding: 10px 5px;
-}
+}*/
 
 .btn-floating {
   display: inline-block;
@@ -331,7 +325,7 @@ button.btn-floating {
     
 }
 
-.reg-now {
+/*.reg-now {
     width: 100%;
     min-height: 500px;
     box-shadow: inset 0px 0px 10px black;
@@ -358,11 +352,12 @@ button.btn-floating {
     -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,1);
     -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,1);
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,1);
-}
+}*/
 
 .btn {
     border-radius: 0px;
     border: none;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
 }
 
 .btn:hover {
@@ -380,6 +375,7 @@ button.btn-floating {
     flex-direction: column;
     justify-content: center;
     padding: 0px 20px;
+    box-shadow: 0 -2px 5px 0 rgba(0, 0, 0, 0.16), 0 -2px 10px 0 rgba(0, 0, 0, 0.12)
 }
 .footer-social {
     float: right;
@@ -442,7 +438,8 @@ form .btn {
 
 /* user form */
 .user-form {
-    box-shadow: 2px 2px 3px 0 hsla(205,5%,48%,.12);
+    /*box-shadow: 2px 2px 3px 0 hsla(205,5%,48%,.12);*/
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
     background-color: #fff;
     margin-top: 25px;
     padding: 20px 0px;
