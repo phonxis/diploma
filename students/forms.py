@@ -14,7 +14,7 @@ class CourseEnrollForm(forms.Form):
 
 class UsersLoginForm(AuthenticationForm):
     username = forms.CharField(
-        label='Username',
+        label='',
         widget=forms.TextInput(
             attrs={'class': 'form-control form-group',
                    'placeholder': 'Username or E-mail address',
@@ -22,7 +22,7 @@ class UsersLoginForm(AuthenticationForm):
         )
     )
     password = forms.CharField(
-        label='Password',
+        label='',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
                    'placeholder': 'Password',
