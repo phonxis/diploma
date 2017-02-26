@@ -17,7 +17,7 @@ class UsersLoginForm(AuthenticationForm):
         label='',
         widget=forms.TextInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Username or E-mail address',
+                   'placeholder': 'Username or Email Address',
                    'required': 'True'}
         )
     )
@@ -47,7 +47,7 @@ class UsersCreationForm(UserCreationForm):
         )
     )'''
     password1 = forms.CharField(
-        label='Password',
+        label='',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
                    'placeholder': 'Password',
@@ -55,10 +55,10 @@ class UsersCreationForm(UserCreationForm):
         )
     )
     password2 = forms.CharField(
-        label='Confirm password',
+        label='',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Confirm password',
+                   'placeholder': 'Confirm Password',
                    'required': 'True'}
         )
     )
@@ -74,9 +74,13 @@ class UsersCreationForm(UserCreationForm):
             ),
             'email': forms.EmailInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Email address',
+                   'placeholder': 'Email Address',
                    'required': 'True'}
             )
+        }
+        labels = {
+          'username': '',
+          'email': ''
         }
 
 
