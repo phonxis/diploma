@@ -4,55 +4,52 @@
 
 {% block content %}
 <div class="content">
-	<div class="section-nude-gray">
-		<h3>
-		{% if object_list %}
-			Мої курси
-		{% else %}
-		{% endif %}
-		</h3>
-	</div>
 
-	<div class="container">
-		<div class="row">
-			{% for course in object_list %}
-				<div class="col-lg-3 col-md-4 col-sm-6">
-					
+    <h3>
+    {% if object_list %}
+        Мої курси
+    {% else %}
+    {% endif %}
+    </h3>
 
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h3 class="panel-title">{{ course.title }} <span class="label label-default">{{ course.subject }}</span></h3>
-						</div>
-						<div class="panel-body">
-							Приступайте до вивчення матеріалу цього курсу прямо зараз!<br />
-							
-							<!--{{ course.completed_course_lectures_by_student.latest.lecture_id }}-->
-							{% if course.completed_course_lectures_by_student.latest.last %}
-								<!-- если курс біл полностью пройден, отобразить эту ссылку-->
-								<a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail' course.id %}">Переглянути пройдений курс</a>
-							{% else %}
-								{% if course.completed_course_lectures_by_student.latest.lecture_id %}
-									<!-- если есть хотя бы одна пройденая лекция, отобразить ссылку для продолжения курса на последней пройденой лекции-->
-									<a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail_module_lecture' course.id course.completed_course_lectures_by_student.latest.module_id course.completed_course_lectures_by_student.latest.lecture_id %}">Продовжити вивчення курсу</a>
-								{% else %}
-									<!-- если ни одна лекция до этого не была пройдена, отобразить ссылку начала курса-->
-									<a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'student_course_detail' course.id %}">Приступити до вивчення</a>
-								{% endif %}
-							{% endif %}
-						</div>
-					</div>
-				</div>
+        <div class="row">
+            {% for course in object_list %}
+                <div class="col-lg-4 col-md-6 col-sm-6 small-card">
+                    <div class="small-card-body">
+                        <h5>{{ course.subject }}</h5>
+                        <h4>{{ course.title }}</h4>
+                        <p class="small-card-description">
+                            Do you need it to be a flex container and be clamped to 3 lines? Or just be clamped to 3 lines? The line-clamp property is a Webkit proprietary thing and has nothing to do with Flexbox specification. It just happens to only work on an element with the
+                        </p>
+                    </div>
+                    <div class="small-card-footer">
+                        <!--{{ course.completed_course_lectures_by_student.latest.lecture_id }}-->
+                        {% if course.completed_course_lectures_by_student.latest.last %}
+                            <!-- если курс біл полностью пройден, отобразить эту ссылку-->
+                            <a class="btn btn-success small-card-btn" href="{% url 'student_course_detail' course.id %}">Переглянути пройдений курс</a>
+                        {% else %}
+                            {% if course.completed_course_lectures_by_student.latest.lecture_id %}
+                                <!-- если есть хотя бы одна пройденая лекция, отобразить ссылку для продолжения курса на последней пройденой лекции-->
+                                <a class="btn btn-success small-card-btn" href="{% url 'student_course_detail_module_lecture' course.id course.completed_course_lectures_by_student.latest.module_id course.completed_course_lectures_by_student.latest.lecture_id %}">Продовжити вивчення курсу</a>
+                            {% else %}
+                                <!-- если ни одна лекция до этого не была пройдена, отобразить ссылку начала курса-->
+                                <a class="btn btn-success small-card-btn" href="{% url 'student_course_detail' course.id %}">Приступити до вивчення</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
 
 
-			{% empty %}
-				<div class="jumbotron">
-					<h1>Not courses</h1>
-					<p>You are not enrolled in any courses yet. Browse courses to enroll in a course.</p>
-					<p><a class="btn btn-primary btn-lg" href="{% url 'course_list' %}">Browse courses</a></p>
-				</div>
-			{% endfor %}
-		</div>
-	</div>
+            {% empty %}
+                <div class="jumbotron">
+                    <h1>Not courses</h1>
+                    <p>You are not enrolled in any courses yet. Browse courses to enroll in a course.</p>
+                    <p><a class="btn btn-primary btn-lg" href="{% url 'course_list' %}">Browse courses</a></p>
+                </div>
+            {% endfor %}
+
+        </div>
+
 </div>
 
 {% endblock %}

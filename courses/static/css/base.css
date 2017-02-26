@@ -445,3 +445,35 @@ form .btn {
     margin-bottom: 10px;
     padding: 20px 0px;
 }
+
+
+/* small card */
+.small-card {
+    /*box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);*/
+    box-shadow: 0px 2px 4px 0px rgba(46, 61, 73, 0.2);
+    background-color: #fff;
+    border: 1px solid #dbe2e8;
+    margin-bottom: 25px;
+    padding: 0px;
+}
+.small-card-body {
+    padding: 30px 50px;
+    line-height: 1.6em;
+    border-bottom: 1px solid #dbe2e8;
+}
+.small-card-body h4 {
+    font-weight: 600;
+}
+.small-card-description {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+.small-card-footer {
+    padding: 25px;
+    display: flex;
+}
+.small-card-btn {
+    margin-left: auto;
+}
