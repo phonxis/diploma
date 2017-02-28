@@ -476,6 +476,9 @@ class CourseDetailView(DetailView):
         context = super(CourseDetailView, self).get_context_data(**kwargs)
         # довавляем в контект форму подписки на текущий объект курса
         context['enroll_form'] = CourseEnrollForm(initial={'course': self.object})
+        #print(self.object.get(students__in=[self.request.user.id]).exists())
+        #print(User.objects.get(courses_joined=self.object))
+        context['lecture_count'] = Lecture.objects.filter(module__course__id=self.object.id).count()
         return context
 
 

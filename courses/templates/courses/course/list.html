@@ -55,7 +55,7 @@
                 <div class="col-xs-12 col-sm-9 course-descr">
                     <h3><a href="{% url 'course_detail' course.slug %}">{{ course.title }}</a> <span class="label label-default"> {{ course.subject }}</h3>
                     <p>{{ course.description }}</p>
-                    <p class="course-summary-comments">10 <i class="fa fa-comments" aria-hidden="true"></i></p>
+                    <p class="course-summary-comments"><a href="{% url 'course_detail' course.slug %}#disqus_thread"></a> <i class="fa fa-comments" aria-hidden="true"></i></p>
                 </div>
             </div>
                         
@@ -66,4 +66,5 @@
     </div>
 
 </div>
+<script id="dsq-count-scr" src="//knuba.disqus.com/count.js" async></script>
 {% endblock %}

@@ -486,7 +486,6 @@ form .btn {
     margin-bottom: 25px;
     box-shadow: 0px 2px 4px 0px rgba(46, 61, 73, 0.2);
     background-color: #fff;
-
 }
 .course-list {
     border-left: 1px solid #DCDCDC;
@@ -542,8 +541,60 @@ form .btn {
     float: right;
     margin-right: 5px;
 }
-.center-block {
+/*.center-block {
     display: block;
     margin-right: auto;
     margin-left: auto;
+}*/
+
+/*course-overview*/
+.course-overview-title {
+    padding-top: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    vertical-align: center;
+}
+.course-overview-title div {
+    font-size: 50px;
+    font-weight: 100;
+    text-align: center;
+    margin-right: 5px;
+}
+.course-overview-title span {
+    font-size: 25px;
+    max-height: 55px;
+}
+.course-overview-description {
+    font-size: 20px;
+    font-weight: lighter;
+    line-height: 40px;
+    letter-spacing: 1px;
+    padding: 0px 30px 20px 30px;
+}
+.course-overview-properties {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0px 30px 20px 30px;
+}
+.enroll-form form {
+    display: flex;
+    justify-content: center;
+}
+.course-overview-curriculum p b {
+    font-size: 20px;
+}
+.module-title {
+    font-size: 20px;
+    padding-left: 30px;
+}
+.lecture-title {
+    font-size: 18px;
+    padding-left: 45px;
+}
+.course-overview-review {
+    display: flex;
+    justify-content: center;
 }
