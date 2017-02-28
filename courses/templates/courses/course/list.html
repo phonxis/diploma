@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block title %}
     {% if subject %}
         {{ subject.title }} courses
@@ -10,56 +12,57 @@
 
 {% block content %}
 
-<div class="content">
-    <div class="section-nude-gray">
-        <h3>
-            {% if subject %}
-                Курси {{ subject.title }}
-            {% else %}
-                Всі курси
-            {% endif %}
-        </h3>
-    </div>
-
-    <div class="btn-group">
-        <div>Subjects:</div>
-        <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            {% if subject %}
-                {{ subject.title }}
-            {% else %}
-                Всі курси
-            {% endif %}
-            <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-            <li><a href="{% url 'course_list' %}">All</a></li>
-            {% for subj in subjects %}
-            <li>
-                <a href="{% url 'subject_course_list' subj.slug %}">
-                    <!-- total_courses это аннотация queryset во вьюхе CourseListView -->
-                    {{ subj.title }}: <span>{{ subj.total_courses }} courses</span>
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="content content-block">
 
     <div class="row">
+
+        <div class="col-sm-3 category-list">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4>Категорія</h4>
+                    <p><a href="{% url 'course_list' %}">All</a></p>
+                    {% for subj in subjects %}
+                    <p>
+                    <a href="{% url 'subject_course_list' subj.slug %}">
+                    <!-- total_courses это аннотация queryset во вьюхе CourseListView -->
+                    {{ subj.title }}: <span>{{ subj.total_courses }} courses</span>
+                    </a>
+                    </p>
+            {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-9 course-list">
+            <div class="intro">
+                <p class="subj-title">
+                    {% if subject %}
+                        {{ subject.title }} курси
+                    {% else %}
+                        Всі курси
+                    {% endif %}
+                </p>
+            </div>
+        <div class="course-summary-cards">
         {% for course in courses %}
 
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{ course.title }} <span class="label label-default"> {{ course.subject }}</span></h3>
-                        </div>
-                        <div class="panel-body">
-                            Приступайте до вивчення матеріалу цього курсу прямо зараз!<br />
-                            <a class="btn btn-default btn-round btn-fill btn-primary" href="{% url 'course_detail' course.slug %}">Переглянути курс</a>
-                        </div>
-                    </div>
+            <div class="course-summary-card row">
+                <div class="col-sm-3 course-pic">
+                    <a href="{% url 'course_detail' course.slug %}">
+                        <img src="{% static 'img/no-image.png' %}" alt="" class="center-block">
+                    </a>
                 </div>
+                <div class="col-xs-12 col-sm-9 course-descr">
+                    <h3><a href="{% url 'course_detail' course.slug %}">{{ course.title }}</a> <span class="label label-default"> {{ course.subject }}</h3>
+                    <p>{{ course.description }}</p>
+                    <p class="course-summary-comments">10 <i class="fa fa-comments" aria-hidden="true"></i></p>
+                </div>
+            </div>
+                        
 
         {% endfor %}
+        </div>
+        </div>
     </div>
 
 </div>

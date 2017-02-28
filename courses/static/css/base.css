@@ -477,3 +477,73 @@ form .btn {
 .small-card-btn {
     margin-left: auto;
 }
+
+
+
+/* content block */
+.content-block {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0px 2px 4px 0px rgba(46, 61, 73, 0.2);
+    background-color: #fff;
+
+}
+.course-list {
+    border-left: 1px solid #DCDCDC;
+}
+.category-list {
+    padding: 25px 0px 0px 25px;
+}
+.intro {
+    height: 100px;
+
+    margin-right: -15px;
+    margin-bottom: 15px;
+    margin-left: -15px;
+    background-color: #18bc9c;;
+}
+@media (max-width: 768px){
+    .intro {
+        margin-top: 20px;
+    }
+}
+.intro .subj-title {
+    padding: 30px 0px 0px 25px;
+    color: #fff;
+    font-weight: normal;
+    font-size: 18px;
+}
+.course-pic {
+
+}
+.course-pic a{
+    width: 100%;
+}
+.course-pic a img {
+    max-width: 100%;
+    height: auto;
+}
+@media (max-width: 768px){
+    .course-pic a img {
+        max-width: 150px;
+    }
+}
+.course-descr p {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    margin-right: 5px;
+}
+.course-summary-card {
+    margin-bottom: 15px;
+}
+.course-summary-comments {
+    float: right;
+    margin-right: 5px;
+}
+.center-block {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
