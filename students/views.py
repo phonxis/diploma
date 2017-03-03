@@ -12,7 +12,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponseRedirect, JsonResponse
 from django.db import transaction
+from django.conf import settings
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
+from avatar.forms import PrimaryAvatarForm, DeleteAvatarForm, UploadAvatarForm
+from avatar.models import Avatar
+from avatar.signals import avatar_updated
 from courses.models import Course, Module, Lecture, Content, StudentLectureComplete, Quiz
 from .models import Profile
 from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm, ProfileEditForm, UserEditForm
@@ -288,9 +292,34 @@ class StudentModuleDetailView(DetailView):
 '''
 
 
+def get_avatars(user):
+    # Default set. Needs to be sliced, but that's it. Keep the natural order.
+    avatars = user.avatar_set.all()
+
+    # Current avatar
+    primary_avatar = avatars.order_by('-primary')[:1]
+    if primary_avatar:
+        avatar = primary_avatar[0]
+    else:
+        avatar = None
+
+    if settings.AVATAR_MAX_AVATARS_PER_USER == 1:
+        avatars = primary_avatar
+    else:
+        # Slice the default set now that we used
+        # the queryset for the primary avatar
+        avatars = avatars[:settings.AVATAR_MAX_AVATARS_PER_USER]
+    return (avatar, avatars)
+
+
 @login_required
 @transaction.atomic
 def update_profile(request):
+    upload_avatar_form = UploadAvatarForm(request.POST or None,
+                                     request.FILES or None,
+                                     user=request.user)
+    avatar, avatars = get_avatars(request.user)
+    #avatar = Avatar.objects.get(user__id=request.user.id, primary=True)
     if request.method == 'POST':
         # формы с подтвержденными данными пользователя, отображаются после submit формы
         user_form = UserEditForm(data=request.POST, instance=request.user)
@@ -314,9 +343,36 @@ def update_profile(request):
 
     return render(request, 'students/student/edit_profile.html', {
             'user_form': user_form,
-            'profile_form': profile_form
+            'profile_form': profile_form,
+            'upload_avatar_form': upload_avatar_form,
+            'avatar': avatar
         })
 
+
+@login_required
+def add(request, extra_context=None, next_override=None,
+        upload_form=UploadAvatarForm, *args, **kwargs):
+
+    avatar, avatars = get_avatars(request.user)
+
+    user_form = UserEditForm(instance=request.user)
+    profile_form = ProfileEditForm(instance=request.user.profile)
+    upload_avatar_form = upload_form(request.POST or None,
+                                         request.FILES or None,
+                                         user=request.user)
+    if request.method == "POST" and 'avatar' in request.FILES:
+        if upload_avatar_form.is_valid():
+            avatar = Avatar(user=request.user, primary=True)
+            image_file = request.FILES['avatar']
+            avatar.avatar.save(image_file.name, image_file)
+            avatar.save()
+            messages.success(request, "Successfully uploaded a new avatar.")
+            avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
+            #return redirect(next_override or _get_next(request))
+            return redirect('update_profile')
+
+    #return render(request, 'students/student/edit_profile.html', context)
+    return redirect('update_profile')
 
 def course_curriculum(request, pk):
     return render(request, 'students/course/curriculum.html')

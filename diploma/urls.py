@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 from courses.views import CourseListView, IndexView, LoginView, InstructorRegistrationView
+from students.views import add
 from students.forms import UsersLoginForm
 from courses.viewsets import QuestionViewSet, LectureViewSet, ContentViewSet, QuestionList
 
@@ -40,6 +41,8 @@ urlpatterns = [
 
     # avatar
     url(r'^avatar/', include('avatar.urls')),
+    # update avatar
+    url(r'^avatar/add-or-update/$', add, name='add_update_avatar'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
