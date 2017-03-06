@@ -18,11 +18,15 @@
 
         <div class="enroll-form">
         {% if request.user.is_authenticated %}
-        <form action="{% url 'student_enroll_course' %}" method="POST">
-            {{ enroll_form }}
-            {% csrf_token %}
-            <input type="submit" class="btn btn-fill btn-success" value="Підписатись на курс">
-        </form>
+            {% if enroll_form %}
+                <form action="{% url 'student_enroll_course' %}" method="POST">
+                    {{ enroll_form }}
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-fill btn-success" value="Підписатись на курс">
+                </form>
+            {% else %}
+                <p class="text-center">You have been enrollen to this course!</p>
+            {% endif %}
         {% else %}
         <a href="{% url 'student_registration' %}" class="btn btn-fill btn-success center-block">Зареєструйтесь</a>
         {% endif %}

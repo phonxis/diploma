@@ -14,7 +14,8 @@
 
         <div class="row">
             {% for course in object_list %}
-                <div class="col-lg-4 col-md-6 col-sm-6 small-card">
+                <div class="col-lg-4 col-md-6 col-sm-6 bounceInUp animated">
+                <div class="small-card">
                     <div class="small-card-body">
                         <h5>{{ course.subject }}</h5>
                         <h4>{{ course.title }}</h4>
@@ -37,6 +38,7 @@
                             {% endif %}
                         {% endif %}
                     </div>
+                </div>
                 </div>
 
 

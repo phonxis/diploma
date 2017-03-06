@@ -46,7 +46,7 @@
         <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="small-card small-card-body">
                 <p class="text-center"><strong>Your current avatar</strong></p>
-                <div class="flex-center">{% avatar user %}</div>
+                <div class="flex-center zoomInUp animated">{% avatar user %}</div>
 
                 <form enctype="multipart/form-data" method="POST" action="{% url 'add_update_avatar' %}">
                     <!-- {{ upload_avatar_form.as_p }} -->
