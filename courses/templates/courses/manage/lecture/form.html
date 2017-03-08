@@ -70,7 +70,7 @@
 
     {% if lecture %}
     <div class="col-md-9 col-xs-12">
-        <h3>Lecture contents:</h3>
+        <h3>Lecture contents</h3>
         <div class="list-group small-card">
             {% for content in object.contents.all %}
                 <div data-id="{{ content.id }}" class="list-group-item flex-one-row-center">
@@ -93,11 +93,13 @@
                     <!-- </div> -->
                 </div>
             {% empty %}
-                <p>This lecture has no contents yet.</p>
+                <div class="list-group-item flex-center">
+                    <h2>This lecture has no contents yet</h2>
+                </div>
             {% endfor %}
         </div>
 
-        <h3>Add new content:</h3>
+        <h3>Add new content</h3>
         <div class="small-card">
             <div class="small-card-body flex-one-row-around">
                 <a href="{% url 'create_lecture_content' module lecture 'text'%}" class="btn btn-info">
