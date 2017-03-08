@@ -613,3 +613,77 @@ form .btn {
   direction: ltr;
   cursor: pointer;
 }
+
+.fixed-action-btn {
+  position: fixed;
+  right: 35px;
+  bottom: 55px;
+  padding-top: 15px;
+  margin-bottom: 0;
+  z-index: 998;
+}
+.btn-floating-add {
+    line-height: 55px;
+    width: 55px;
+    height: 55px;
+}
+.success-color {
+    background-color: #18bc9c;
+}
+.flex-one-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.flex-one-row .btn {
+    margin: 7px 0px;
+    float: right;
+}
+.flex-one-row .btn .fa, .flex-one-row-center .btn .fa, .flex-one-row-around .btn .fa {
+    margin-right: 5px;
+}
+.list-group-item {
+    border-left: 0px;
+    border-right: 0px;
+}
+.list-group-item:hover {
+    background-color: #dbe2e8;
+}
+.list-group-item:last-child {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom: none;
+}
+.list-group-item:first-child {
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-top: none;
+}
+.flex-one-row-center {
+    display: flex;
+    flex-direction: row;
+    
+    align-items: center;
+}
+.flex-one-row-center form{
+    margin-right: 0px;
+    /*margin-left: auto;*/
+}
+.flex-one-row-center a {
+    margin-right: 5px;
+    margin-left: auto;
+}
+.no-margin {
+    margin: 0px 0px!important;
+}
+.flex-one-row-around {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+.flex-one-row-around a {
+    margin-bottom: 5px;
+}

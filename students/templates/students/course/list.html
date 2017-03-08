@@ -14,13 +14,13 @@
 
         <div class="row">
             {% for course in object_list %}
-                <div class="col-lg-4 col-md-6 col-sm-6 bounceInUp animated">
+                <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="small-card">
                     <div class="small-card-body">
                         <h5>{{ course.subject }}</h5>
                         <h4>{{ course.title }}</h4>
                         <p class="small-card-description">
-                            Do you need it to be a flex container and be clamped to 3 lines? Or just be clamped to 3 lines? The line-clamp property is a Webkit proprietary thing and has nothing to do with Flexbox specification. It just happens to only work on an element with the
+                            {{ course.description }}
                         </p>
                     </div>
                     <div class="small-card-footer">

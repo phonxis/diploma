@@ -22,6 +22,9 @@ class LectureForm(forms.ModelForm):
                 }
             )
         }
+        #labels = {
+        #  'title': ''
+        #}
 
 
 class QuestionForm(forms.ModelForm):

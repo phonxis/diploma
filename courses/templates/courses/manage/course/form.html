@@ -13,13 +13,15 @@
     </h1>
     <div>
         <h2>Информация о курсе</h2>
-        <form action="." method="POST">
-            {{ form|bootstrap }}
-            {% csrf_token %}
-            <p>
-                <input type="submit" value="Сохранить курс">
-            </p>
-        </form>
+        <div class="small-card">
+            <div class="small-card-body">
+                <form action="." method="POST">
+                    {{ form|bootstrap }}
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-success" value="Сохранить курс">
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

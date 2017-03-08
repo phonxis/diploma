@@ -8,62 +8,129 @@
 
 {% block content %}
 <div class="content">
-    <h1>
-    {% if object %}
-        Edit lecture "{{ object.title }}"
-    {% else %}
-        Add a new lecture
-    {% endif %}
-    </h1>
-    <div class="module">
-        <h2>Lecture info</h2>
-            <form action="" method="post" enctype="multipart/form-data">
-                {{ form|bootstrap }}
-                {% csrf_token %}
-                <p><input type="submit" value="Save lecture"></p>
-            </form>
-    </div>
+    <div class="row">
+        <h1>
+        {% if object %}
+            Edit Lecture {{ object.order|add:1 }}: {{ object.title }}
+        {% else %}
+            <div class="text-center">Create a new lecture</div>
+        {% endif %}
+        </h1>
+
+
+        {% if lecture %}
+
+            {% comment %}
+                <div class="col-md-3 col-xs-12">
+                    <h3>Lecture title</h3>
+                    <div class="small-card">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <a href="#collapseForm" class="btn btn-info" data-toggle="collapse" aria-expanded="false" aria-controls="collapseForm">
+                                Change lecture title
+                            </a>
+                            <div class="collapse in" id="collapseForm">
+                                {{ form|bootstrap }}
+                            </div>
+                            {% csrf_token %}
+                            <p><input type="submit" value="Save lecture"></p>
+                        </form>
+                    </div>
+                </div>
+            {% endcomment %}
+
+            <div class="col-md-3 col-xs-12">
+                <h3>Lecture info</h3>
+                    <div class="small-card">
+                        <div class="small-card-body">
+                            <form action="" method="post" enctype="multipart/form-data">
+                                {{ form|bootstrap }}
+                                {% csrf_token %}
+                                <div class="flex-center">
+                                    <input type="submit" value="Save lecture" class="btn btn-success no-margin">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        {% else %}
+            <div class="col-md-6 col-md-offset-3">
+                <div class="small-card">
+                    <div class="small-card-body">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {{ form|bootstrap }}
+                            {% csrf_token %}
+                            <p class="flex-center">
+                                <input type="submit" value="Save lecture" class="btn btn-success no-margin">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
 
     {% if lecture %}
-    <div class="lecture">
-            <h2>Lecture {{ object.order|add:1 }}: {{ object.title }}</h2>
-            <h3>Lecture contents:</h3>
-            <div id="lecture-contents">
-                {% for content in object.contents.all %}
-                    <div data-id="{{ content.id }}">
+    <div class="col-md-9 col-xs-12">
+        <h3>Lecture contents:</h3>
+        <div class="list-group small-card">
+            {% for content in object.contents.all %}
+                <div data-id="{{ content.id }}" class="list-group-item flex-one-row-center">
+                    <!-- <div class="small-card-body"> -->
                         {% with item=content.content_object %}
-                            <p>{{ item }} ({{ item|name_of_model }})</p>
+
+                            <div>{{ item }} ({{ item|name_of_model }})</div>
+
                             {% if item|name_of_model == 'text' or item|name_of_model == 'video' or item|name_of_model == 'question' %}
-                            <a href="{% url 'update_lecture_content' module lecture item|name_of_model item.id %}">Edit</a>
+                                <a href="{% url 'update_lecture_content' module lecture item|name_of_model item.id %}" class="btn btn-warning">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+                                </a>
                             {% endif %}
+
                             <form action="{% url 'delete_lecture_content' content.id %}" method="post">
-                                <input type="submit" value="Delete">
+                                <input type="submit" class="btn btn-danger no-margin" value="Delete">
                                 {% csrf_token %}
                             </form>
                         {% endwith %}
-                    </div>
-                {% empty %}
-                    <p>This lecture has no contents yet.</p>
-                {% endfor %}
-            </div>
+                    <!-- </div> -->
+                </div>
+            {% empty %}
+                <p>This lecture has no contents yet.</p>
+            {% endfor %}
+        </div>
 
-            <hr>
-                <h3>Add new content:</h3>
-                <ul class="content-types">
-                    <li><a href="{% url 'create_lecture_content' module lecture 'text'%}">Text</a></li>
-                    <li><a href="{% url 'create_lecture_content' module lecture 'image' %}">Image</a></li>
-                    <li><a href="{% url 'create_lecture_content' module lecture 'video' %}">Video</a></li>
-                    <li><a href="{% url 'create_lecture_content' module lecture 'file' %}">File</a></li>
-                    <li><a href="{% url 'create_lecture_content' module lecture 'question' %}">Question for quiz</a></li>
-                </ul>
+        <h3>Add new content:</h3>
+        <div class="small-card">
+            <div class="small-card-body flex-one-row-around">
+                <a href="{% url 'create_lecture_content' module lecture 'text'%}" class="btn btn-info">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i> Text
+                </a>
+                <a href="{% url 'create_lecture_content' module lecture 'image' %}" class="btn btn-info">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i> Image
+                </a>
+                <a href="{% url 'create_lecture_content' module lecture 'video' %}" class="btn btn-info">
+                    <i class="fa fa-video-camera" aria-hidden="true"></i> Video
+                </a>
+                <a href="{% url 'create_lecture_content' module lecture 'file' %}" class="btn btn-info">
+                    <i class="fa fa-file" aria-hidden="true"></i> File
+                </a>
+                <a href="{% url 'create_lecture_content' module lecture 'question' %}" class="btn btn-info">
+                    <i class="fa fa-question" aria-hidden="true"></i> Question
+                </a>
+            </div>
+        </div>
+
         </div>
         {% endif %}
+
+
+    </div>
 </div>
 
 
 {% endblock %}
 
 {% block domready %}
+    $('.collapse').collapse();
+
     //делаем div'и #lecture-contents сортируемым
     $('#lecture-contents').sortable({
         // этот ивент вызывается когда прекращена сортировка
@@ -85,4 +152,5 @@
             });
         }
     });
+
 {% endblock %}
