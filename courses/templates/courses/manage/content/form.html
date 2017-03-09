@@ -18,8 +18,10 @@
         Add a new content
     {% endif %}
     </h1>
-    <div class="module">
-        <h2>Course info</h2>
+    <h2>Course info</h2>
+
+    <div class="small-card">
+        <div class="small-card-body">
         {% if form %}
             <form action="" method="post" enctype="multipart/form-data">
                 {{ form|bootstrap }}
@@ -27,7 +29,7 @@
                     {{ answer_form }}
                 {% endif %}
                 {% csrf_token %}
-                <p><input type="submit" value="Save content"></p>
+                <input type="submit" value="Save" class="btn btn-success">
             </form>
         {% else %}
         <span class="btn btn-success fileinput-button">
@@ -57,6 +59,7 @@
 
             <a href="{% url 'update_lecture' module lecture %}">go back</a>
         {% endif %}
+        </div>
     </div>
 </div>
 
@@ -84,6 +87,10 @@
 
 {% block domready %}
 console.log('{{ model_name }}');
+var type_content = '{{ model_name }}';
+if (type_content !== 'video') {
+    
+
 $('#id_data_field').trumbowyg({
     btnsAdd: ['preformatted'],
     btns: [
@@ -102,4 +109,6 @@ $('#id_data_field').trumbowyg({
     ],
     autogrow: true
 });
+
+}
 {% endblock %}

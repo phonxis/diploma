@@ -197,11 +197,68 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
     def get(self, request, module_id, lecture_id=None):
         form = LectureForm(instance=self.obj)
 
+        # получаем контент текущей лекции
+        contents = Lecture.objects.filter(id=self.obj.id).values('contents')[0]
+
+        # стандартно будут отображаться все кнопки добавления контента
+        allowed_text = True
+        allowed_image = True
+        allowed_video = True
+        allowed_file = True
+        allowed_question = True
+        # для обозначения, что ни одна из кнопок не отображается
+        allowed_nothing = False
+
+        if contents['contents']:
+            # получаем id контента
+            type_content_id = Content.objects.filter(id=contents['contents']).values('content_type')[0]['content_type']
+            # получаем тип контента: текст, видео, файл, вопрос для теста, изображение
+            name_content = ContentType.objects.filter(id=type_content_id).values('model')[0]['model']
+
+            if name_content == 'text':
+                # лекция содержит текствые данные. нельзя добавить видео и вопрос для теста
+                allowed_video = False
+                allowed_question = False
+            elif name_content == 'image':
+                # лекция содержит изображение. нельзя добавить видео и вопрос для теста
+                allowed_video = False
+                allowed_question = False
+            elif name_content == 'video':
+                # лекция содержит видео. к этой лекции больше нельзя ничего добавить
+                allowed_text = False
+                allowed_image = False
+                allowed_video = False
+                allowed_file = False
+                allowed_question = False
+                # указываем, что больше нельзя ничего добавить
+                allowed_nothing = True
+            elif name_content == 'file':
+                # лекция содержит файл. нельзя добавить видео и вопрос для теста
+                allowed_video = False
+                allowed_question = False
+            elif name_content == 'question':
+                # лекция содержит вопрос для теста. можно добавить только еще один вопрос
+                allowed_text = False
+                allowed_image = False
+                allowed_video = False
+                allowed_file = False
+
+        else:
+            # если контента в этой лекции еще нет, то будут выведены все кнопки для добавления контента
+            print('No content')
+
         return self.render_to_response({
                 'form': form,
                 'module': module_id,
                 'lecture': lecture_id,
-                'object': self.obj
+                'object': self.obj,
+
+                'allowed_text': allowed_text,
+                'allowed_image': allowed_image,
+                'allowed_video': allowed_video,
+                'allowed_file': allowed_file,
+                'allowed_question': allowed_question,
+                'allowed_nothing': allowed_nothing
             })
 
     def post(self, request, module_id, lecture_id):
@@ -237,17 +294,21 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
         # со всеми полями кроме тех что указаны в exclude
         # print(model._meta.model_name)
         if model._meta.model_name in ['text']:
-            # форма с полем title и data_field
+            # форма с полем data_field
             Form = modelform_factory(model, exclude=['owner',
                                                      'created',
                                                      'updated',
-                                                     'order'],) #widgets={'data_field': SummernoteWidget()})
+                                                     'title',
+                                                     'order'],
+                                            labels={'data_field': 'Type text below'}) #widgets={'data_field': SummernoteWidget()})
         elif model._meta.model_name in ['video']:
-            # форма с полем title и data_field
+            # форма с полем data_field
             Form = modelform_factory(model, exclude=['owner',
                                                      'created',
                                                      'updated',
-                                                     'order'])
+                                                     'title',
+                                                     'order'],
+                                            labels={'data_field': 'URL video'})
         elif model._meta.model_name in ['question']:
             # форма с полем data_field и title
             Form = modelform_factory(model,
@@ -255,7 +316,8 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                              #'title',
                                              'created',
                                              'updated',
-                                             'order'])
+                                             'order'],
+                                    labels={'data_field': 'Additional info for question', 'title': 'Question'})
         else:
             # форма для загрузки файлов и изображений
             Form = modelform_factory(model, exclude=['owner',
@@ -338,14 +400,25 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                     Content.objects.create(lecture=self.lecture, content_object=obj)
                 return redirect('update_lecture', self.module.id, self.lecture.id)
 
-            elif model_name in ['text', 'video']:
+            elif model_name in ['text']:
+                # задаем стандартный title
+                obj.title = 'Text object'
                 obj.save()
                 if not id:
-                    # если id объекта не указан, создаем новый экземпляр video или text
+                    # если id объекта не указан, создаем новый экземпляр text
                     Content.objects.create(lecture=self.lecture, content_object=obj)
                 #return redirect('module_content_list', self.module.id)
                 return redirect('update_lecture', self.module.id, self.lecture.id)
+            elif model_name in ['video']:
+                # задаем сстандартный title
+                obj.title = 'Video object'
+                obj.save()
+                if not id:
+                    # если id объекта не указан, создаем новый экземпляр video
+                    Content.objects.create(lecture=self.lecture, content_object=obj)
+                return redirect('update_lecture', self.module.id, self.lecture.id)
 
+            # указываем название для файла или изображения
             obj.title = "_".join(obj.data_field.name.split('/')[-1].split('.')[:-1])
             data = {'name': obj.title}
             obj.save()
@@ -371,8 +444,9 @@ class ContentDeleteView(InstructorMixin, View):
         module = content.lecture.module
         content.content_object.delete()
         content.delete()
-        # возвращаемся к списку контента модуля
-        return redirect('module_lecture_list', module.id)
+        # возвращаемся к списку контента лекции
+        return redirect('update_lecture', module.id, content.lecture.id)
+        #return redirect('module_lecture_list', module.id)
         #return JsonResponse({"data": "ok"})
 
 

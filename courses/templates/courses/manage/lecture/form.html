@@ -102,21 +102,40 @@
         <h3>Add new content</h3>
         <div class="small-card">
             <div class="small-card-body flex-one-row-around">
+
+                {% if allowed_text %}
                 <a href="{% url 'create_lecture_content' module lecture 'text'%}" class="btn btn-info">
                     <i class="fa fa-file-text-o" aria-hidden="true"></i> Text
                 </a>
+                {% endif %}
+
+                {% if allowed_image %}
                 <a href="{% url 'create_lecture_content' module lecture 'image' %}" class="btn btn-info">
                     <i class="fa fa-picture-o" aria-hidden="true"></i> Image
                 </a>
+                {% endif %}
+
+                {% if allowed_video %}
                 <a href="{% url 'create_lecture_content' module lecture 'video' %}" class="btn btn-info">
                     <i class="fa fa-video-camera" aria-hidden="true"></i> Video
                 </a>
+                {% endif %}
+
+                {% if allowed_file %}
                 <a href="{% url 'create_lecture_content' module lecture 'file' %}" class="btn btn-info">
                     <i class="fa fa-file" aria-hidden="true"></i> File
                 </a>
+                {% endif %}
+
+                {% if allowed_question %}
                 <a href="{% url 'create_lecture_content' module lecture 'question' %}" class="btn btn-info">
                     <i class="fa fa-question" aria-hidden="true"></i> Question
                 </a>
+                {% endif %}
+
+                {% if allowed_nothing %}
+                    <p>Create new lecture</p>
+                {% endif %}
             </div>
         </div>
 

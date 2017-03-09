@@ -17,7 +17,7 @@ from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from avatar.forms import PrimaryAvatarForm, DeleteAvatarForm, UploadAvatarForm
 from avatar.models import Avatar
 from avatar.signals import avatar_updated
-from courses.models import Course, Module, Lecture, Content, StudentLectureComplete, Quiz
+from courses.models import Course, Module, Lecture, Content, StudentLectureComplete
 from .models import Profile
 from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm, ProfileEditForm, UserEditForm
 

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
-from .models import Course, Module, Lecture, Quiz, Question, Answer
+from .models import Course, Module, Lecture, Question, Answer
 
 ModuleFormSet = inlineformset_factory(Course,
                                       Module,
@@ -45,4 +45,14 @@ AnswerForm = inlineformset_factory(Question,
                                    Answer,
                                    fields=['answer', 'correct'],
                                    extra=1,
-                                   can_delete=True)
+                                   can_delete=True,
+                                   widgets={'answer': forms.TextInput(
+                                      attrs={
+                                        'class': 'form-control form-group',
+                                        'placeholder': 'Type answer',
+                                        'required': 'True'
+                                      }
+                                    ),
+                                   'correct': forms.CheckboxInput(
+                                      attrs={'class': 'checkbox'}
+                                    )})

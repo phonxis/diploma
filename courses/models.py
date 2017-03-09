@@ -167,21 +167,8 @@ class StudentLectureComplete(models.Model):
                                                              self.date_completed)
 
 
-class Quiz(BaseContent):
-    data_field = models.TextField(max_length=200)# 
-    #module = models.ForeignKey(Module, related_name="quizes")
-    #title = models.CharField(max_length=200)
-    #order = OrderField(blank=True, for_fields=['module'])
-
-    #def __str__(self):
-    #    return self.title
-
-
 class Question(BaseContent):
-    data_field = models.TextField(default='') # set DEFAULT
-
-    #def __str__(self):
-    #    return self.question ###################################################
+    data_field = models.TextField(default='')
 
 
 class Answer(models.Model):
