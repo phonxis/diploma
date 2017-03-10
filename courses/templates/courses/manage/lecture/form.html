@@ -89,13 +89,11 @@
                                 <a href="{% url 'update_lecture_content' module lecture item|name_of_model item.id %}" class="btn btn-warning">
                                     <i class="fa fa-pencil" aria-hidden="true"></i> Edit
                                 </a>
-                            {% else %}
-                                <a href="#" class="btn btn-warning" style="display: none;">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i> Edit
-                                </a>
                             {% endif %}
 
-                            <form action="{% url 'delete_lecture_content' content.id %}" method="post">
+                            <form action="{% url 'delete_lecture_content' content.id %}"
+                                  method="post"
+                                  {% if item|name_of_model == 'file' or item|name_of_model == 'image' %}style="margin-left: auto;"{% endif %}>
                                 <input type="submit" class="btn btn-danger no-margin" value="Delete">
                                 {% csrf_token %}
                             </form>

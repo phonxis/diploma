@@ -693,3 +693,12 @@ label {
 .delete-form {
     margin-top: 5px;
 }
+#files {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+#files div p button{
+    margin: 0 auto;
+}

@@ -8,6 +8,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.contrib import messages
 from django.contrib.auth import REDIRECT_FIELD_NAME, login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -435,6 +436,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             if not id:
                 # если id объекта не указан, создаем новый экземпляр file или image
                 Content.objects.create(lecture=self.lecture, content_object=obj)
+                messages.success(request, '{} success uploaded!'.format(obj.title))
             
             #return redirect('module_content_list', self.module.id)
             return JsonResponse(data)

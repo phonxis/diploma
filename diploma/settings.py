@@ -74,6 +74,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'courses.middleware.AjaxMessaging',
+
     # social auth
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
