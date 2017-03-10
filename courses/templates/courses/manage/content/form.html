@@ -26,10 +26,16 @@
             <form action="" method="post" enctype="multipart/form-data">
                 {{ form|bootstrap }}
                 {% if answer_form %}
-                    {{ answer_form }}
+                    {% for field in answer_form %}
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {{ field }}
+                        <br />
+                    {% endfor %}
+                    {{ answer_form.management_form }}
                 {% endif %}
                 {% csrf_token %}
-                <input type="submit" value="Save" class="btn btn-success">
+                <p><input type="submit" value="Save" class="btn btn-success"></p>
             </form>
         {% else %}
         <span class="btn btn-success fileinput-button">

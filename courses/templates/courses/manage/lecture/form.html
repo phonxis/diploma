@@ -49,6 +49,12 @@
                                     <input type="submit" value="Save lecture" class="btn btn-success no-margin">
                                 </div>
                             </form>
+                            <form action="{% url 'delete_lecture' lecture %}" method="post" class="delete-form">
+                                <div class="flex-center">
+                                    <input type="submit" class="btn btn-danger no-margin" value="Delete">
+                                </div>
+                                {% csrf_token %}
+                            </form>
                         </div>
                     </div>
             </div>
@@ -71,7 +77,7 @@
     {% if lecture %}
     <div class="col-md-9 col-xs-12">
         <h3>Lecture contents</h3>
-        <div class="list-group small-card">
+        <div class="list-group small-card" id="lecture-contents">
             {% for content in object.contents.all %}
                 <div data-id="{{ content.id }}" class="list-group-item flex-one-row-center">
                     <!-- <div class="small-card-body"> -->
@@ -81,6 +87,10 @@
 
                             {% if item|name_of_model == 'text' or item|name_of_model == 'video' or item|name_of_model == 'question' %}
                                 <a href="{% url 'update_lecture_content' module lecture item|name_of_model item.id %}" class="btn btn-warning">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+                                </a>
+                            {% else %}
+                                <a href="#" class="btn btn-warning" style="display: none;">
                                     <i class="fa fa-pencil" aria-hidden="true"></i> Edit
                                 </a>
                             {% endif %}

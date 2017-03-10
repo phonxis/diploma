@@ -54,5 +54,5 @@ AnswerForm = inlineformset_factory(Question,
                                       }
                                     ),
                                    'correct': forms.CheckboxInput(
-                                      attrs={'class': 'checkbox'}
+                                      attrs={'class': 'regular-checkbox'}
                                     )})

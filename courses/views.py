@@ -274,6 +274,13 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             return self.render_to_response({'form': form})
 
 
+class LectureDeleteView(InstructorMixin, View):
+    def post(self, request, lecture_id):
+        lecture = get_object_or_404(Lecture, id=lecture_id, module__course__owner=request.user)
+        lecture.delete()
+        return redirect('module_lecture_list', lecture.module.id)
+
+
 class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
     lecture = None
     module = None

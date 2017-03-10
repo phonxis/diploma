@@ -687,3 +687,9 @@ form .btn {
 .flex-one-row-around a {
     margin-bottom: 5px;
 }
+label {
+    display: inline;
+}
+.delete-form {
+    margin-top: 5px;
+}
