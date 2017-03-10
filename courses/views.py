@@ -445,16 +445,36 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
         return JsonResponse(data)
 
 
-class ContentDeleteView(InstructorMixin, View):
+# class ContentDeleteView(InstructorMixin, View):
+#     def post(self, request, id):
+#         content = get_object_or_404(Content,
+#                                     id=id,
+#                                     lecture__module__course__owner=request.user)
+#         module = content.lecture.module
+#         content.content_object.delete()
+#         content.delete()
+#         # возвращаемся к списку контента лекции
+#         return redirect('update_lecture', module.id, content.lecture.id)
+#         #return redirect('module_lecture_list', module.id)
+#         #return JsonResponse({"data": "ok"})
+
+
+class ContentDeleteView(InstructorMixin, JsonRequestResponseMixin, View):
     def post(self, request, id):
         content = get_object_or_404(Content,
                                     id=id,
                                     lecture__module__course__owner=request.user)
-        module = content.lecture.module
-        content.content_object.delete()
-        content.delete()
-        # возвращаемся к списку контента лекции
-        return redirect('update_lecture', module.id, content.lecture.id)
+
+        if content:
+            module = content.lecture.module
+            content.content_object.delete()
+            content.delete()
+            messages.success(request, 'Success deleted!')
+            return self.render_json_response({'deleted': 'OK'})
+            # возвращаемся к списку контента лекции
+            #return redirect('update_lecture', module.id, content.lecture.id)
+        messages.error(request, 'Failure deleted!')
+        return self.render_json_response({'deleted': 'OK'})
         #return redirect('module_lecture_list', module.id)
         #return JsonResponse({"data": "ok"})
 

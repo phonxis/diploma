@@ -94,7 +94,7 @@
                             <form action="{% url 'delete_lecture_content' content.id %}"
                                   method="post"
                                   {% if item|name_of_model == 'file' or item|name_of_model == 'image' %}style="margin-left: auto;"{% endif %}>
-                                <input type="submit" class="btn btn-danger no-margin" value="Delete">
+                                <input type="submit" class="btn btn-danger no-margin delete-content-submit" value="Delete">
                                 {% csrf_token %}
                             </form>
                         {% endwith %}
@@ -157,8 +157,61 @@
 
 {% endblock %}
 
+
+{% block extra_js %}
+<script type="text/javascript">
+$(function () {
+
+})
+</script>
+{% endblock %}
+
+
 {% block domready %}
-    $('.collapse').collapse();
+
+//------------ set csrf cookie -------------------------------------------------------
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+//--------------------------------------------------------------------------------------
+
+// вывод сообщения
+  function addMessage(text, extra_tags) {
+    var message = $('<div class="alert alert-dismissible '+extra_tags+'">'+text+'</div>').hide();
+    $("#messages").append(message);
+    message.fadeIn(500);
+
+    setTimeout(function() {
+      message.fadeOut(500, function() {
+        message.remove();
+      });
+    }, 3000);
+  }
+
 
     //делаем div'и #lecture-contents сортируемым
     $('#lecture-contents').sortable({
@@ -182,4 +235,44 @@
         }
     });
 
+// ajax запрос удаления контента
+$('.delete-content-submit').on('click', function(event) {
+        event.preventDefault();
+
+        // меняем текст кнопки
+        $(this).val('Deleting...');
+
+        // получаем прародителя текущего элемента
+        var parentDiv = $(this).parent().parent();
+
+        // создаем ссылку с id контента
+        var act = '/course/content/' + parentDiv.attr('data-id') + '/delete/';
+        $.ajax({
+            type: 'POST',
+            url: act,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: ""
+        }).error(function(e) {
+            console.log(e);
+        }).success(function(data) {
+            //console.log(data);
+
+            // удаляем контент из DOM
+            parentDiv.remove();
+
+            // выводим сообщение об удалении
+            $.each(data.django_messages, function (i, item) {
+                //console.log(item);
+                addMessage(item.message, item.extra_tags);
+            });
+
+            //console.log($('#lecture-contents').children().length);
+
+            // если весь контент этой лекции удален, то добавляем соответствующую информацию
+            if ($('#lecture-contents').children().length === 0) {
+                $('#lecture-contents').html("<div class='list-group-item flex-center'><h2>This lecture has no contents yet</h2></div>");
+            }
+        })
+    })
 {% endblock %}
