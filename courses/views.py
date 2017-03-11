@@ -171,7 +171,9 @@ class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
         formset = self.get_formset(data=request.POST)
         if formset.is_valid():
             formset.save()
+            messages.success(request, 'Success!')
             return redirect('manage_course_list')
+        messages.success(request, 'Some error!')
         return self.render_to_response({'course': self.course,
                                         'formset': formset})
 
@@ -270,9 +272,11 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             new_obj = form.save(commit=False)
             new_obj.module = self.module
             new_obj.save()
+            messages.success(request, 'Lecture success updated!')
             return redirect('module_lecture_list', self.module.id)
 
         else:
+            messages.success(request, 'Some error!')
             return self.render_to_response({'form': form})
 
 
@@ -280,6 +284,7 @@ class LectureDeleteView(InstructorMixin, View):
     def post(self, request, lecture_id):
         lecture = get_object_or_404(Lecture, id=lecture_id, module__course__owner=request.user)
         lecture.delete()
+        messages.success(request, 'Lecture success deleted!')
         return redirect('module_lecture_list', lecture.module.id)
 
 
@@ -407,6 +412,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                 if not id:
                     # если id объекта не указан, создаем новый экземпляр question
                     Content.objects.create(lecture=self.lecture, content_object=obj)
+                messages.success(request, 'Success!')
                 return redirect('update_lecture', self.module.id, self.lecture.id)
 
             elif model_name in ['text']:
@@ -417,6 +423,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                     # если id объекта не указан, создаем новый экземпляр text
                     Content.objects.create(lecture=self.lecture, content_object=obj)
                 #return redirect('module_content_list', self.module.id)
+                messages.success(request, 'Success!')
                 return redirect('update_lecture', self.module.id, self.lecture.id)
             elif model_name in ['video']:
                 # задаем сстандартный title
@@ -425,6 +432,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                 if not id:
                     # если id объекта не указан, создаем новый экземпляр video
                     Content.objects.create(lecture=self.lecture, content_object=obj)
+                messages.success(request, 'Success!')
                 return redirect('update_lecture', self.module.id, self.lecture.id)
 
             # указываем название для файла или изображения
@@ -440,9 +448,11 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                 messages.success(request, '{} success uploaded!'.format(obj.title))
             
             #return redirect('module_content_list', self.module.id)
+            messages.success(request, 'Success!')
             return JsonResponse(data)
         #return self.render_to_response({'form': form, 'object': self.obj})
         #data = {'error': True}
+        messages.success(request, 'Some error!')
         return JsonResponse(data)
 
 

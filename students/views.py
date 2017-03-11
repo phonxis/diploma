@@ -57,6 +57,7 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
         self.course.students.add(self.request.user)
         # если форма валидна, пользователль будет перенаправлен
         # на URL из get_success_url
+        messages.success(request, 'Success enrolled!')
         return super(StudentEnrollCourseView, self).form_valid(form)
 
     def get_success_url(self):
