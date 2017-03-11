@@ -7,44 +7,43 @@
 <div class="content">
     <div class="row">
         <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 user-form">
-            <div class="">
-                <h1 class="text-center">Вхід</h1>
-                <form action="." class="login-form" method="POST">
-                    <!--{{ form.username }}
-                    {{ form.password }} -->
-                    {{ form|bootstrap }}
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ next }}" />
-                    <input type="submit" class="btn btn-primary btn-hg btn-block" value="Вхід" />
-                </form>
 
-                <hr class="login-hr">
+            <h1 class="text-center">Вхід</h1>
 
-                <div class="social-auth">
-                    <a class="btn btn-hg fb-bg"
-                       href="{% url 'social:begin' 'facebook' %}">
-                            <i class="fa fa-facebook" aria-hidden="true"></i> FB
-                    </a>
-                    <a class="btn btn-hg g-bg"
-                       href="{% url 'social:begin' 'google-oauth2' %}">
-                            <i class="fa fa-google" aria-hidden="true"></i> Google
-                    </a>
-                    <a class="btn btn-hg vk-bg"
-                       href="{% url 'social:begin' 'vk-oauth2' %}">
-                            <i class="fa fa-vk" aria-hidden="true"></i> VK
-                    </a>
-                </div>
+            <form action="." class="login-form" method="POST">
+                {{ form|bootstrap }}
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
+                <input type="submit" class="btn btn-primary btn-hg btn-block" value="Вхід" />
+            </form>
 
-                <br>
+            <hr class="login-hr">
 
-                <p class="text-center">
-                    Все ще не зареєстровані?
-                    <a href="{% url 'student_registration' %}">
-                        Зареєструйтесь зараз
-                    </a>
-                </p>
-            </div> <!-- div.content -->
-        </div> <!-- div.col-md-4 -->
+            <div class="social-auth">
+                <a class="btn btn-hg fb-bg"
+                   href="{% url 'social:begin' 'facebook' %}">
+                        <i class="fa fa-facebook" aria-hidden="true"></i> FB
+                </a>
+                <a class="btn btn-hg g-bg"
+                   href="{% url 'social:begin' 'google-oauth2' %}">
+                        <i class="fa fa-google" aria-hidden="true"></i> Google
+                </a>
+                <a class="btn btn-hg vk-bg"
+                   href="{% url 'social:begin' 'vk-oauth2' %}">
+                        <i class="fa fa-vk" aria-hidden="true"></i> VK
+                </a>
+            </div>
+
+            <br>
+
+            <p class="text-center">
+                Все ще не зареєстровані?
+                <a href="{% url 'student_registration' %}">
+                    Зареєструйтесь зараз
+                </a>
+            </p>
+
+        </div> <!-- div.col-md -->
     </div> <!-- div.row -->
 </div> <!-- div.content -->
 

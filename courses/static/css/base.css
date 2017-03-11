@@ -394,9 +394,9 @@ button.btn-floating {
     width: 75%;
     margin: 0 auto;
 }
-.login-form .form-group, .register-form .form-group {
+/*.login-form .form-group, .register-form .form-group {
     margin-bottom: 0px;
-}
+}*/
 form .btn {
     margin: 20px 0px;
 }
@@ -445,7 +445,9 @@ form .btn {
     margin-bottom: 10px;
     padding: 20px 0px;
 }
-
+.user-form h1 {
+    margin-bottom: 21px;
+}
 
 /* small card */
 .small-card {

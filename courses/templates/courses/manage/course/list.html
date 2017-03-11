@@ -21,7 +21,7 @@
                     </a>
                     {% if course.modules.count > 0 %}
                         <a href="{% url 'module_lecture_list' course.modules.first.id %}" class="btn btn-success">
-                            <i class="fa fa-file" aria-hidden="true"></i> Контент
+                            <i class="fa fa-file" aria-hidden="true"></i> Лекции
                         </a>
                     {% endif %}
                                         <a href="{% url 'delete_course' course.id %}" class="btn btn-danger">

@@ -198,9 +198,6 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
     def get(self, request, module_id, lecture_id=None):
         form = LectureForm(instance=self.obj)
 
-        # получаем контент текущей лекции
-        contents = Lecture.objects.filter(id=self.obj.id).values('contents')[0]
-
         # стандартно будут отображаться все кнопки добавления контента
         allowed_text = True
         allowed_image = True
@@ -210,43 +207,47 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
         # для обозначения, что ни одна из кнопок не отображается
         allowed_nothing = False
 
-        if contents['contents']:
-            # получаем id контента
-            type_content_id = Content.objects.filter(id=contents['contents']).values('content_type')[0]['content_type']
-            # получаем тип контента: текст, видео, файл, вопрос для теста, изображение
-            name_content = ContentType.objects.filter(id=type_content_id).values('model')[0]['model']
+        if lecture_id:
+            # получаем контент текущей лекции
+            contents = Lecture.objects.filter(id=self.obj.id).values('contents')[0]
 
-            if name_content == 'text':
-                # лекция содержит текствые данные. нельзя добавить видео и вопрос для теста
-                allowed_video = False
-                allowed_question = False
-            elif name_content == 'image':
-                # лекция содержит изображение. нельзя добавить видео и вопрос для теста
-                allowed_video = False
-                allowed_question = False
-            elif name_content == 'video':
-                # лекция содержит видео. к этой лекции больше нельзя ничего добавить
-                allowed_text = False
-                allowed_image = False
-                allowed_video = False
-                allowed_file = False
-                allowed_question = False
-                # указываем, что больше нельзя ничего добавить
-                allowed_nothing = True
-            elif name_content == 'file':
-                # лекция содержит файл. нельзя добавить видео и вопрос для теста
-                allowed_video = False
-                allowed_question = False
-            elif name_content == 'question':
-                # лекция содержит вопрос для теста. можно добавить только еще один вопрос
-                allowed_text = False
-                allowed_image = False
-                allowed_video = False
-                allowed_file = False
+            if contents['contents']:
+                # получаем id контента
+                type_content_id = Content.objects.filter(id=contents['contents']).values('content_type')[0]['content_type']
+                # получаем тип контента: текст, видео, файл, вопрос для теста, изображение
+                name_content = ContentType.objects.filter(id=type_content_id).values('model')[0]['model']
 
-        else:
-            # если контента в этой лекции еще нет, то будут выведены все кнопки для добавления контента
-            print('No content')
+                if name_content == 'text':
+                    # лекция содержит текствые данные. нельзя добавить видео и вопрос для теста
+                    allowed_video = False
+                    allowed_question = False
+                elif name_content == 'image':
+                    # лекция содержит изображение. нельзя добавить видео и вопрос для теста
+                    allowed_video = False
+                    allowed_question = False
+                elif name_content == 'video':
+                    # лекция содержит видео. к этой лекции больше нельзя ничего добавить
+                    allowed_text = False
+                    allowed_image = False
+                    allowed_video = False
+                    allowed_file = False
+                    allowed_question = False
+                    # указываем, что больше нельзя ничего добавить
+                    allowed_nothing = True
+                elif name_content == 'file':
+                    # лекция содержит файл. нельзя добавить видео и вопрос для теста
+                    allowed_video = False
+                    allowed_question = False
+                elif name_content == 'question':
+                    # лекция содержит вопрос для теста. можно добавить только еще один вопрос
+                    allowed_text = False
+                    allowed_image = False
+                    allowed_video = False
+                    allowed_file = False
+
+            else:
+                # если контента в этой лекции еще нет, то будут выведены все кнопки для добавления контента
+                print('No content')
 
         return self.render_to_response({
                 'form': form,
