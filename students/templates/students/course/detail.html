@@ -24,35 +24,13 @@
 
 
 {% block content %}
-<div>
-<button class="btn-hamburger"></button>
-{% if lecture %}
-<button class="next-obj-side">
-        <!-- ссылка на следующую лекцию -->
-                    {% if next_lecture %}
-                        <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}">next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                    {% endif %}
+<div id="wrapper">
 
-                    <!-- ссылка на страницу окончания курса -->
-                    {% if complete_course %}
-                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" >next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                    {% endif %}
-</button>
-{% endif %}
-
-</div>
-
-
-<div class="content-side" data-slideout-ignore>
-
-    <div class="row content-body">
-
-        <div class="col-xs-6 col-md-3" id="sidebarLeft" role="navigation">
-            <div id="sidebar-nav">
-
-                <ul class="nav" id="modules">
-
-                <li>
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <nav id="spy">
+                <ul class="sidebar-nav nav">
+                    <li>
                     <h3>Модулі</h3>
                 </li>
 
@@ -96,92 +74,61 @@
                         <li>No modules yet.</li>
                     {% endfor %}
                 {% endif %}
-                </ul><!-- end .nav-->
-            </div><!-- end .sidebar-nav -->
-        </div> <!-- end div.col-md-3-->
+                </ul>
+            </nav>
+        </div>
 
-        <div class="col-xs-12 col-md-9" id="main-content">
-            <div class="">
-                <!--{% if module %}
-                    {% cache 300 module_contents module %}
-                    {% for lec in module.lectures.all %}
-                        {% with item=content.content_object %}
-                            {{ item.render }}
-                        {% endwith %}
-                        <p><a href="{% url 'lecture_detail' object.id module.id lec.id %}">{{ lec.title }}</a></p>
-                    {% endfor %}
-                    {% endcache %}
-                {% endif %}-->
+        <!-- Page content -->
+        <div class="content-side width100">
+        <div class="row content-body">
+        <div id="page-content-wrapper">
+            <div class="content-header">
+                <h1 id="home">
+                    <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
+                    </a>
+                    Sidebar Navigation Template
+                </h1>
+            </div>
 
-                <!-- отображение лекции -->
-                {% if lecture %}
-
-                    <div class="next-obj">
-                        <!-- ссылка на следующую лекцию -->
-                        {% if next_lecture %}
-                            <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}">next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% endif %}
-
-                        <!-- ссылка на страницу окончания курса -->
-                        {% if complete_course %}
-                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" >next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% endif %}
-                    </div>
-
-                    {% if questions %}
-                        <!-- отображаем вопросы теста -->
-                        <div id="content">
-                            <h3 id="question"></h3>
-                            <div id="additional-data"></div>
-                            <div id="choices"></div>
-                            <p><button id="submit"></button></p>
-                            <p id="score"></p>
+            <div class="page-content inset" data-spy="scroll" data-target="#spy">
+                <div class="row">
+  
+                        <div class="jumbotron text-center" >
+                            <h1>Hello Beautiful!</h1>
+                            <p>This is a sidebar navigation responsive template built off of Bootstrap 3.0 and simple sidebar template. It includes anchors, scroll spy, smooth scroll, and Awesome icon fonts.</p>
+                            <p><a class="btn btn-default">Click On Me!</a>
+                            <a class="btn btn-info">Tweet Me!</a></p>
                         </div>
-                    {% else %}
-
-                        <!-- отображение контента лекции -->
-                        {% for content in lecture.contents.all %}
-                            {% with item=content.content_object %}
-                                {{ item.render }}
-                            {% endwith %}
-                        {% endfor %}
-
-                    {% endif %}
-
-                {% endif %}
-
-                <!-- отображение содержания курса -->
-                {% if modules %}
-                    <div class="next-obj">
-                        <!-- ссылка на следующую лекцию -->
-                        {% if next_lecture %}
-                            <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}">next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% endif %}
-
-                        <!-- ссылка на страницу окончания курса -->
-                        {% if complete_course %}
-                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" >next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% endif %}
+    
+                </div>
+                <div class="row">
+                    <div class="col-md-12 well">
+                        <legend id="anch1">Anchor 1</legend>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultricies, metus eget fringilla fermentum, sem justo pulvinar tellus, ac varius neque ante eget mi. Donec cursus nibh ultrices vulputate aliquet. Morbi nulla enim, molestie eu ullamcorper quis, placerat a mauris. Proin vel magna ullamcorper, vulputate leo eu, egestas odio. Vivamus erat leo, egestas in euismod sed, fermentum nec magna. Nunc nisi enim, euismod a tellus sit amet, fermentum adipiscing ipsum. Fusce rhoncus diam ac neque aliquam convallis. Etiam malesuada, nibh id rutrum euismod, enim augue gravida dolor, at vulputate felis mi at magna. Nulla luctus, libero eget luctus gravida, sapien enim varius massa, adipiscing aliquet lacus mi eu eros. Duis pretium laoreet ullamcorper. Aenean in mauris nec libero tincidunt pharetra non et dui. Sed tortor turpis, mollis et tempus eu, auctor laoreet neque. Etiam eu tortor rutrum, rutrum mauris sit amet, hendrerit augue. Sed ut tincidunt nisi. Nam consectetur velit ac pharetra venenatis.</p>
+                        <p>Donec pellentesque id quam vel iaculis. Phasellus commodo tempor metus, eget sollicitudin odio ultricies id. Proin sed ipsum quis turpis suscipit luctus vitae id urna. Fusce et rhoncus quam. Etiam vel justo ligula. Nullam euismod lacinia risus a pulvinar. Pellentesque sit amet nisl eget ante vulputate feugiat. Suspendisse venenatis magna nunc, mollis facilisis neque condimentum ac. Vivamus non semper dui. Aenean sed eleifend dui. Vivamus a massa aliquam nibh consectetur luctus id at ligula. Nunc ipsum dolor, mollis at sem et, auctor rhoncus ipsum. Nulla faucibus venenatis est sit amet facilisis. In vestibulum nisi at tellus egestas, in pharetra enim fringilla. In ac erat non magna accumsan aliquam.</p>
                     </div>
+                    <div class="col-md-12 well">
+                        <legend id="anch2">Anchor 2</legend>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultricies, metus eget fringilla fermentum, sem justo pulvinar tellus, ac varius neque ante eget mi. Donec cursus nibh ultrices vulputate aliquet. Morbi nulla enim, molestie eu ullamcorper quis, placerat a mauris. Proin vel magna ullamcorper, vulputate leo eu, egestas odio. Vivamus erat leo, egestas in euismod sed, fermentum nec magna. Nunc nisi enim, euismod a tellus sit amet, fermentum adipiscing ipsum. Fusce rhoncus diam ac neque aliquam convallis. Etiam malesuada, nibh id rutrum euismod, enim augue gravida dolor, at vulputate felis mi at magna. Nulla luctus, libero eget luctus gravida, sapien enim varius massa, adipiscing aliquet lacus mi eu eros. Duis pretium laoreet ullamcorper. Aenean in mauris nec libero tincidunt pharetra non et dui. Sed tortor turpis, mollis et tempus eu, auctor laoreet neque. Etiam eu tortor rutrum, rutrum mauris sit amet, hendrerit augue. Sed ut tincidunt nisi. Nam consectetur velit ac pharetra venenatis.</p>
+                        <p>Donec pellentesque id quam vel iaculis. Phasellus commodo tempor metus, eget sollicitudin odio ultricies id. Proin sed ipsum quis turpis suscipit luctus vitae id urna. Fusce et rhoncus quam. Etiam vel justo ligula. Nullam euismod lacinia risus a pulvinar. Pellentesque sit amet nisl eget ante vulputate feugiat. Suspendisse venenatis magna nunc, mollis facilisis neque condimentum ac. Vivamus non semper dui. Aenean sed eleifend dui. Vivamus a massa aliquam nibh consectetur luctus id at ligula. Nunc ipsum dolor, mollis at sem et, auctor rhoncus ipsum. Nulla faucibus venenatis est sit amet facilisis. In vestibulum nisi at tellus egestas, in pharetra enim fringilla. In ac erat non magna accumsan aliquam.</p>
+                    </div>
+                    <div class="col-md-12 well">
+                        <legend id="anch3">Anchor 3</legend>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultricies, metus eget fringilla fermentum, sem justo pulvinar tellus, ac varius neque ante eget mi. Donec cursus nibh ultrices vulputate aliquet. Morbi nulla enim, molestie eu ullamcorper quis, placerat a mauris. Proin vel magna ullamcorper, vulputate leo eu, egestas odio. Vivamus erat leo, egestas in euismod sed, fermentum nec magna. Nunc nisi enim, euismod a tellus sit amet, fermentum adipiscing ipsum. Fusce rhoncus diam ac neque aliquam convallis. Etiam malesuada, nibh id rutrum euismod, enim augue gravida dolor, at vulputate felis mi at magna. Nulla luctus, libero eget luctus gravida, sapien enim varius massa, adipiscing aliquet lacus mi eu eros. Duis pretium laoreet ullamcorper. Aenean in mauris nec libero tincidunt pharetra non et dui. Sed tortor turpis, mollis et tempus eu, auctor laoreet neque. Etiam eu tortor rutrum, rutrum mauris sit amet, hendrerit augue. Sed ut tincidunt nisi. Nam consectetur velit ac pharetra venenatis.</p>
+                        <p>Donec pellentesque id quam vel iaculis. Phasellus commodo tempor metus, eget sollicitudin odio ultricies id. Proin sed ipsum quis turpis suscipit luctus vitae id urna. Fusce et rhoncus quam. Etiam vel justo ligula. Nullam euismod lacinia risus a pulvinar. Pellentesque sit amet nisl eget ante vulputate feugiat. Suspendisse venenatis magna nunc, mollis facilisis neque condimentum ac. Vivamus non semper dui. Aenean sed eleifend dui. Vivamus a massa aliquam nibh consectetur luctus id at ligula. Nunc ipsum dolor, mollis at sem et, auctor rhoncus ipsum. Nulla faucibus venenatis est sit amet facilisis. In vestibulum nisi at tellus egestas, in pharetra enim fringilla. In ac erat non magna accumsan aliquam.</p>
+                    </div>
+                    <div class="col-md-12 well">
+                        <legend id="anch4">Anchor 4</legend>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultricies, metus eget fringilla fermentum, sem justo pulvinar tellus, ac varius neque ante eget mi. Donec cursus nibh ultrices vulputate aliquet. Morbi nulla enim, molestie eu ullamcorper quis, placerat a mauris. Proin vel magna ullamcorper, vulputate leo eu, egestas odio. Vivamus erat leo, egestas in euismod sed, fermentum nec magna. Nunc nisi enim, euismod a tellus sit amet, fermentum adipiscing ipsum. Fusce rhoncus diam ac neque aliquam convallis. Etiam malesuada, nibh id rutrum euismod, enim augue gravida dolor, at vulputate felis mi at magna. Nulla luctus, libero eget luctus gravida, sapien enim varius massa, adipiscing aliquet lacus mi eu eros. Duis pretium laoreet ullamcorper. Aenean in mauris nec libero tincidunt pharetra non et dui. Sed tortor turpis, mollis et tempus eu, auctor laoreet neque. Etiam eu tortor rutrum, rutrum mauris sit amet, hendrerit augue. Sed ut tincidunt nisi. Nam consectetur velit ac pharetra venenatis.</p>
+                        <p>Donec pellentesque id quam vel iaculis. Phasellus commodo tempor metus, eget sollicitudin odio ultricies id. Proin sed ipsum quis turpis suscipit luctus vitae id urna. Fusce et rhoncus quam. Etiam vel justo ligula. Nullam euismod lacinia risus a pulvinar. Pellentesque sit amet nisl eget ante vulputate feugiat. Suspendisse venenatis magna nunc, mollis facilisis neque condimentum ac. Vivamus non semper dui. Aenean sed eleifend dui. Vivamus a massa aliquam nibh consectetur luctus id at ligula. Nunc ipsum dolor, mollis at sem et, auctor rhoncus ipsum. Nulla faucibus venenatis est sit amet facilisis. In vestibulum nisi at tellus egestas, in pharetra enim fringilla. In ac erat non magna accumsan aliquam.</p>
+                    </div>
+                </div>
+            </div>
 
-                    {% for m in object.modules.all %}
-                        <p>{{ m.title }}</p>
-                        {% for lec in m.lectures.all %}
-                            <p><a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}">{{ lec.title }}</a></p>
-                        {% endfor %}
-                    {% empty %}
-
-                    {% endfor %}
-
-                {% endif %}
-            </div> <!-- end div.module-->
-            {% if lecture %}
-                {% include "disqus.html" %}
-            {% endif %}
-        </div> <!-- end div.col-md-9.section-white.courses-->
-    </div> <!-- end div.row-->
-
-</div> <!-- end div.content-->
+        </div>
+        </div>
+        </div>
+    </div>
 
 
 
@@ -191,36 +138,28 @@
 {% block extra_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
 <script>
-    var slideout = new Slideout({
-        'panel': document.getElementById('main-content'),
-        'menu': document.getElementById('sidebarLeft'),
-        'padding': 256,
-        'tolerance': 70
-    });
+/*Menu-toggle*/
+$("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("active");
+    $(".content-side").toggleClass('width100');
+});
 
-    //slideout.disableTouch();
 
-    // Toggle button
-    document.querySelector('.btn-hamburger').addEventListener('click', function() {
-        slideout.toggle();
-    });
+/*Smooth link animation*/
+$('a[href*=#]:not([href=#])').click(function() {
+    if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
 
-    function close(eve) {
-        eve.preventDefault();
-        slideout.close();
+        var target = $(this.hash);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+        if (target.length) {
+            $('html,body').animate({
+                scrollTop: target.offset().top
+            }, 1000);
+            return false;
+        }
     }
-
-    slideout
-        .on('beforeopen', function() {
-            this.panel.classList.add('panel-open');
-        })
-        .on('open', function() {
-            this.panel.addEventListener('click', close);
-        })
-        .on('beforeclose', function() {
-            this.panel.classList.remove('panel-open');
-            this.panel.removeEventListener('click', close);
-        });
+});
 </script>
 
 <script type="text/javascript">

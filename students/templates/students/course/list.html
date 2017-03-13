@@ -25,11 +25,11 @@
                     </div>
                     <div class="small-card-footer">
                         <!--{{ course.completed_course_lectures_by_student.latest.lecture_id }}-->
-                        {% if course.completed_course_lectures_by_student.latest.last %}
-                            <!-- если курс біл полностью пройден, отобразить эту ссылку-->
+                        {% if course.completed_course_lectures_by_student.latest.last and course.completed_course_lectures_by_student.student == request.user %}
+                            <!-- если курс был полностью пройден, отобразить эту ссылку-->
                             <a class="btn btn-success small-card-btn" href="{% url 'student_course_detail' course.id %}">Переглянути пройдений курс</a>
                         {% else %}
-                            {% if course.completed_course_lectures_by_student.latest.lecture_id %}
+                            {% if course.completed_course_lectures_by_student.latest.lecture_id and course.completed_course_lectures_by_student.student == request.user %}
                                 <!-- если есть хотя бы одна пройденая лекция, отобразить ссылку для продолжения курса на последней пройденой лекции-->
                                 <a class="btn btn-success small-card-btn" href="{% url 'student_course_detail_module_lecture' course.id course.completed_course_lectures_by_student.latest.module_id course.completed_course_lectures_by_student.latest.lecture_id %}">Продовжити вивчення курсу</a>
                             {% else %}
@@ -43,10 +43,12 @@
 
 
             {% empty %}
-                <div class="jumbotron">
-                    <h1>Not courses</h1>
-                    <p>You are not enrolled in any courses yet. Browse courses to enroll in a course.</p>
-                    <p><a class="btn btn-primary btn-lg" href="{% url 'course_list' %}">Browse courses</a></p>
+                <div class="small-card">
+                    <div class="small-card-body">
+                        <h1 class="text-center">Not courses</h1>
+                        <h3 class="text-center">You are not enrolled in any courses yet. Browse courses to enroll in a course.</h3>
+                        <a class="btn btn-primary btn-lg center-block" href="{% url 'course_list' %}" style="width: 185px;">Browse courses</a>
+                    </div>
                 </div>
             {% endfor %}
 
