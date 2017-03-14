@@ -10,7 +10,7 @@
 
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/semantic-sidebar.css' %}">
 <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css">-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/atom-one-dark.css' %}">
 {% endblock %}
@@ -24,35 +24,103 @@
 
 
 {% block content %}
-<div id="wrapper">
 
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <nav id="spy">
-                <ul class="sidebar-nav nav">
-                    <li>
-                    <h3>Модулі</h3>
-                </li>
+{% if modules %}
+<div class="second-nav-course">
+    <div class="menu-btn">
+        <a href="#" id="left-sidebar-toggle">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </a>
+        <a href="#" id></a>
+    </div>
+</div>
+{% else %}
+<div class="second-nav">
+    <div class="menu-btn">
+        <a href="#" id="left-sidebar-toggle">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
+{% endif %}
+
+
+<div class="ui left vertical inverted sidebar menu">
+<ul class="sidebar-nav nav">
+<li>
+    <h4 class="text-center">Прогрес</h4>
+</li>
+
+<!-- прогресс бар -->
+<li class="padding15">
+    <div class="progress">
+        <div class="progress-bar" style="width: {{ lectures_completed }}%;"></div>
+    </div>
+</li>
+<li>
+    <p class="text-center">{{ lectures_completed|floatformat:"0" }} %</p>
+</li>
+<!-- прогресс бар -->
+
+<!-- отображаем меню курса и содержание курса -->
+{% if modules %}
+    <li class="text-center"><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></li>
+    <li class="text-center"><a href="{% url 'student_course_about' object.id %}">about course</a></li>
+{% else %}
+    <!-- цикл по модулям -->
+    {% for m in object.modules.all %}
+        <li>
+            <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
+            <span>
+                Module <span class="order">{{ m.order|add:1 }}</span>
+            </span>
+            <br />
+            {{ m.title }}
+            <!--</a>-->
+        </li>
+        <!-- цикл по лекциям -->
+        {% for lec in m.lectures.all %}
+            <li>
+                <!-- добавлен id модуля для формирования ссылки на последнюю пройденую лекцию -->
+                <a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}" data-id="{{ lec.id }}" class="lecture">
+                    {{ lec.title }}
+                </a>
+            </li>
+        {% endfor %}
+    {% empty %}
+        <li>No modules yet.</li>
+    {% endfor %}
+{% endif %}
+</ul>
+</div>
+
+
+<div class="content content-block">
+    <div class="row">
+        <div class="col-sm-4 col-md-3 no-mobile-display">
+            <div class="">
+
+                <p>
+                    <h4 class="text-center">Прогрес</h4>
+                </p>
 
                 <!-- прогресс бар -->
-                <li>
+                <p>
                     <div class="progress">
                         <div class="progress-bar" style="width: {{ lectures_completed }}%;"></div>
                     </div>
-                </li>
-                <li>
-                    {{ lectures_completed|floatformat:"0" }} %
-                </li>
+                </p>
+                <p class="text-center">{{ lectures_completed|floatformat:"0" }} %</p>
                 <!-- прогресс бар -->
 
                 <!-- отображаем меню курса и содержание курса -->
                 {% if modules %}
-                    <li><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></li>
-                    <li><a href="{% url 'student_course_about' object.id %}">about course</a></li>
+                    <p><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></p>
+                    <p><a href="{% url 'student_course_about' object.id %}">about course</a></p>
                 {% else %}
                     <!-- цикл по модулям -->
                     {% for m in object.modules.all %}
-                        <li>
+                        <p>
                             <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
                             <span>
                                 Module <span class="order">{{ m.order|add:1 }}</span>
@@ -60,90 +128,114 @@
                             <br />
                             {{ m.title }}
                             <!--</a>-->
-                        </li>
+                        </p>
                         <!-- цикл по лекциям -->
                         {% for lec in m.lectures.all %}
-                            <li>
+                            <p>
                                 <!-- добавлен id модуля для формирования ссылки на последнюю пройденую лекцию -->
                                 <a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}" data-id="{{ lec.id }}" class="lecture">
                                     {{ lec.title }}
                                 </a>
-                            </li>
+                            </p>
                         {% endfor %}
                     {% empty %}
-                        <li>No modules yet.</li>
+                        <p>No modules yet.</p>
                     {% endfor %}
                 {% endif %}
-                </ul>
-            </nav>
-        </div>
 
-        <!-- Page content -->
-        <div class="content-side width100">
-        <div class="row content-body">
-        <div id="page-content-wrapper">
-            <div class="content-header">
-                <h1 id="home">
-                    <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
-                    </a>
-                    Sidebar Navigation Template
-                </h1>
             </div>
+        </div>
+        <div class="col-sm-8 col-md-9 curriculum">
+            <div class="intro">
+                <p class="subj-title">Curriculum</p>
+            </div>
+            <div class="ui">
 
-            <div class="page-content inset" data-spy="scroll" data-target="#spy">
-                <div class="row">
-  
-                        <div class="jumbotron text-center" >
-                            <h1>Hello Beautiful!</h1>
-                            <p>This is a sidebar navigation responsive template built off of Bootstrap 3.0 and simple sidebar template. It includes anchors, scroll spy, smooth scroll, and Awesome icon fonts.</p>
-                            <p><a class="btn btn-default">Click On Me!</a>
-                            <a class="btn btn-info">Tweet Me!</a></p>
+                {% if modules %}
+
+                    {% for m in object.modules.all %}
+                        <p>{{ forloop.counter }}. Module "{{ m.title }}"</p>
+                        {% for lec in m.lectures.all %}
+                            <p class="margin15">
+                                <a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}">
+                                    {{ forloop.parentloop.counter }}.{{ forloop.counter }} {{ lec.title }}
+                                </a>
+                            </p>
+                        {% endfor %}
+                    {% empty %}
+
+                    {% endfor %}
+                {% endif %}
+
+                <!-- отображение лекции -->
+                {% if lecture %}
+
+                    <div class="next-obj">
+                        <!-- ссылка на следующую лекцию -->
+                        {% if next_lecture %}
+                            <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}">next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        {% endif %}
+
+                        <!-- ссылка на страницу окончания курса -->
+                        {% if complete_course %}
+                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" >next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                        {% endif %}
+                    </div>
+
+                    {% if questions %}
+                        <!-- отображаем вопросы теста -->
+                        <div id="content">
+                            <h3 id="question"></h3>
+                            <div id="additional-data"></div>
+                            <div id="choices"></div>
+                            <p><button id="submit"></button></p>
+                            <p id="score"></p>
                         </div>
-    
-                </div>
-                <div class="row">
-                    <div class="col-md-12 well">
-                        <legend id="anch1">Anchor 1</legend>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultricies, metus eget fringilla fermentum, sem justo pulvinar tellus, ac varius neque ante eget mi. Donec cursus nibh ultrices vulputate aliquet. Morbi nulla enim, molestie eu ullamcorper quis, placerat a mauris. Proin vel magna ullamcorper, vulputate leo eu, egestas odio. Vivamus erat leo, egestas in euismod sed, fermentum nec magna. Nunc nisi enim, euismod a tellus sit amet, fermentum adipiscing ipsum. Fusce rhoncus diam ac neque aliquam convallis. Etiam malesuada, nibh id rutrum euismod, enim augue gravida dolor, at vulputate felis mi at magna. Nulla luctus, libero eget luctus gravida, sapien enim varius massa, adipiscing aliquet lacus mi eu eros. Duis pretium laoreet ullamcorper. Aenean in mauris nec libero tincidunt pharetra non et dui. Sed tortor turpis, mollis et tempus eu, auctor laoreet neque. Etiam eu tortor rutrum, rutrum mauris sit amet, hendrerit augue. Sed ut tincidunt nisi. Nam consectetur velit ac pharetra venenatis.</p>
-                        <p>Donec pellentesque id quam vel iaculis. Phasellus commodo tempor metus, eget sollicitudin odio ultricies id. Proin sed ipsum quis turpis suscipit luctus vitae id urna. Fusce et rhoncus quam. Etiam vel justo ligula. Nullam euismod lacinia risus a pulvinar. Pellentesque sit amet nisl eget ante vulputate feugiat. Suspendisse venenatis magna nunc, mollis facilisis neque condimentum ac. Vivamus non semper dui. Aenean sed eleifend dui. Vivamus a massa aliquam nibh consectetur luctus id at ligula. Nunc ipsum dolor, mollis at sem et, auctor rhoncus ipsum. Nulla faucibus venenatis est sit amet facilisis. In vestibulum nisi at tellus egestas, in pharetra enim fringilla. In ac erat non magna accumsan aliquam.</p>
-                    </div>
-                    <div class="col-md-12 well">
-                        <legend id="anch2">Anchor 2</legend>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultricies, metus eget fringilla fermentum, sem justo pulvinar tellus, ac varius neque ante eget mi. Donec cursus nibh ultrices vulputate aliquet. Morbi nulla enim, molestie eu ullamcorper quis, placerat a mauris. Proin vel magna ullamcorper, vulputate leo eu, egestas odio. Vivamus erat leo, egestas in euismod sed, fermentum nec magna. Nunc nisi enim, euismod a tellus sit amet, fermentum adipiscing ipsum. Fusce rhoncus diam ac neque aliquam convallis. Etiam malesuada, nibh id rutrum euismod, enim augue gravida dolor, at vulputate felis mi at magna. Nulla luctus, libero eget luctus gravida, sapien enim varius massa, adipiscing aliquet lacus mi eu eros. Duis pretium laoreet ullamcorper. Aenean in mauris nec libero tincidunt pharetra non et dui. Sed tortor turpis, mollis et tempus eu, auctor laoreet neque. Etiam eu tortor rutrum, rutrum mauris sit amet, hendrerit augue. Sed ut tincidunt nisi. Nam consectetur velit ac pharetra venenatis.</p>
-                        <p>Donec pellentesque id quam vel iaculis. Phasellus commodo tempor metus, eget sollicitudin odio ultricies id. Proin sed ipsum quis turpis suscipit luctus vitae id urna. Fusce et rhoncus quam. Etiam vel justo ligula. Nullam euismod lacinia risus a pulvinar. Pellentesque sit amet nisl eget ante vulputate feugiat. Suspendisse venenatis magna nunc, mollis facilisis neque condimentum ac. Vivamus non semper dui. Aenean sed eleifend dui. Vivamus a massa aliquam nibh consectetur luctus id at ligula. Nunc ipsum dolor, mollis at sem et, auctor rhoncus ipsum. Nulla faucibus venenatis est sit amet facilisis. In vestibulum nisi at tellus egestas, in pharetra enim fringilla. In ac erat non magna accumsan aliquam.</p>
-                    </div>
-                    <div class="col-md-12 well">
-                        <legend id="anch3">Anchor 3</legend>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultricies, metus eget fringilla fermentum, sem justo pulvinar tellus, ac varius neque ante eget mi. Donec cursus nibh ultrices vulputate aliquet. Morbi nulla enim, molestie eu ullamcorper quis, placerat a mauris. Proin vel magna ullamcorper, vulputate leo eu, egestas odio. Vivamus erat leo, egestas in euismod sed, fermentum nec magna. Nunc nisi enim, euismod a tellus sit amet, fermentum adipiscing ipsum. Fusce rhoncus diam ac neque aliquam convallis. Etiam malesuada, nibh id rutrum euismod, enim augue gravida dolor, at vulputate felis mi at magna. Nulla luctus, libero eget luctus gravida, sapien enim varius massa, adipiscing aliquet lacus mi eu eros. Duis pretium laoreet ullamcorper. Aenean in mauris nec libero tincidunt pharetra non et dui. Sed tortor turpis, mollis et tempus eu, auctor laoreet neque. Etiam eu tortor rutrum, rutrum mauris sit amet, hendrerit augue. Sed ut tincidunt nisi. Nam consectetur velit ac pharetra venenatis.</p>
-                        <p>Donec pellentesque id quam vel iaculis. Phasellus commodo tempor metus, eget sollicitudin odio ultricies id. Proin sed ipsum quis turpis suscipit luctus vitae id urna. Fusce et rhoncus quam. Etiam vel justo ligula. Nullam euismod lacinia risus a pulvinar. Pellentesque sit amet nisl eget ante vulputate feugiat. Suspendisse venenatis magna nunc, mollis facilisis neque condimentum ac. Vivamus non semper dui. Aenean sed eleifend dui. Vivamus a massa aliquam nibh consectetur luctus id at ligula. Nunc ipsum dolor, mollis at sem et, auctor rhoncus ipsum. Nulla faucibus venenatis est sit amet facilisis. In vestibulum nisi at tellus egestas, in pharetra enim fringilla. In ac erat non magna accumsan aliquam.</p>
-                    </div>
-                    <div class="col-md-12 well">
-                        <legend id="anch4">Anchor 4</legend>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultricies, metus eget fringilla fermentum, sem justo pulvinar tellus, ac varius neque ante eget mi. Donec cursus nibh ultrices vulputate aliquet. Morbi nulla enim, molestie eu ullamcorper quis, placerat a mauris. Proin vel magna ullamcorper, vulputate leo eu, egestas odio. Vivamus erat leo, egestas in euismod sed, fermentum nec magna. Nunc nisi enim, euismod a tellus sit amet, fermentum adipiscing ipsum. Fusce rhoncus diam ac neque aliquam convallis. Etiam malesuada, nibh id rutrum euismod, enim augue gravida dolor, at vulputate felis mi at magna. Nulla luctus, libero eget luctus gravida, sapien enim varius massa, adipiscing aliquet lacus mi eu eros. Duis pretium laoreet ullamcorper. Aenean in mauris nec libero tincidunt pharetra non et dui. Sed tortor turpis, mollis et tempus eu, auctor laoreet neque. Etiam eu tortor rutrum, rutrum mauris sit amet, hendrerit augue. Sed ut tincidunt nisi. Nam consectetur velit ac pharetra venenatis.</p>
-                        <p>Donec pellentesque id quam vel iaculis. Phasellus commodo tempor metus, eget sollicitudin odio ultricies id. Proin sed ipsum quis turpis suscipit luctus vitae id urna. Fusce et rhoncus quam. Etiam vel justo ligula. Nullam euismod lacinia risus a pulvinar. Pellentesque sit amet nisl eget ante vulputate feugiat. Suspendisse venenatis magna nunc, mollis facilisis neque condimentum ac. Vivamus non semper dui. Aenean sed eleifend dui. Vivamus a massa aliquam nibh consectetur luctus id at ligula. Nunc ipsum dolor, mollis at sem et, auctor rhoncus ipsum. Nulla faucibus venenatis est sit amet facilisis. In vestibulum nisi at tellus egestas, in pharetra enim fringilla. In ac erat non magna accumsan aliquam.</p>
-                    </div>
-                </div>
-            </div>
+                    {% else %}
 
-        </div>
-        </div>
+                        <!-- отображение контента лекции -->
+                        {% for content in lecture.contents.all %}
+                            {% with item=content.content_object %}
+                                {{ item.render }}
+                            {% endwith %}
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endif %}
+
+                {% if lecture %}
+                    {% include "disqus.html" %}
+                {% endif %}
+            </div>
         </div>
     </div>
-
-
+</div>
 
 {% endblock %}
 
 
 {% block extra_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script>
+<script type="text/javascript" src="{% static 'js/semantic-sidebar.js' %}"></script>
 <script>
 /*Menu-toggle*/
 $("#menu-toggle").click(function(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("active");
-    $(".content-side").toggleClass('width100');
+    // $("#content-side").toggleClass('width100');
 });
+
+$('.ui.left.sidebar').sidebar({
+ dimPage: false,
+ transition: 'push',
+ exclusive: false,
+ closable: true,
+ scrollLock: true
+ });
+
+ $('.ui.left.sidebar')
+ .sidebar('attach events', '#left-sidebar-toggle');
 
 
 /*Smooth link animation*/
@@ -160,8 +252,13 @@ $('a[href*=#]:not([href=#])').click(function() {
         }
     }
 });
-</script>
 
+</script>
+<!-- <script type="text/javascript">
+$(document).scroll(function() {
+  $('#sidebar-wrapper').css({ 'margin-top': $(this).scrollTop()>60 ? "-60px":"0px"})
+})
+</script> -->
 <script type="text/javascript">
 /**
 *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.

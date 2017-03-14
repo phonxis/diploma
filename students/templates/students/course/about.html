@@ -6,32 +6,93 @@
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/semantic-sidebar.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="content-side">
-  <div class="row content-body">
-    <div class="col-xs-6 col-md-3" id="sidebarLeft" role="navigation">
-      <div id="sidebar-nav">
-        <ul class="nav" id="modules">
-          <li><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></li>
-          <li><a href="{% url 'student_course_about' object.id %}">about course</a></li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="col-xs-12 col-md-9" id="main-content">
-      <p>about</p>
-      {% include "disqus.html" %}
+<div class="second-nav-course">
+    <div class="menu-btn">
+        <a href="#" id="left-sidebar-toggle">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </a>
+        <a href="#" id></a>
     </div>
-  </div>
+</div>
+
+<div class="ui left vertical inverted sidebar menu">
+<ul class="sidebar-nav nav">
+<li>
+    <h4 class="text-center">Прогрес</h4>
+</li>
+
+<!-- прогресс бар -->
+<li class="padding15">
+    <div class="progress">
+        <div class="progress-bar" style="width: {{ lectures_completed }}%;"></div>
+    </div>
+</li>
+<li>
+    <p class="text-center">{{ lectures_completed|floatformat:"0" }} %</p>
+</li>
+<!-- прогресс бар -->
+
+<!-- отображаем меню курса и содержание курса -->
+    <li class="text-center"><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></li>
+    <li class="text-center"><a href="{% url 'student_course_about' object.id %}">about course</a></li>
+</ul>
+</div>
+
+<div class="content content-block">
+    <div class="row">
+        <div class="col-sm-4 col-md-3 no-mobile-display">
+            <div class="">
+
+                <p>
+                    <h4 class="text-center">Прогрес</h4>
+                </p>
+
+                <!-- прогресс бар -->
+                <p>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {{ lectures_completed }}%;"></div>
+                    </div>
+                </p>
+                <p class="text-center">{{ lectures_completed|floatformat:"0"|default:"0" }} %</p>
+                <!-- прогресс бар -->
+
+                <!-- отображаем меню курса и содержание курса -->
+                    <p><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></p>
+                    <p><a href="{% url 'student_course_about' object.id %}">about course</a></p>
+            </div>
+        </div>
+        <div class="col-sm-8 col-md-9 curriculum">
+            <div class="intro">
+                <p class="subj-title">About course</p>
+            </div>
+            <div class="ui">
+              <p>Course description</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
+<script type="text/javascript" src="{% static 'js/semantic-sidebar.js' %}"></script>
 <script type="text/javascript">
+$('.ui.left.sidebar').sidebar({
+ dimPage: false,
+ transition: 'push',
+ exclusive: false,
+ closable: true,
+ scrollLock: true
+ });
+
+ $('.ui.left.sidebar')
+ .sidebar('attach events', '#left-sidebar-toggle');
+
 $('#load-comments').click(function() {
   $(this).hide();
   var d = document, s = d.createElement('script');
