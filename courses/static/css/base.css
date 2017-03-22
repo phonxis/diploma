@@ -19,19 +19,19 @@ div.content, div.content-side, .second-nav-course {
 }
 
 @media (min-width: 768px){
-    div.content, div.content-side, .second-nav-course {
+    div.content, div.content-side, .second-nav-course, .second-nav {
         width: 750px;
     }
 }
 
 @media (min-width: 992px){
-    div.content, div.content-side, .second-nav-course {
+    div.content, div.content-side, .second-nav-course, .second-nav {
         width: 970px;
     }
 }
 
 @media (min-width: 1200px){
-    div.content, div.content-side, .second-nav-course {
+    div.content, div.content-side, .second-nav-course, .second-nav {
         width: 1170px;
     }
 }
@@ -826,4 +826,47 @@ body.pushable .pusher {
 }
 div.pusher .content-block {
     margin-top: -20px;
+}
+
+#next-sidebar-btn {
+    height: 60px!important;
+    border-left: 1px solid #D7DADB;
+    width: 125px;
+    float: right;
+    padding-left: 15px;
+    padding-right: 5px;
+    text-decoration: none;
+}
+#next-sidebar-btn i {
+    font-size: 52px!important;
+}
+#next-sidebar-btn span {
+    font-size: 26px!important;
+    vertical-align: super;
+}
+
+@media (min-width: 768px) {
+    .second-nav {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+    }
+    .second-nav .menu-btn {
+        background-color: #f4f4ef!important;
+        border: none;
+    }
+    #next-sidebar-btn {
+        background-color: #fff;
+        border: 1px solid #D7DADB;
+    }
+    .lecture-title-sidebar {
+        display: none;
+    }
+}
+.lecture-title-sidebar {
+    font-size: 26px;
+    vertical-align: super;
+}
+.lecture-title-sidebar:hover {
+    text-decoration: none;
 }

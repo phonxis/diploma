@@ -40,6 +40,25 @@
         <a href="#" id="left-sidebar-toggle">
             <i class="fa fa-angle-left" aria-hidden="true"></i>
         </a>
+
+        <a class="lecture-title-sidebar">Lecture: {{ lecture.title }}</a>
+        <!-- ссылка на следующую лекцию -->
+        {% if next_lecture %}
+            <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}"
+               id="next-sidebar-btn">
+                <span>next</span>
+                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </a>
+        {% endif %}
+
+        <!-- ссылка на страницу окончания курса -->
+        {% if complete_course %}
+        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" id="next-sidebar-btn">
+            <span>next</span>
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+        </a>
+        {% endif %}
+
     </div>
 </div>
 {% endif %}
@@ -72,10 +91,8 @@
         <li>
             <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
             <span>
-                Module <span class="order">{{ m.order|add:1 }}</span>
+                Module <span class="order">{{ m.order|add:1 }} </span>{{ m.title }}
             </span>
-            <br />
-            {{ m.title }}
             <!--</a>-->
         </li>
         <!-- цикл по лекциям -->
@@ -146,9 +163,11 @@
             </div>
         </div>
         <div class="col-sm-8 col-md-9 curriculum">
+            {% if modules %}
             <div class="intro">
                 <p class="subj-title">Curriculum</p>
             </div>
+            {% endif %}
             <div class="ui">
 
                 {% if modules %}
@@ -169,18 +188,6 @@
 
                 <!-- отображение лекции -->
                 {% if lecture %}
-
-                    <div class="next-obj">
-                        <!-- ссылка на следующую лекцию -->
-                        {% if next_lecture %}
-                            <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}">next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% endif %}
-
-                        <!-- ссылка на страницу окончания курса -->
-                        {% if complete_course %}
-                        <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" >next <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        {% endif %}
-                    </div>
 
                     {% if questions %}
                         <!-- отображаем вопросы теста -->
