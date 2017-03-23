@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="{% static 'css/semantic-sidebar.css' %}">
 <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css">-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/checkbox.min.css' %}">
 
 {% endblock %}
 
@@ -142,10 +143,9 @@
                         <p>
                             <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
                             <span>
-                                Module <span class="order">{{ m.order|add:1 }}</span>
+                                Module <span class="order">{{ m.order|add:1 }}</span> {{ m.title }}
                             </span>
-                            <br />
-                            {{ m.title }}
+
                             <!--</a>-->
                         </p>
                         <!-- цикл по лекциям -->
@@ -193,11 +193,11 @@
 
                     {% if questions %}
                         <!-- отображаем вопросы теста -->
-                        <div id="content">
+                        <div id="content" class="grouped fields">
                             <h3 id="question"></h3>
                             <div id="additional-data"></div>
                             <div id="choices"></div>
-                            <p><button id="submit"></button></p>
+                            <button id="submit" class="btn btn-success"></button>
                             <p id="score"></p>
                         </div>
                     {% else %}
@@ -226,6 +226,7 @@
 
 {% block extra_js %}
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/1.0.1/slideout.min.js"></script> -->
+<script type="text/javascript" src="{% static 'js/checkbox.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/semantic-sidebar.js' %}"></script>
 <script>
 /*Menu-toggle*/
@@ -304,7 +305,7 @@ $('#load-comments').click(function() {
 //(d.head || d.body).appendChild(s);
 //})();
 </script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
 
 {% if questions %}
 <!-- js код для отображения вопросов теста -->
@@ -361,12 +362,12 @@ function askQuestion() {
 
     // формируем ответы на вопросы
     for (var i = 0; i < choicesLength; i++) {
-        choicesHTML += "<input type='radio' name='quiz" +
+        choicesHTML += "<div class='field'><div class='ui radio checkbox'><input type='radio' name='quiz" +
         currentQuestion + "' id='choice" + (i + 1) + "' " +
         'value="' + choices[i].answer + '">' +
         " <label for='choice" + (i + 1) + "'>" +
         choices[i].answer +
-        "</label><br>";
+        "</label></div></div>";
     }
 
     // выводит текст вопроса
@@ -375,6 +376,12 @@ function askQuestion() {
 
     //
     additionalData.innerHTML = quiz_data[currentQuestion].data_field;
+
+    if ($('pre') !== null){
+        $('pre').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+    }
 
     // выводим ответы на вопросы
     choicesContainer.innerHTML = choicesHTML;
@@ -414,14 +421,19 @@ function checkAnswer() {
 
     // закрашиваем правильный ответ в зеленый, не правильный в красный
     var labels = document.getElementsByTagName('label');
+    var fields = document.getElementsByClassName('field');
     var labelStyle = labels[correctIndex].style;
+    var fieldClass = fields[correctIndex];
     labelStyle.fontWeight = "bold";
     if (userpick_index == correctIndex) {
       score++;
       labelStyle.color = "green";
+      fieldClass.className = 'field right';
     } else {
       labelStyle.color = "green";
+      fieldClass.className = 'field right';
       labels[userpick_index].style.color = 'red';
+      fields[userpick_index].className = 'field wrong';
     }
 
     scoreContainer.textContent = "Score: " + score + " right answers out of " +
@@ -456,7 +468,6 @@ submitBtn.addEventListener("click", checkAnswer, false);
 </script>
 {% endif %}
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
 <script type="text/javascript">
     $('pre').each(function(i, block) {
   hljs.highlightBlock(block);

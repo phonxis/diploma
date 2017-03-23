@@ -857,7 +857,8 @@ div.pusher .content-block {
     }
     #next-sidebar-btn {
         background-color: #fff;
-        border: 1px solid #D7DADB;
+        /*border: 1px solid #D7DADB;*/
+        box-shadow: 0px 2px 4px 0px rgba(46, 61, 73, 0.2);
     }
     .lecture-title-sidebar {
         display: none;
@@ -869,4 +870,22 @@ div.pusher .content-block {
 }
 .lecture-title-sidebar:hover {
     text-decoration: none;
+}
+.field .ui label {
+    font-size: 16px!important;
+}
+.wrong {
+    background: hsla(9,81%,61%,.5);
+}
+.right {
+    background: rgba(135,211,124,.5);
+}
+#submit {
+    margin: 10px 0px;
+}
+#load-comments {
+    background-color: transparent;
+    border: 2px solid #2BBBAD;
+    color: #00695c;
+    width: 100%;
 }
