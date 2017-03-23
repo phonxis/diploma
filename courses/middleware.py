@@ -5,6 +5,7 @@ from django.contrib import messages
 
 class AjaxMessaging(object):
     def process_response(self, request, response):
+        print(request.GET)
         if request.is_ajax():
             if response['Content-Type'] in ['application/javascript', 'application/json']:
                 try:
@@ -21,7 +22,12 @@ class AjaxMessaging(object):
                         "extra_tags": message.tags
                     })
 
-                content['django_messages'] = django_messages
+                # возникает ошибка при отображении question
+                try:
+                    content['django_messages'] = django_messages
+                except Exception:
+                    # возвращаем response без django_messages
+                    return response
 
                 response.content = json.dumps(content)
 
