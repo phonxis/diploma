@@ -27,19 +27,19 @@ class LectureForm(forms.ModelForm):
         #}
 
 
-class QuestionForm(forms.ModelForm):
-    class Meta:
-        model = Question
-        fields = ('data_field',)
-        widgets = {
-            'data_field': forms.TextInput(
-                attrs={
-                    'class': 'form-control form-group',
-                    'placeholder': 'additional data for question',
-                    'required': 'True'
-                }
-            )
-        }
+# class QuestionForm(forms.ModelForm):
+#     class Meta:
+#         model = Question
+#         fields = ('data_field',)
+#         widgets = {
+#             'data_field': forms.TextInput(
+#                 attrs={
+#                     'class': 'form-control form-group',
+#                     'placeholder': 'additional data for question',
+#                     'required': 'False'
+#                 }
+#             )
+#         }
 
 AnswerForm = inlineformset_factory(Question,
                                    Answer,

@@ -22,7 +22,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from nested_formset import nestedformset_factory
 from .models import Course, Module, Content, Subject, Lecture
-from .forms import ModuleFormSet, LectureForm, QuestionForm, AnswerForm
+from .forms import ModuleFormSet, LectureForm, AnswerForm
 from students.forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm#, InstructorsCreationForm
 
 
@@ -173,7 +173,7 @@ class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
             formset.save()
             messages.success(request, 'Success!')
             return redirect('manage_course_list')
-        messages.success(request, 'Some error!')
+        messages.warning(request, 'Some error!')
         return self.render_to_response({'course': self.course,
                                         'formset': formset})
 

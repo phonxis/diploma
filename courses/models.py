@@ -168,7 +168,7 @@ class StudentLectureComplete(models.Model):
 
 
 class Question(BaseContent):
-    data_field = models.TextField(default='')
+    data_field = models.TextField(blank=True, null=True)
 
 
 class Answer(models.Model):
