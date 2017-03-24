@@ -22,6 +22,10 @@ from .models import Profile
 from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm, ProfileEditForm, UserEditForm
 
 
+def make_list_from_qset_values(qset, qset_key):
+    return [qset_dict.get(qset_key) for qset_dict in qset]
+
+
 class StudentRegistrationView(CreateView):
     template_name = "students/student/registration.html"
     form_class = UsersCreationForm
@@ -214,11 +218,14 @@ class StudentCourseDetailView(DetailView):
 
         # получаем суммарное количество лекций курса
         course_lectures = Lecture.objects.filter(module__course__id=self.object.id).count()
-        # получаемколичество лекций курса пройденого определенным студентом
-        completed_lectures = StudentLectureComplete.objects.filter(student__id=request.user.id, course__id=self.object.id).count()
+        # получаем лекции курса пройденные определенным студентом
+        #completed_lectures = StudentLectureComplete.objects.filter(student__id=request.user.id, course__id=self.object.id).count()
+        completed_lectures = StudentLectureComplete.objects.filter(student__id=request.user.id, course__id=self.object.id).values('lecture__id')
+        # формируем список из id пройденных лекций
+        context['completed_lectures_ids'] = [qset_dict.get('lecture__id') for qset_dict in completed_lectures]
 
         # определяем процент пройденых лекций
-        context['lectures_completed'] = (completed_lectures / course_lectures) * 100
+        context['lectures_completed'] = (len(completed_lectures) / course_lectures) * 100
 
         return self.render_to_response(context)
 
@@ -383,7 +390,12 @@ def course_about(request, pk):
     course = Course.objects.get(id=pk)
     # получаем владельца курса
     owner = User.objects.get(id=course.owner.id)
+    # получаем суммарное количество лекций курса
+    course_lectures = Lecture.objects.filter(module__course__id=course.id).count()
+    # получаем лекции курса пройденные определенным студентом
+    completed_lectures = StudentLectureComplete.objects.filter(student__id=request.user.id, course__id=course.id).values('lecture__id')
 
     return render(request, 'students/course/about.html', {'object': course,
-                                                          'owner': owner})
+                                                          'owner': owner,
+                                                          'lectures_completed': (len(completed_lectures) / course_lectures) * 100})
 

@@ -889,3 +889,7 @@ div.pusher .content-block {
     color: #00695c;
     width: 100%;
 }
+.fa-check-white {
+    /*color: #a8b3b1!important;*/
+    color: #fff!important;
+}

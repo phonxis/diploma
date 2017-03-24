@@ -179,6 +179,11 @@
                         {% for lec in m.lectures.all %}
                             <p class="margin15">
                                 <a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}">
+                                    {% if lec.id in completed_lectures_ids %}
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                    {% else %}
+                                    <i class="fa fa-check fa-check-white" aria-hidden="true"></i>
+                                    {% endif %}
                                     {{ forloop.parentloop.counter }}.{{ forloop.counter }} {{ lec.title }}
                                 </a>
                             </p>
