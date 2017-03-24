@@ -46,7 +46,7 @@
                                 {{ form|bootstrap }}
                                 {% csrf_token %}
                                 <div class="flex-center">
-                                    <input type="submit" value="Save lecture" class="btn btn-success no-margin">
+                                    <input type="submit" value="Save lecture" id="save-lec" class="btn btn-success no-margin animated infinite tada">
                                 </div>
                             </form>
                             <form action="{% url 'delete_lecture' lecture %}" method="post" class="delete-form">

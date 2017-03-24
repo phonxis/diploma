@@ -627,7 +627,7 @@ form .btn {
 .fixed-action-btn {
   position: fixed;
   right: 35px;
-  bottom: 55px;
+  bottom: 50px;
   padding-top: 15px;
   margin-bottom: 0;
   z-index: 998;
@@ -636,6 +636,12 @@ form .btn {
     line-height: 55px;
     width: 55px;
     height: 55px;
+}
+@media (max-width: 768px){
+    .fixed-action-btn {
+      right: 20px;
+      bottom: 35px;
+    }
 }
 .success-color {
     background-color: #18bc9c;
@@ -892,4 +898,10 @@ div.pusher .content-block {
 .fa-check-white {
     /*color: #a8b3b1!important;*/
     color: #fff!important;
+}
+#save-lec {
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s;
+    -webkit-animation-delay: 5s;
+    animation-delay: 5s;
 }

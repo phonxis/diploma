@@ -22,9 +22,6 @@ from .models import Profile
 from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm, ProfileEditForm, UserEditForm
 
 
-def make_list_from_qset_values(qset, qset_key):
-    return [qset_dict.get(qset_key) for qset_dict in qset]
-
 
 class StudentRegistrationView(CreateView):
     template_name = "students/student/registration.html"
