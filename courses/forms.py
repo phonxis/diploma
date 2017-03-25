@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
+from django.utils.translation import ugettext_lazy as _
 from .models import Course, Module, Lecture, Question, Answer
 
 ModuleFormSet = inlineformset_factory(Course,
@@ -17,7 +18,7 @@ class LectureForm(forms.ModelForm):
             'title': forms.TextInput(
                 attrs={
                     'class': 'form-control form-group',
-                    'placeholder': 'Title of lecture',
+                    'placeholder': _('Title of lecture'),
                     'required': 'True'
                 }
             )
@@ -49,7 +50,7 @@ AnswerForm = inlineformset_factory(Question,
                                    widgets={'answer': forms.TextInput(
                                       attrs={
                                         'class': 'form-control form-group',
-                                        'placeholder': 'Type answer',
+                                        'placeholder': _('Type answer'),
                                         'required': 'True'
                                       }
                                     ),

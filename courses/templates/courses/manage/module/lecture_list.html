@@ -2,6 +2,8 @@
 
 {% load user_tags %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="content">
     <div class="row">
@@ -9,10 +11,10 @@
         <h1>Course "{{ course.title }}"</h1>
         <div class="col-md-3 col-xs-12">
             <div class="row flex-one-row">
-                <div class="col-md-6 col-xs-6"><h3>Modules</h3></div>
+                <div class="col-md-6 col-xs-6"><h3>{% trans 'Modules' %}</h3></div>
                 <div class="col-md-6 col-xs-6">
                     <a href="{% url 'update_course_module' course.id %}" class="btn btn-success">
-                        <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+                        <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'Edit' %}
                     </a>
                 </div>
             </div>
@@ -22,20 +24,20 @@
                     <li data-id="{{ m.id }}" {% if m == module %} class="list-group-item selected"{% endif %} class="list-group-item">
                         <a href="{% url 'module_lecture_list' m.id %}">
                             <span>
-                                Module <span class="order">{{ m.order|add:1 }}</span>
+                                {% trans 'Module' %} <span class="order">{{ m.order|add:1 }}</span>
                             </span>
                             <br>
                             {{ m.title }}
                         </a>
                     </li>
                 {% empty %}
-                    <li>No modules yet.</li>
+                    <li>{% trans 'No modules yet.' %}</li>
                 {% endfor %}
             </ul>
             
             {% comment %}
             {% if course.modules.count > 0 %}
-                <a href="{% url 'module_lecture_list' course.modules.first.id %}">Manage contents</a>
+                <a href="{% url 'module_lecture_list' course.modules.first.id %}">{% trans 'Manage contents' %}</a>
             {% endif %}
             {% endcomment %}
         </div>
@@ -44,11 +46,11 @@
 
                 <div class="row flex-one-row">
                     <div class="col-md-6 col-xs-6">
-                        <h3>Lectures of module {{ module.order|add:1 }}: {{ module.title }}</h3>
+                        <h3>{% trans 'Lectures of module' %} {{ module.order|add:1 }}: {{ module.title }}</h3>
                     </div>
                     <div class="col-md-6 col-xs-6">
                         <a href="{% url 'create_lecture' module.id %}" class="btn btn-success">
-                            <i class="fa fa-plus" aria-hidden="true"></i> New Lecture
+                            <i class="fa fa-plus" aria-hidden="true"></i> {% trans 'New Lecture' %}
                         </a>
                     </div>
 
@@ -61,12 +63,12 @@
                     <div>{{ lecture.title }}</div>
                     <a href="{% url 'update_lecture' module.id lecture.id %}">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
-                        Update
+                        {% trans 'Update' %}
                     </a>
                 </li>
             {% empty %}
                 <li class="list-group-item flex-center">
-                    <h2>No created lectures</h2>
+                    <h2>{% trans 'No created lectures' %}</h2>
                 </li>
             {% endfor %}
             </ul>

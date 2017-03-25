@@ -1,0 +1,735 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-25 16:44+0200\n"
+"PO-Revision-Date: 2017-03-25 16:43+0000\n"
+"Last-Translator: b'  <>'\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Translated-Using: django-rosetta 0.7.12\n"
+
+#: .\courses\forms.py:21
+msgid "Title of lecture"
+msgstr "Назва лекції"
+
+#: .\courses\forms.py:53
+msgid "Type answer"
+msgstr "Відповідь"
+
+#: .\courses\models.py:15
+msgid "Subject's title"
+msgstr "Назва предмету"
+
+#: .\courses\models.py:16
+msgid "Subject's slug"
+msgstr "Slug предмету"
+
+#: .\courses\models.py:29
+msgid "Course owner"
+msgstr "Власник курсу"
+
+#: .\courses\models.py:32
+msgid "Course subject"
+msgstr "Предмет курсу"
+
+#: .\courses\models.py:34
+msgid "Course title"
+msgstr "Назва курсу"
+
+#: .\courses\models.py:36
+msgid "Course slug"
+msgstr "Slug курсу"
+
+#: .\courses\models.py:39 .\students\templates\students\course\about.html:76
+msgid "Course description"
+msgstr "Опис курсу"
+
+#: .\courses\models.py:40
+msgid "Course created datetime"
+msgstr "Дата створення курсу"
+
+#: .\courses\models.py:43
+msgid "Course students"
+msgstr "Студенти курсу"
+
+#: .\courses\models.py:66
+msgid "Module course"
+msgstr "Модуль курсу"
+
+#: .\courses\models.py:68
+msgid "Module title"
+msgstr "Назва модулю"
+
+#: .\courses\models.py:69
+msgid "Module description"
+msgstr "Опис модулю"
+
+#: .\courses\models.py:72
+msgid "Module order"
+msgstr "Порядок модулю"
+
+#: .\courses\models.py:82
+msgid "Lecture module"
+msgstr "Модуль лекції"
+
+#: .\courses\models.py:83
+msgid "Lecture title"
+msgstr "Назва лекції"
+
+#: .\courses\models.py:84
+msgid "Lecture order"
+msgstr "Порядок лекції"
+
+#: .\courses\models.py:94
+msgid "Content lecture"
+msgstr "Контент лекції"
+
+#: .\courses\models.py:110
+msgid "Content order"
+msgstr "Порядок контенту"
+
+#: .\courses\models.py:119
+msgid "Content owner"
+msgstr "Власник контенту"
+
+#: .\courses\models.py:120
+msgid "Content title"
+msgstr "Назва контенту"
+
+#: .\courses\models.py:121
+msgid "Content created datetime"
+msgstr "Дата створення контенту"
+
+#: .\courses\models.py:122
+msgid "Content updated datetime"
+msgstr "Дата оновлення контенту"
+
+#: .\courses\models.py:137
+#: .\courses\templates\courses\manage\lecture\form.html:137
+#: .\courses\templates\courses\manage\module\content_list.html:69
+msgid "File"
+msgstr "Файл"
+
+#: .\courses\models.py:142
+#: .\courses\templates\courses\manage\lecture\form.html:125
+#: .\courses\templates\courses\manage\module\content_list.html:67
+msgid "Image"
+msgstr "Зображення"
+
+#: .\courses\models.py:147
+#: .\courses\templates\courses\manage\lecture\form.html:119
+#: .\courses\templates\courses\manage\module\content_list.html:66
+msgid "Text"
+msgstr "Текст"
+
+#: .\courses\models.py:152
+#: .\courses\templates\courses\manage\lecture\form.html:131
+#: .\courses\templates\courses\manage\module\content_list.html:68
+msgid "Video"
+msgstr "Відео"
+
+#: .\courses\models.py:156
+msgid "Comleted lecture student"
+msgstr "Студент пройденої лекції"
+
+#: .\courses\models.py:157
+msgid "Completed lecture course"
+msgstr "Курс пройденої лекції"
+
+#: .\courses\models.py:159
+msgid "Completed lecture module"
+msgstr "Модуль пройденої лекції"
+
+#: .\courses\models.py:160
+msgid "Completed lecture"
+msgstr "Пройдена лекція"
+
+#: .\courses\models.py:162
+msgid "Completed?"
+msgstr "Завершено?"
+
+#: .\courses\models.py:164
+msgid "Lecture is last?"
+msgstr "Лекція є останньою?"
+
+#: .\courses\models.py:165
+msgid "Completed lecture datetime"
+msgstr "Дата проходження лекції"
+
+#: .\courses\models.py:184
+#: .\courses\templates\courses\manage\lecture\form.html:143
+#: .\courses\views.py:335
+msgid "Question"
+msgstr "Питання"
+
+#: .\courses\models.py:185
+msgid "Answer"
+msgstr "Відповідь"
+
+#: .\courses\models.py:186
+msgid "Correct?"
+msgstr "Відповідь вірна?"
+
+#: .\courses\templates\base.html:58
+msgid "Create new course"
+msgstr "Створити новий курс"
+
+#: .\courses\templates\base.html:59 .\courses\templates\base.html:62
+#: .\courses\templates\courses\manage\course\list.html:7
+#: .\students\templates\students\course\list.html:5
+#: .\students\templates\students\course\list.html:12
+msgid "My courses"
+msgstr "Мої курси"
+
+#: .\courses\templates\base.html:61
+msgid "All Courses"
+msgstr "Всі курси"
+
+#: .\courses\templates\base.html:66
+msgid "Profile"
+msgstr "Профіль"
+
+#: .\courses\templates\base.html:69
+msgid "Sign out"
+msgstr "Вихід"
+
+#: .\courses\templates\base.html:73
+msgid "Sign in"
+msgstr "Вхід"
+
+#: .\courses\templates\base.html:76
+msgid "Sign Up"
+msgstr "Реєстрація"
+
+#: .\courses\templates\base.html:79
+msgid "Teach"
+msgstr "Викладачу"
+
+#: .\courses\templates\courses\content\file.html:1
+msgid "Get file"
+msgstr "Скачати файл"
+
+#: .\courses\templates\courses\course\detail.html:16
+#: .\courses\templates\courses\manage\course\list.html:22
+#: .\courses\templates\courses\manage\module\content_list.html:12
+#: .\courses\templates\courses\manage\module\lecture_list.html:14
+msgid "Modules"
+msgstr "Модулі"
+
+#: .\courses\templates\courses\course\detail.html:17
+msgid "Lections"
+msgstr "Лекції"
+
+#: .\courses\templates\courses\course\detail.html:18
+msgid "Students"
+msgstr "Студентів"
+
+#: .\courses\templates\courses\course\detail.html:27
+msgid "Get a course"
+msgstr "Приступити до вивчення курсуі"
+
+#: .\courses\templates\courses\course\detail.html:30
+msgid "You have been enrolled to this course!"
+msgstr "Ви вже вивчаєте цей курс!"
+
+#: .\courses\templates\courses\course\detail.html:33
+#: .\courses\templates\registration\login.html:44
+msgid "Register now"
+msgstr "Зареєструйтесь зараз"
+
+#: .\courses\templates\courses\course\detail.html:47
+msgid "Reviews"
+msgstr "Відгуки"
+
+#: .\courses\templates\courses\course\list.html:9
+#: .\courses\templates\courses\course\list.html:42
+#, python-format
+msgid "%(subject.title)s courses"
+msgstr "Курси %(subject.title)s "
+
+#: .\courses\templates\courses\course\list.html:11
+#: .\courses\templates\courses\course\list.html:44
+#: .\courses\templates\index.html:129
+msgid "All courses"
+msgstr "Всі курси"
+
+#: .\courses\templates\courses\course\list.html:24
+msgid "Category"
+msgstr "Категорія"
+
+#: .\courses\templates\courses\course\list.html:25
+msgid "All"
+msgstr "Всі предмети"
+
+#: .\courses\templates\courses\course\list.html:30
+#: .\students\templates\students\course\completed_course.html:9
+msgid "courses"
+msgstr "курси"
+
+#: .\courses\templates\courses\manage\content\form.html:18
+msgid "Edit content"
+msgstr "Змінити контент"
+
+#: .\courses\templates\courses\manage\content\form.html:20
+msgid "Add a new content"
+msgstr "Додати контент"
+
+#: .\courses\templates\courses\manage\content\form.html:23
+msgid "Course info"
+msgstr "Інфо про курс"
+
+#: .\courses\templates\courses\manage\content\form.html:45
+msgid "Add file..."
+msgstr "Додати файл"
+
+#: .\courses\templates\courses\manage\content\form.html:68
+msgid "Go back"
+msgstr "Назад"
+
+#: .\courses\templates\courses\manage\course\delete.html:8
+msgid "Deleting course"
+msgstr "Видалення курсу"
+
+#: .\courses\templates\courses\manage\course\delete.html:13
+msgid "Are you sure to deleting course?"
+msgstr "Ви дійсно хочете видалити курс?"
+
+#: .\courses\templates\courses\manage\course\delete.html:14
+msgid "Confirm"
+msgstr "Підтвердити"
+
+#: .\courses\templates\courses\manage\course\form.html:11
+msgid "Modifying course"
+msgstr "Змінити курс"
+
+#: .\courses\templates\courses\manage\course\form.html:13
+msgid "Creating new course"
+msgstr "Створення нового курсу"
+
+#: .\courses\templates\courses\manage\course\form.html:17
+msgid "Information about course"
+msgstr "Інформація про курс"
+
+#: .\courses\templates\courses\manage\course\form.html:23
+#: .\courses\templates\courses\manage\quiz\formset.html:32
+#: .\students\templates\students\student\edit_profile.html:41
+msgid "Save"
+msgstr "Зберегти"
+
+#: .\courses\templates\courses\manage\course\list.html:19
+msgid "Modify"
+msgstr "Модифікувати"
+
+#: .\courses\templates\courses\manage\course\list.html:26
+msgid "Lectures"
+msgstr "Лекції"
+
+#: .\courses\templates\courses\manage\course\list.html:30
+msgid "Delete course"
+msgstr "Видалити курс"
+
+#: .\courses\templates\courses\manage\course\list.html:38
+msgid "No courses"
+msgstr "Немає курсів"
+
+#: .\courses\templates\courses\manage\course\list.html:44
+msgid "Add new course"
+msgstr "Додати новий курс"
+
+#: .\courses\templates\courses\manage\lecture\form.html:16
+msgid "Edit Lecture"
+msgstr "Змінити лекцію"
+
+#: .\courses\templates\courses\manage\lecture\form.html:18
+msgid "Create a new lecture"
+msgstr "Створити нову лекцію"
+
+#: .\courses\templates\courses\manage\lecture\form.html:45
+msgid "Lecture info"
+msgstr "Інформація про лекцію"
+
+#: .\courses\templates\courses\manage\lecture\form.html:52
+#: .\courses\templates\courses\manage\lecture\form.html:72
+msgid "Save lecture"
+msgstr "Зберегти лекцію"
+
+#: .\courses\templates\courses\manage\lecture\form.html:57
+#: .\courses\templates\courses\manage\lecture\form.html:100
+msgid "Delete"
+msgstr "Видалити"
+
+#: .\courses\templates\courses\manage\lecture\form.html:82
+#: .\courses\templates\courses\manage\module\content_list.html:35
+msgid "Lecture contents"
+msgstr "Контент лекції"
+
+#: .\courses\templates\courses\manage\lecture\form.html:93
+#: .\courses\templates\courses\manage\module\formset.html:9
+#: .\courses\templates\courses\manage\module\lecture_list.html:17
+#: .\courses\templates\courses\manage\quiz\formset.html:11
+msgid "Edit"
+msgstr "Змінити"
+
+#: .\courses\templates\courses\manage\lecture\form.html:108
+msgid "This lecture has no contents yet"
+msgstr "В цій лекції ще немає контенту"
+
+#: .\courses\templates\courses\manage\lecture\form.html:113
+#: .\courses\templates\courses\manage\module\content_list.html:64
+msgid "Add new content"
+msgstr "Додати новий контент"
+
+#: .\courses\templates\courses\manage\lecture\form.html:148
+#: .\courses\templates\courses\manage\module\content_list.html:62
+msgid "Create new lecture"
+msgstr "Створити нову лекцію"
+
+#: .\courses\templates\courses\manage\module\content_list.html:10
+msgid "Course"
+msgstr "Курс"
+
+#: .\courses\templates\courses\manage\module\content_list.html:18
+#: .\courses\templates\courses\manage\module\content_list.html:34
+#: .\courses\templates\courses\manage\module\lecture_list.html:27
+#: .\students\templates\students\course\detail.html:99
+#: .\students\templates\students\course\detail.html:148
+#: .\students\templates\students\course\detail.html:180
+msgid "Module"
+msgstr "Модуль"
+
+#: .\courses\templates\courses\manage\module\content_list.html:25
+#: .\courses\templates\courses\manage\module\lecture_list.html:34
+#: .\students\templates\students\course\detail.html:113
+#: .\students\templates\students\course\detail.html:163
+msgid "No modules yet."
+msgstr "Ще не створено ні одного модулю."
+
+#: .\courses\templates\courses\manage\module\content_list.html:28
+msgid "Edit modules"
+msgstr "Змінити модулі"
+
+#: .\courses\templates\courses\manage\module\content_list.html:30
+msgid "Manage contents"
+msgstr "Управління контентом"
+
+#: .\courses\templates\courses\manage\module\content_list.html:58
+msgid "No lectures"
+msgstr "Лекцій немає"
+
+#: .\courses\templates\courses\manage\module\content_list.html:61
+msgid "Add lecture"
+msgstr "Додати лекцію"
+
+#: .\courses\templates\courses\manage\module\formset.html:11
+msgid "Course modules"
+msgstr "Модулі курсу"
+
+#: .\courses\templates\courses\manage\module\formset.html:16
+msgid "Save modules"
+msgstr "Зберегти модулі"
+
+#: .\courses\templates\courses\manage\module\lecture_list.html:50
+msgid "Lectures of module"
+msgstr "Лекції модулю"
+
+#: .\courses\templates\courses\manage\module\lecture_list.html:54
+msgid "New Lecture"
+msgstr "Нова лекція"
+
+#: .\courses\templates\courses\manage\module\lecture_list.html:67
+msgid "Update"
+msgstr "Оновити"
+
+#: .\courses\templates\courses\manage\module\lecture_list.html:72
+msgid "No created lectures"
+msgstr "Немає лекцій"
+
+#: .\courses\templates\courses\manage\quiz\form.html:14
+msgid "Quiz"
+msgstr "Тест"
+
+#: .\courses\templates\courses\manage\quiz\form.html:17
+msgid "Quiz info"
+msgstr "Дані тесту"
+
+#: .\courses\templates\courses\manage\quiz\form.html:21
+msgid "Save quiz"
+msgstr "Зберегти тест"
+
+#: .\courses\templates\disqus.html:2
+msgid "Load comments"
+msgstr "Завантажити коментарі"
+
+#: .\courses\templates\index.html:19
+msgid "Get new knowledge"
+msgstr "Оволодій новими знаннями"
+
+#: .\courses\templates\index.html:20
+msgid "with"
+msgstr "з"
+
+#: .\courses\templates\index.html:21
+msgid "Join for free"
+msgstr "Приєднатися безкоштовно"
+
+#: .\courses\templates\index.html:29
+msgid "Popular courses"
+msgstr "Найпопулярніші курси"
+
+#: .\courses\templates\index.html:139
+msgid "Study everywhere"
+msgstr "Навчайся будь-де та будь-коли"
+
+#: .\courses\templates\index.html:140
+msgid "Start now"
+msgstr "Почни саме зараз"
+
+#: .\courses\templates\index.html:141
+#: .\students\templates\students\student\registration.html:26
+msgid "Register"
+msgstr "Зареєструйся"
+
+#: .\courses\templates\registration\logged_out.html:7
+msgid "Logout"
+msgstr "Вихід"
+
+#: .\courses\templates\registration\logged_out.html:9
+msgid "Login again?"
+msgstr "Ввійти знову?"
+
+#: .\courses\templates\registration\login.html:13
+#: .\courses\templates\registration\login.html:19
+msgid "Log in"
+msgstr "Вхід"
+
+#: .\courses\templates\registration\login.html:42
+msgid "Have not account yet?"
+msgstr "Ще не маєте акаунт?"
+
+#: .\courses\templates\registration\registration.html:8
+#: .\courses\templates\registration\registration.html:17
+msgid "Teach registration"
+msgstr "Реєстрація викладача"
+
+#: .\courses\templates\registration\registration.html:38
+#: .\students\templates\students\student\registration.html:48
+msgid "Have account?"
+msgstr "Маєте акаунт?"
+
+#: .\courses\templates\registration\registration.html:40
+#: .\students\templates\students\student\registration.html:50
+msgid "Log in now"
+msgstr "Ввійти зараз"
+
+#: .\courses\views.py:175 .\courses\views.py:416 .\courses\views.py:427
+#: .\courses\views.py:436 .\courses\views.py:452
+msgid "Success!"
+msgstr "Успішно!"
+
+#: .\courses\views.py:177
+msgid "Something broken!"
+msgstr "Щось пішло не так!"
+
+#: .\courses\views.py:276
+msgid "Lecture success updated!"
+msgstr "Лекція успішно оновлена!"
+
+#: .\courses\views.py:288
+msgid "Lecture success deleted!"
+msgstr "Лекція успішно видалена"
+
+#: .\courses\views.py:318
+msgid "Type text below"
+msgstr "Текстова інформація для лекції"
+
+#: .\courses\views.py:326
+msgid "URL video"
+msgstr "URL відео"
+
+#: .\courses\views.py:335
+msgid "Additional info for question"
+msgstr "Додаткова інформація для запитання"
+
+#: .\courses\views.py:449
+msgid "{} success uploaded!"
+msgstr "{} успішно завантажено!"
+
+#: .\courses\views.py:456
+msgid "Some error!"
+msgstr "Помилка!"
+
+#: .\courses\views.py:484
+msgid "Success deleted!"
+msgstr "Успішно видалено!"
+
+#: .\courses\views.py:488
+msgid "Failure deleted!"
+msgstr "Помилка при видаленні!"
+
+#: .\diploma\settings.py:174
+msgid "English"
+msgstr "Англійська"
+
+#: .\diploma\settings.py:175
+msgid "Ukrainian"
+msgstr "Українська"
+
+#: .\students\forms.py:21
+msgid "Username or Email Address"
+msgstr "Username або Email адреса"
+
+#: .\students\forms.py:29 .\students\forms.py:54 .\students\forms.py:138
+#: .\students\forms.py:177
+msgid "Password"
+msgstr "Пароль"
+
+#: .\students\forms.py:62
+msgid "Confirm Password"
+msgstr "Підтвердження паролю"
+
+#: .\students\forms.py:73 .\students\forms.py:165 .\students\forms.py:175
+msgid "Username"
+msgstr "Username"
+
+#: .\students\forms.py:78
+msgid "Email Address"
+msgstr "Email адреса"
+
+#: .\students\forms.py:97
+msgid "First name"
+msgstr "Ім'я"
+
+#: .\students\forms.py:103
+msgid "Last name"
+msgstr "Прізвище"
+
+#: .\students\forms.py:109
+msgid "Email"
+msgstr "Email"
+
+#: .\students\forms.py:124 .\students\forms.py:129 .\students\models.py:11
+msgid "Birthday date"
+msgstr "Дата народження"
+
+#: .\students\forms.py:146 .\students\forms.py:178
+msgid "Confirm password"
+msgstr "Підтвердження паролю"
+
+#: .\students\forms.py:170
+msgid "Email address"
+msgstr "Email адреса"
+
+#: .\students\forms.py:176
+msgid "E-mail"
+msgstr "E-mail"
+
+#: .\students\models.py:10
+msgid "Profile user"
+msgstr "Користувач профіля"
+
+#: .\students\templates\students\course\about.html:28
+#: .\students\templates\students\course\about.html:54
+#: .\students\templates\students\course\detail.html:75
+#: .\students\templates\students\course\detail.html:126
+msgid "Progress"
+msgstr "Прогрес"
+
+#: .\students\templates\students\course\about.html:43
+#: .\students\templates\students\course\about.html:67
+#: .\students\templates\students\course\detail.html:91
+#: .\students\templates\students\course\detail.html:140
+#: .\students\templates\students\course\detail.html:172
+msgid "Curriculum"
+msgstr "Навчальний план"
+
+#: .\students\templates\students\course\about.html:44
+#: .\students\templates\students\course\about.html:68
+#: .\students\templates\students\course\about.html:73
+#: .\students\templates\students\course\detail.html:92
+#: .\students\templates\students\course\detail.html:141
+msgid "About course"
+msgstr "Про курс"
+
+#: .\students\templates\students\course\completed_course.html:7
+msgid "Nice work"
+msgstr "Гарна робота!"
+
+#: .\students\templates\students\course\completed_course.html:8
+#, python-format
+msgid "Course %(course.title)s full completed"
+msgstr "Курс %(course.title)s повністю пройдений"
+
+#: .\students\templates\students\course\completed_course.html:9
+msgid "Look to other"
+msgstr "Переглянути інші"
+
+#: .\students\templates\students\course\detail.html:49
+msgid "Lecture"
+msgstr "Лекція"
+
+#: .\students\templates\students\course\detail.html:54
+#: .\students\templates\students\course\detail.html:62
+msgid "Next"
+msgstr "Наступна"
+
+#: .\students\templates\students\course\list.html:45
+msgid "Go to course"
+msgstr "Перейти до курсу"
+
+#: .\students\templates\students\course\list.html:54
+msgid "Not courses"
+msgstr "Немає курсів"
+
+#: .\students\templates\students\course\list.html:55
+msgid ""
+"You are not enrolled in any courses yet. Browse courses to enroll in a "
+"course."
+msgstr "Ви ще не вступили ні до одного курсу."
+
+#: .\students\templates\students\course\list.html:56
+msgid "Browse courses"
+msgstr "Переглянути курси"
+
+#: .\students\templates\students\student\edit_profile.html:56
+msgid "Your current avatar"
+msgstr "Ваш аватар"
+
+#: .\students\templates\students\student\edit_profile.html:63
+msgid "Add new avatar"
+msgstr "Додати новий аватар"
+
+#: .\students\templates\students\student\registration.html:8
+msgid "Signup"
+msgstr "Реєстрація"
+
+#: .\students\templates\students\student\registration.html:17
+msgid "Student registration"
+msgstr "Реєстрація студента"
+
+#: .\students\views.py:62
+msgid "Success enrolled!"
+msgstr "Ви успішно підписались на курс!"
+
+#: .\students\views.py:342
+msgid "Profile update successfully"
+msgstr "Профіль успішно оновлений!"
+
+#: .\students\views.py:344
+msgid "Correct errors"
+msgstr "Виправте помилки"
+
+#: .\students\views.py:375
+msgid "Successfully uploaded a new avatar."
+msgstr "Ви успішно завантажили новий аватар."

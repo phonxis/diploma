@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Мої курси{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans 'My courses' %}{% endblock %}
 
 {% block content %}
 <div class="content">
 
     <h3>
     {% if object_list %}
-        Мої курси
+        {% trans 'My courses' %}
     {% else %}
     {% endif %}
     </h3>
@@ -24,6 +26,7 @@
                         </p>
                     </div>
                     <div class="small-card-footer">
+                    {% comment %}
                         <!--{{ course.completed_course_lectures_by_student.latest.lecture_id }}-->
                         {% if course.completed_course_lectures_by_student.latest.last and course.completed_course_lectures_by_student.student == request.user %}
                             <!-- если курс был полностью пройден, отобразить эту ссылку-->
@@ -37,6 +40,8 @@
                                 <a class="btn btn-success small-card-btn" href="{% url 'student_course_detail' course.id %}">Приступити до вивчення</a>
                             {% endif %}
                         {% endif %}
+                    {% endcomment %}
+                        <a class="btn btn-success small-card-btn" href="{% url 'student_course_detail' course.id %}">{% trans 'Go to course' %}</a>
                     </div>
                 </div>
                 </div>
@@ -45,9 +50,9 @@
             {% empty %}
                 <div class="small-card">
                     <div class="small-card-body">
-                        <h1 class="text-center">Not courses</h1>
-                        <h3 class="text-center">You are not enrolled in any courses yet. Browse courses to enroll in a course.</h3>
-                        <a class="btn btn-primary btn-lg center-block" href="{% url 'course_list' %}" style="width: 185px;">Browse courses</a>
+                        <h1 class="text-center">{% trans 'Not courses' %}</h1>
+                        <h3 class="text-center">{% trans 'You are not enrolled in any courses yet. Browse courses to enroll in a course.' %}</h3>
+                        <a class="btn btn-primary btn-lg center-block" href="{% url 'course_list' %}" style="width: 185px;">{% trans 'Browse courses' %}</a>
                     </div>
                 </div>
             {% endfor %}

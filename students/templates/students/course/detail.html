@@ -2,6 +2,8 @@
 
 {% load staticfiles %}
 
+{% load i18n %}
+
 {% load cache %}
 
 {% block title %}
@@ -44,12 +46,12 @@
             <i class="fa fa-angle-left" aria-hidden="true"></i>
         </a>
 
-        <a class="lecture-title-sidebar">Lecture: {{ lecture.title }}</a>
+        <a class="lecture-title-sidebar">{% trans 'Lecture' %}: {{ lecture.title }}</a>
         <!-- ссылка на следующую лекцию -->
         {% if next_lecture %}
             <a href="{% url 'student_course_detail_module_lecture' object.id module_id next_lecture.id %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}"
                id="next-sidebar-btn">
-                <span>next</span>
+                <span>{% trans 'Next' %}</span>
                 <i class="fa fa-arrow-right" aria-hidden="true"></i>
             </a>
         {% endif %}
@@ -57,7 +59,7 @@
         <!-- ссылка на страницу окончания курса -->
         {% if complete_course %}
         <a href="{% url 'course_completed' %}?prev-lecture={{lecture.id}}&prev-module={{module_id}}&prev-course={{object.id}}" id="next-sidebar-btn">
-            <span>next</span>
+            <span>{% trans 'Next' %}</span>
             <i class="fa fa-arrow-right" aria-hidden="true"></i>
         </a>
         {% endif %}
@@ -70,7 +72,7 @@
 <div class="ui left vertical inverted sidebar menu">
 <ul class="sidebar-nav nav">
 <li>
-    <h4 class="text-center">Прогрес</h4>
+    <h4 class="text-center">{% trans 'Progress' %}</h4>
 </li>
 
 <!-- прогресс бар -->
@@ -86,15 +88,15 @@
 
 <!-- отображаем меню курса и содержание курса -->
 {% if modules %}
-    <li class="text-center"><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></li>
-    <li class="text-center"><a href="{% url 'student_course_about' object.id %}">about course</a></li>
+    <li class="text-center"><a href="{% url 'student_course_detail' object.id %}">{% trans 'Curriculum' %}</a></li>
+    <li class="text-center"><a href="{% url 'student_course_about' object.id %}">{% trans 'About course' %}</a></li>
 {% else %}
     <!-- цикл по модулям -->
     {% for m in object.modules.all %}
         <li>
             <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
             <span>
-                Module <span class="order">{{ m.order|add:1 }} </span>{{ m.title }}
+                {% trans 'Module' %} <span class="order">{{ m.order|add:1 }} </span>{{ m.title }}
             </span>
             <!--</a>-->
         </li>
@@ -108,7 +110,7 @@
             </li>
         {% endfor %}
     {% empty %}
-        <li>No modules yet.</li>
+        <li>{% trans 'No modules yet.' %}</li>
     {% endfor %}
 {% endif %}
 </ul>
@@ -121,7 +123,7 @@
             <div class="">
 
                 <p>
-                    <h4 class="text-center">Прогрес</h4>
+                    <h4 class="text-center">{% trans 'Progress' %}</h4>
                 </p>
 
                 <!-- прогресс бар -->
@@ -135,15 +137,15 @@
 
                 <!-- отображаем меню курса и содержание курса -->
                 {% if modules %}
-                    <p><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></p>
-                    <p><a href="{% url 'student_course_about' object.id %}">about course</a></p>
+                    <p><a href="{% url 'student_course_detail' object.id %}">{% trans 'Curriculum' %}</a></p>
+                    <p><a href="{% url 'student_course_about' object.id %}">{% trans 'About course' %}</a></p>
                 {% else %}
                     <!-- цикл по модулям -->
                     {% for m in object.modules.all %}
                         <p>
                             <!--<a href="{% url 'student_course_detail_module' object.id m.id %}" data-id="{{ m.id }}" class="module">-->
                             <span>
-                                Module <span class="order">{{ m.order|add:1 }}</span> {{ m.title }}
+                                {% trans 'Module' %} <span class="order">{{ m.order|add:1 }}</span> {{ m.title }}
                             </span>
 
                             <!--</a>-->
@@ -158,7 +160,7 @@
                             </p>
                         {% endfor %}
                     {% empty %}
-                        <p>No modules yet.</p>
+                        <p>{% trans 'No modules yet.' %}</p>
                     {% endfor %}
                 {% endif %}
 
@@ -167,7 +169,7 @@
         <div class="col-sm-8 col-md-9 curriculum">
             {% if modules %}
             <div class="intro">
-                <p class="subj-title">Curriculum</p>
+                <p class="subj-title">{% trans 'Curriculum' %}</p>
             </div>
             {% endif %}
             <div class="ui">
@@ -175,14 +177,14 @@
                 {% if modules %}
 
                     {% for m in object.modules.all %}
-                        <p>{{ forloop.counter }}. Module "{{ m.title }}"</p>
+                        <p>{{ forloop.counter }}. {% trans 'Module' %} "{{ m.title }}"</p>
                         {% for lec in m.lectures.all %}
                             <p class="margin15">
                                 <a href="{% url 'student_course_detail_module_lecture' object.id m.id lec.id %}">
                                     {% if lec.id in completed_lectures_ids %}
-                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                        <i class="fa fa-check" aria-hidden="true"></i>
                                     {% else %}
-                                    <i class="fa fa-check fa-check-white" aria-hidden="true"></i>
+                                        <i class="fa fa-check fa-check-white" aria-hidden="true"></i>
                                     {% endif %}
                                     {{ forloop.parentloop.counter }}.{{ forloop.counter }} {{ lec.title }}
                                 </a>

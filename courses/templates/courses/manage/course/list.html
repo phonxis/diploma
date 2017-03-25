@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="content">
-    <h1>Мои курсы</h1>
+    <h1>{% trans 'My courses' %}</h1>
 
     <div class="row">
         <!-- -->
@@ -14,18 +16,18 @@
                 <h4 class="">{{ course.title }}</h4>
 
                     <a href="{% url 'edit_course' course.id %}" class="btn btn-warning">
-                        <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
+                        <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'Modify' %}
                     </a>
                     <a href="{% url 'update_course_module' course.id %}" class="btn btn-info">
-                        <i class="fa fa-list" aria-hidden="true"></i> Модули
+                        <i class="fa fa-list" aria-hidden="true"></i> {% trans 'Modules' %}
                     </a>
                     {% if course.modules.count > 0 %}
                         <a href="{% url 'module_lecture_list' course.modules.first.id %}" class="btn btn-success">
-                            <i class="fa fa-file" aria-hidden="true"></i> Лекции
+                            <i class="fa fa-file" aria-hidden="true"></i> {% trans 'Lectures' %}
                         </a>
                     {% endif %}
                                         <a href="{% url 'delete_course' course.id %}" class="btn btn-danger">
-                        <i class="fa fa-trash" aria-hidden="true"></i> Удалить курс
+                        <i class="fa fa-trash" aria-hidden="true"></i> {% trans 'Delete course' %}
                     </a>
 
               </div>
@@ -33,13 +35,13 @@
 
         </div>
         {% empty %}
-            <p>Вы еще несоздали ниодного курса.</p>
+            <p>{% trans 'No courses' %}</p>
         {% endfor %}
 
     </div>
 
 <div class="fixed-action-btn">
-    <a href="{% url 'create_course' %}" class="btn-floating btn-floating-add success-color" title="Add new course">
+    <a href="{% url 'create_course' %}" class="btn-floating btn-floating-add success-color" title="{% trans 'Add new course' %}">
         <i class="fa fa-plus" aria-hidden="true"></i>
     </a>
 </div>

@@ -96,7 +96,7 @@ html,body, main {
     padding: 0px 20px;
 }
 
-.footer-social {
+.footer-social, .float-r {
     float: right;
 }
 
@@ -105,4 +105,12 @@ html,body, main {
         margin-left: 0px;
         margin-right: 0px;
     }
+}
+
+.white-link {
+    color: #fff;
+    margin-left: 5px;
+}
+.white-link:hover {
+    text-decoration: none;
 }

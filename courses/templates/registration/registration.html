@@ -2,8 +2,10 @@
 
 {% load bootstrap %}
 
+{% load i18n %}
+
 {% block title %}
-    Teach
+    {% trans 'Teach registration' %}
 {% endblock %}
 
 {% block content %}
@@ -12,7 +14,7 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 user-form">
             <div class="">
-                <h1 class="text-center">Реєстрація викладача</h1>
+                <h1 class="text-center">{% trans 'Teach registration' %}</h1>
                 <form action="." class="register-form" method="POST">
                     <!--{{ form.username }}
                     {{ form.username.errors }}
@@ -33,9 +35,9 @@
                     <input type="submit" class="btn btn-primary btn-hg btn-block" value="Стати викладачем" />
                 </form>
                 <p class="text-center">
-                    Вже зареєстровані?
+                    {% trans 'Have account?' %}
                     <a href="{% url 'login' %}">
-                        Залогіньтесь зараз
+                        {% trans 'Log in now' %}
                     </a>
                 </p>
             </div>

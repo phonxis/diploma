@@ -2,23 +2,25 @@
 
 {% load bootstrap %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="content">
     <h1>
         {% if object %}
-            Изменение курса "{{ object.title }}"
+            {% trans 'Modifying course' %} "{{ object.title }}"
         {% else %}
-            Создание нового курса
+            {% trans 'Creating new course' %}
         {% endif %}
     </h1>
     <div>
-        <h2>Информация о курсе</h2>
+        <h2>{% trans 'Information about course' %}</h2>
         <div class="small-card">
             <div class="small-card-body">
                 <form action="." method="POST">
                     {{ form|bootstrap }}
                     {% csrf_token %}
-                    <input type="submit" class="btn btn-success" value="Сохранить курс">
+                    <input type="submit" class="btn btn-success" value="{% trans 'Save' %}">
                 </form>
             </div>
         </div>

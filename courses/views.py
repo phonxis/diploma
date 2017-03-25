@@ -16,6 +16,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect, JsonResponse
@@ -171,9 +172,9 @@ class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
         formset = self.get_formset(data=request.POST)
         if formset.is_valid():
             formset.save()
-            messages.success(request, 'Success!')
+            messages.success(request, _('Success!'))
             return redirect('manage_course_list')
-        messages.warning(request, 'Some error!')
+        messages.warning(request, _('Something broken!'))
         return self.render_to_response({'course': self.course,
                                         'formset': formset})
 
@@ -272,7 +273,7 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             new_obj = form.save(commit=False)
             new_obj.module = self.module
             new_obj.save()
-            messages.success(request, 'Lecture success updated!')
+            messages.success(request, _('Lecture success updated!'))
             return redirect('module_lecture_list', self.module.id)
 
         else:
@@ -284,7 +285,7 @@ class LectureDeleteView(InstructorMixin, View):
     def post(self, request, lecture_id):
         lecture = get_object_or_404(Lecture, id=lecture_id, module__course__owner=request.user)
         lecture.delete()
-        messages.success(request, 'Lecture success deleted!')
+        messages.success(request, _('Lecture success deleted!'))
         return redirect('module_lecture_list', lecture.module.id)
 
 
@@ -314,7 +315,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                                      'updated',
                                                      'title',
                                                      'order'],
-                                            labels={'data_field': 'Type text below'}) #widgets={'data_field': SummernoteWidget()})
+                                            labels={'data_field': _('Type text below')}) #widgets={'data_field': SummernoteWidget()})
         elif model._meta.model_name in ['video']:
             # форма с полем data_field
             Form = modelform_factory(model, exclude=['owner',
@@ -322,7 +323,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                                      'updated',
                                                      'title',
                                                      'order'],
-                                            labels={'data_field': 'URL video'})
+                                            labels={'data_field': _('URL video')})
         elif model._meta.model_name in ['question']:
             # форма с полем data_field и title
             Form = modelform_factory(model,
@@ -331,7 +332,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                              'created',
                                              'updated',
                                              'order'],
-                                    labels={'data_field': 'Additional info for question', 'title': 'Question'})
+                                    labels={'data_field': _('Additional info for question'), 'title': _('Question')})
         else:
             # форма для загрузки файлов и изображений
             Form = modelform_factory(model, exclude=['owner',
@@ -412,7 +413,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                 if not id:
                     # если id объекта не указан, создаем новый экземпляр question
                     Content.objects.create(lecture=self.lecture, content_object=obj)
-                messages.success(request, 'Success!')
+                messages.success(request, _('Success!'))
                 return redirect('update_lecture', self.module.id, self.lecture.id)
 
             elif model_name in ['text']:
@@ -423,7 +424,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                     # если id объекта не указан, создаем новый экземпляр text
                     Content.objects.create(lecture=self.lecture, content_object=obj)
                 #return redirect('module_content_list', self.module.id)
-                messages.success(request, 'Success!')
+                messages.success(request, _('Success!'))
                 return redirect('update_lecture', self.module.id, self.lecture.id)
             elif model_name in ['video']:
                 # задаем сстандартный title
@@ -432,7 +433,7 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                 if not id:
                     # если id объекта не указан, создаем новый экземпляр video
                     Content.objects.create(lecture=self.lecture, content_object=obj)
-                messages.success(request, 'Success!')
+                messages.success(request, _('Success!'))
                 return redirect('update_lecture', self.module.id, self.lecture.id)
 
             # указываем название для файла или изображения
@@ -445,14 +446,14 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             if not id:
                 # если id объекта не указан, создаем новый экземпляр file или image
                 Content.objects.create(lecture=self.lecture, content_object=obj)
-                messages.success(request, '{} success uploaded!'.format(obj.title))
+                messages.success(request, _('{} success uploaded!'.format(obj.title)))
             
             #return redirect('module_content_list', self.module.id)
-            messages.success(request, 'Success!')
+            messages.success(request, _('Success!'))
             return JsonResponse(data)
         #return self.render_to_response({'form': form, 'object': self.obj})
         #data = {'error': True}
-        messages.success(request, 'Some error!')
+        messages.success(request, _('Some error!'))
         return JsonResponse(data)
 
 
@@ -480,11 +481,11 @@ class ContentDeleteView(InstructorMixin, JsonRequestResponseMixin, View):
             module = content.lecture.module
             content.content_object.delete()
             content.delete()
-            messages.success(request, 'Success deleted!')
+            messages.success(request, _('Success deleted!'))
             return self.render_json_response({'deleted': 'OK'})
             # возвращаемся к списку контента лекции
             #return redirect('update_lecture', module.id, content.lecture.id)
-        messages.error(request, 'Failure deleted!')
+        messages.error(request, _('Failure deleted!'))
         return self.render_json_response({'deleted': 'OK'})
         #return redirect('module_lecture_list', module.id)
         #return JsonResponse({"data": "ok"})

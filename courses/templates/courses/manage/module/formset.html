@@ -2,16 +2,18 @@
 
 {% load bootstrap %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="content">
-    <h1>Edit "{{ course.title }}"</h1>
+    <h1>{% trans 'Edit' %} "{{ course.title }}"</h1>
     <div class="module">
-        <h2>Course modules</h2>
+        <h2>{% trans 'Course modules' %}</h2>
         <form action="" method="post">
             {{ formset|bootstrap }}
             {{ formset.management_form }}
             {% csrf_token %}
-            <input type="submit" class="button" value="Save modules">
+            <input type="submit" class="button" value="{% trans 'Save modules' %}">
         </form>
     </div>
 </div>

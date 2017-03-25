@@ -2,36 +2,37 @@
 
 {% load user_tags %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="content">
     {% with course=module.course %}
-        <h1>Course "{{ course.title }}"</h1>
+        <h1>{% trans 'Course' %} "{{ course.title }}"</h1>
         <div class="contents">
-            <h3>Modules</h3>
+            <h3>{% trans 'Modules' %}</h3>
             <ul id="modules">
                 {% for m in course.modules.all %}
                     <li data-id="{{ m.id }}" {% if m == module %} class="selected"{% endif %}>
                         <a href="{% url 'module_lecture_list' m.id %}">
                             <span>
-                                Module <span class="order">{{ m.order|add:1 }}</span>
+                                {% trans 'Module' %} <span class="order">{{ m.order|add:1 }}</span>
                             </span>
                             <br>
                             {{ m.title }}
                         </a>
                     </li>
                 {% empty %}
-                    <li>No modules yet.</li>
+                    <li>{% trans 'No modules yet.' %}</li>
                 {% endfor %}
             </ul>
-            <p><a href="{% url 'update_course_module' course.id %}">Edit
-modules</a></p>
+            <p><a href="{% url 'update_course_module' course.id %}">{% trans 'Edit modules' %}</a></p>
             {% if course.modules.count > 0 %}
-                <a href="{% url 'module_lecture_list' course.modules.first.id %}">Manage contents</a>
+                <a href="{% url 'module_lecture_list' course.modules.first.id %}">{% trans 'Manage contents' %}</a>
             {% endif %}
         </div>
         <div class="module">
-            <h2>Module {{ module.order|add:1 }}: {{ module.title }}</h2>
-            <h3>Lecture contents:</h3>
+            <h2>{% trans 'Module' %} {{ module.order|add:1 }}: {{ module.title }}</h2>
+            <h3>{% trans 'Lecture contents' %}:</h3>
             <!--<div id="module-contents">
                 {% for content in module.contents.all %}
                     <div data-id="{{ content.id }}">
@@ -54,18 +55,18 @@ modules</a></p>
             {% for lecture in module.lectures.all %}
                 <p>{{ lecture.title }}</p>
             {% empty %}
-                <p>no lectures</p>
+                <p>{% trans 'No lectures' %}</p>
             {% endfor %}
             <hr>
-            <p>add lecture</p>
-            <p><a href="{% url 'create_lecture' module.id %}">create new lecture</a></p>
+            <p>{% trans 'Add lecture' %}</p>
+            <p><a href="{% url 'create_lecture' module.id %}">{% trans 'Create new lecture' %}</a></p>
             <hr>
-            <h3>Add new content:</h3>
+            <h3>{% trans 'Add new content' %}:</h3>
             <ul class="content-types">
-                <li><a href="{% url 'create_module_content' module.id 'text'%}">Text</a></li>
-                <li><a href="{% url 'create_module_content' module.id 'image' %}">Image</a></li>
-                <li><a href="{% url 'create_module_content' module.id 'video' %}">Video</a></li>
-                <li><a href="{% url 'create_module_content' module.id 'file' %}">File</a></li>
+                <li><a href="{% url 'create_module_content' module.id 'text'%}">{% trans 'Text' %}</a></li>
+                <li><a href="{% url 'create_module_content' module.id 'image' %}">{% trans 'Image' %}</a></li>
+                <li><a href="{% url 'create_module_content' module.id 'video' %}">{% trans 'Video' %}</a></li>
+                <li><a href="{% url 'create_module_content' module.id 'file' %}">{% trans 'File' %}</a></li>
             </ul>
         </div>
     {% endwith %}

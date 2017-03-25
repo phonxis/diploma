@@ -2,19 +2,21 @@
 
 {% load bootstrap %}
 
+{% load i18n %}
+
 {% block content %}
 
 <div class="content">
     <div class="row">
         <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 user-form">
 
-            <h1 class="text-center">Вхід</h1>
+            <h1 class="text-center">{% trans 'Log in' %}</h1>
 
             <form action="." class="login-form" method="POST">
                 {{ form|bootstrap }}
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ next }}" />
-                <input type="submit" class="btn btn-primary btn-hg btn-block" value="Вхід" />
+                <input type="submit" class="btn btn-primary btn-hg btn-block" value="{% trans 'Log in' %}" />
             </form>
 
             <hr class="login-hr">
@@ -37,9 +39,9 @@
             <br>
 
             <p class="text-center">
-                Все ще не зареєстровані?
+                {% trans 'Have not account yet?' %}
                 <a href="{% url 'student_registration' %}">
-                    Зареєструйтесь зараз
+                    {% trans 'Register now' %}
                 </a>
             </p>
 

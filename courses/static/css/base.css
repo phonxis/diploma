@@ -377,7 +377,7 @@ button.btn-floating {
     padding: 0px 20px;
     box-shadow: 0 -2px 5px 0 rgba(0, 0, 0, 0.16), 0 -2px 10px 0 rgba(0, 0, 0, 0.12)
 }
-.footer-social {
+.footer-social, .float-r {
     float: right;
 }
 
@@ -904,4 +904,11 @@ div.pusher .content-block {
     animation-duration: 2s;
     -webkit-animation-delay: 5s;
     animation-delay: 5s;
+}
+.white-link {
+    color: #fff;
+    margin-left: 5px;
+}
+.white-link:hover {
+    text-decoration: none;
 }

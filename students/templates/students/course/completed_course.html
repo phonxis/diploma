@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block content %}
     <div class="content-side">
-        <h1>Nice work</h1>
-        <h2>Course {{ course.title }} full completed</h2>
-        <p>Look to other <a href="{% url 'course_list' %}">courses</a>.</p>
+        <h1>{% trans "Nice work" %}</h1>
+        <h2>{% blocktrans %}Course {{ course.title }} full completed{% endblocktrans %}</h2>
+        <p>{% trans 'Look to other' %} <a href="{% url 'course_list' %}">{% trans 'courses' %}</a>.</p>
     </div>
 {% endblock %}

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.utils.translation import ugettext_lazy as _
 from courses.models import Course
 from .models import Profile
 
@@ -17,7 +18,7 @@ class UsersLoginForm(AuthenticationForm):
         label='',
         widget=forms.TextInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Username or Email Address',
+                   'placeholder': _('Username or Email Address'),
                    'required': 'True'}
         )
     )
@@ -25,7 +26,7 @@ class UsersLoginForm(AuthenticationForm):
         label='',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Password',
+                   'placeholder': _('Password'),
                    'required': 'True'}
         )
     )
@@ -50,7 +51,7 @@ class UsersCreationForm(UserCreationForm):
         label='',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Password',
+                   'placeholder': _('Password'),
                    'required': 'True'}
         )
     )
@@ -58,7 +59,7 @@ class UsersCreationForm(UserCreationForm):
         label='',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Confirm Password',
+                   'placeholder': _('Confirm Password'),
                    'required': 'True'}
         )
     )
@@ -69,12 +70,12 @@ class UsersCreationForm(UserCreationForm):
         widgets = {
             'username': forms.TextInput(
                     attrs={'class': 'form-control form-group',
-                           'placeholder': 'Username',
+                           'placeholder': _('Username'),
                            'required': 'True'}
             ),
             'email': forms.EmailInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Email Address',
+                   'placeholder': _('Email Address'),
                    'required': 'True'}
             )
         }
@@ -93,19 +94,19 @@ class UserEditForm(forms.ModelForm):
           'first_name': forms.TextInput(
                 attrs={
                     'class': 'form-control form-group',
-                    'placeholder': 'First name',
+                    'placeholder': _('First name'),
                 }
             ),
           'last_name': forms.TextInput(
                 attrs={
                     'class': 'form-control form-group',
-                    'placeholder': 'Last name'
+                    'placeholder': _('Last name')
                 }
             ),
           'email': forms.EmailInput(
                 attrs={
                     'class': 'form-control form-group',
-                    'placeholder': 'Email',
+                    'placeholder': _('Email'),
                     'required': 'True'
                 }
             )
@@ -120,12 +121,12 @@ class ProfileEditForm(forms.ModelForm):
             'date_of_birth': forms.DateInput(
                 attrs={
                     'class': 'form-control form-group',
-                    'placeholder': 'Birthday date'
+                    'placeholder': _('Birthday date')
                 }
             )
         }
         labels = {
-            'date_of_birth': "Birthday date"
+            'date_of_birth': _("Birthday date")
         }
 
 # не используется----------------------------------------------------------
@@ -134,7 +135,7 @@ class InstructorsCreationForm(UserCreationForm):
         #label='Password',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Password',
+                   'placeholder': _('Password'),
                    'required': 'True'}
         )
     )
@@ -142,7 +143,7 @@ class InstructorsCreationForm(UserCreationForm):
         #label='Confirm password',
         widget=forms.PasswordInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Confirm password',
+                   'placeholder': _('Confirm password'),
                    'required': 'True'}
         )
     )
@@ -161,19 +162,19 @@ class InstructorsCreationForm(UserCreationForm):
         widgets = {
             'username': forms.TextInput(
                     attrs={'class': 'form-control form-group',
-                           'placeholder': 'Username',
+                           'placeholder': _('Username'),
                            'required': 'True'}
             ),
             'email': forms.EmailInput(
             attrs={'class': 'form-control form-group',
-                   'placeholder': 'Email address',
+                   'placeholder': _('Email address'),
                    'required': 'True'}
             )
         }
         labels = {
-            'username': "Username",
-            'email': 'E-mail',
-            'password1': 'Password',
-            'password2': 'Confirm password'
+            'username': _("Username"),
+            'email': _('E-mail'),
+            'password1': _('Password'),
+            'password2': _('Confirm password')
         }
 # ---------------------------------------------------------------------------

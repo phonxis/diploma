@@ -2,6 +2,8 @@
 
 {% load staticfiles %}
 
+{% load i18n %}
+
 {% load bootstrap %}
 
 {% block css_load_file %}
@@ -13,12 +15,12 @@
 <div class="content">
     <h1>
     {% if object %}
-        Edit content "{{ object.title }}"
+        {% trans 'Edit content' %} "{{ object.title }}"
     {% else %}
-        Add a new content
+        {% trans 'Add a new content' %}
     {% endif %}
     </h1>
-    <h2>Course info</h2>
+    <h2>{% trans 'Course info' %}</h2>
 
     <div class="small-card">
         <div class="small-card-body">
@@ -40,7 +42,7 @@
         {% else %}
         <span class="btn btn-success fileinput-button">
             <i class="glyphicon glyphicon-plus"></i>
-            <span>Add file...</span>
+            <span>{% trans 'Add file...' %}</span>
             <!-- The file input field used as target for the file upload widget -->
             <input id="fileupload" type="file" name="data_field" multiple data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
         </span>
@@ -63,7 +65,7 @@
                    style="display: none;"
                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'> -->
 
-            <a href="{% url 'update_lecture' module lecture %}">go back</a>
+            <a href="{% url 'update_lecture' module lecture %}">{% trans 'Go back' %}</a>
         {% endif %}
         </div>
     </div>

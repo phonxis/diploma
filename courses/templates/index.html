@@ -2,6 +2,10 @@
 
 {% load staticfiles %}
 
+{% load i18n %}
+
+{% load change_lang_path %}
+
 {% block title %}{% endblock %}
 
 {% block extra_css %}
@@ -11,9 +15,12 @@
 {% block content %}
 <div class="jumbotron">
   <div class="welcome rgba-black-light fadeIn animated">
-    <h1>Оволодій новими знаннями</h1>
+    <!-- <h1>Оволодій новими знаннями</h1>
     <h1>з AwesomenessEdu</h1>
-    <button class="btn btn-success fadeIn wow">Приєднатися безкоштовно</button>
+    <button class="btn btn-success fadeIn wow">Приєднатися безкоштовно</button> -->
+    <h1>{% trans 'Get new knowledge' %}</h1>
+    <h1>{% trans 'with' %} AwesomenessEdu</h1>
+    <button class="btn btn-success fadeIn wow">{% trans 'Join for free' %}</button>
   </div>
 </div>
 
@@ -21,7 +28,7 @@
 
   <div class="hr-block fadeIn wow">
     <hr>
-    <h2>Найпопулярніші курси</h2>
+    <h2>{% trans 'Popular courses' %}</h2>
     <hr>
   </div>
 
@@ -121,22 +128,40 @@
   </div><!-- .fadeIn.wow -->
 
   <div class="see-all">
-    <a href="#" class="see-all-courses">Переглянути всі курси <span class="btn-floating btn-large"><i class="fa fa-chevron-right"></i></span></a>
+    <a href="#" class="see-all-courses">{% trans 'All courses' %} <span class="btn-floating btn-large"><i class="fa fa-chevron-right"></i></span></a>
   </div>
 
 </div>
 
 <div class="container reg-now">
   <div class="welcome rgba-black-light fadeIn wow">
-    <h1>Навчайся будь-де та будь-коли</h1>
+    <!-- <h1>Навчайся будь-де та будь-коли</h1>
     <h3>Почни саме зараз</h3>
-    <button class="btn btn-success">Зареєструватись</button>
+    <button class="btn btn-success">Зареєструватись</button> -->
+    <h1>{% trans 'Study everywhere' %}</h1>
+    <h3>{% trans 'Start now' %}</h3>
+    <button class="btn btn-success">{% trans 'Register' %}</button>
   </div>
 </div>
 
 
 <footer class="landing-footer">
-  <div class="container">&copy; 2017 AwesomenessEdu <div class="footer-social">Twitter</div></div>
+  <div class="container">
+    &copy; 2017 AwesomenessEdu
+
+    <!-- <div class="footer-social">Twitter</div> -->
+    <div class="float-r">
+      {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+
+        {% for language in languages %}
+          <a href="/{{ language.code }}/{{ request.path|change_path }}" class="white-link">
+            {{ language.name_local }}
+          </a>
+        {% endfor %}
+    </div>
+  </div>
 </footer>
 
 {% endblock %}

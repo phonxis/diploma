@@ -2,6 +2,8 @@
 
 {% load staticfiles %}
 
+{% load i18n %}
+
 {% block title %}
 {% endblock %}
 
@@ -23,7 +25,7 @@
 <div class="ui left vertical inverted sidebar menu">
 <ul class="sidebar-nav nav">
 <li>
-    <h4 class="text-center">Прогрес</h4>
+    <h4 class="text-center">{% trans "Progress" %}</h4>
 </li>
 
 <!-- прогресс бар -->
@@ -38,8 +40,8 @@
 <!-- прогресс бар -->
 
 <!-- отображаем меню курса и содержание курса -->
-    <li class="text-center"><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></li>
-    <li class="text-center"><a href="{% url 'student_course_about' object.id %}">about course</a></li>
+    <li class="text-center"><a href="{% url 'student_course_detail' object.id %}">{% trans "Curriculum" %}</a></li>
+    <li class="text-center"><a href="{% url 'student_course_about' object.id %}">{% trans "About course" %}</a></li>
 </ul>
 </div>
 
@@ -49,7 +51,7 @@
             <div class="">
 
                 <p>
-                    <h4 class="text-center">Прогрес</h4>
+                    <h4 class="text-center">{% trans "Progress" %}</h4>
                 </p>
 
                 <!-- прогресс бар -->
@@ -62,16 +64,16 @@
                 <!-- прогресс бар -->
 
                 <!-- отображаем меню курса и содержание курса -->
-                    <p><a href="{% url 'student_course_detail' object.id %}">Curriculum</a></p>
-                    <p><a href="{% url 'student_course_about' object.id %}">about course</a></p>
+                    <p><a href="{% url 'student_course_detail' object.id %}">{% trans "Curriculum" %}</a></p>
+                    <p><a href="{% url 'student_course_about' object.id %}">{% trans "About course" %}</a></p>
             </div>
         </div>
         <div class="col-sm-8 col-md-9 curriculum">
             <div class="intro">
-                <p class="subj-title">About course</p>
+                <p class="subj-title">{% trans "About course" %}</p>
             </div>
             <div class="ui">
-              <p>Course description</p>
+              <p>{% trans "Course description" %}</p>
             </div>
         </div>
     </div>

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
     {{ object.title }}
 {% endblock %}
@@ -11,9 +13,9 @@
         <div class="course-overview-title"><div>{{ object.title }} </div> <span class="label label-success"> {{ object.subject }}</span></div>
         <div class="course-overview-description">{{ object.description }}</div>
         <div class="course-overview-properties">
-            <div>Модулів: <br>{{object.modules.count }}</div>
-            <div>Лекцій: <br>{{ lecture_count }}</div>
-            <div>Студентів: <br>{{ object.students.count }}</div>
+            <div>{% trans 'Modules' %}: <br>{{object.modules.count }}</div>
+            <div>{% trans 'Lections' %}: <br>{{ lecture_count }}</div>
+            <div>{% trans 'Students' %}: <br>{{ object.students.count }}</div>
         </div>
 
         <div class="enroll-form">
@@ -22,13 +24,13 @@
                 <form action="{% url 'student_enroll_course' %}" method="POST">
                     {{ enroll_form }}
                     {% csrf_token %}
-                    <input type="submit" class="btn btn-fill btn-success" value="Підписатись на курс">
+                    <input type="submit" class="btn btn-fill btn-success" value="{% trans 'Get a course' %}">
                 </form>
             {% else %}
-                <p class="text-center">You have been enrolled to this course!</p>
+                <p class="text-center">{% trans 'You have been enrolled to this course!' %}</p>
             {% endif %}
         {% else %}
-        <a href="{% url 'student_registration' %}" class="btn btn-fill btn-success center-block">Зареєструйтесь</a>
+        <a href="{% url 'student_registration' %}" class="btn btn-fill btn-success center-block">{% trans 'Register now' %}</a>
         {% endif %}
         </div>
 
@@ -42,7 +44,7 @@
         </div>
     </div>
     <div class="course-overview-review">
-        <h1>Reviews</h1>
+        <h1>{% trans 'Reviews' %}</h1>
     </div>
     <div class="course-overview-review">
         {% include "disqus.html" %}

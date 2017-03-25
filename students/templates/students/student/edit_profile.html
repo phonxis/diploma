@@ -6,6 +6,8 @@
 
 {% load staticfiles %}
 
+{% load i18n %}
+
 
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datepicker.min.css' %}">
@@ -36,7 +38,7 @@
                     {{ profile_form.date_of_birth }}
                     {{ profile_form.date_of_birth.errors }} -->
                     {% csrf_token %}
-                    <p><button type='submit' class="btn btn-primary btn-hg btn-block">Save</button></p>
+                    <p><button type='submit' class="btn btn-primary btn-hg btn-block">{% trans 'Save' %}</button></p>
                 </form>
 
                 <!-- {% if request.user|has_avatar %}
@@ -51,18 +53,18 @@
         </div>
         <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="small-card small-card-body">
-                <p class="text-center"><strong>Your current avatar</strong></p>
+                <p class="text-center"><strong>{% trans 'Your current avatar' %}</strong></p>
                 <div class="flex-center zoomInUp animated">{% avatar user %}</div>
 
                 <form enctype="multipart/form-data" method="POST" action="{% url 'add_update_avatar' %}">
                     <!-- {{ upload_avatar_form.as_p }} -->
                     <div class="flex-center">
                     <span class="btn btn-success fileinput-button">
-                    <span>Add new avatar</span>
+                    <span>{% trans 'Add new avatar' %}</span>
                     {{ upload_avatar_form.avatar }}
                     </span>
                     </div>
-                    {% csrf_token %}<input type="submit" class="btn btn-primary btn-hg btn-block" value="Update avatar" />
+                    {% csrf_token %}<input type="submit" class="btn btn-primary btn-hg btn-block" value="{% trans 'Update avatar' %}" />
                 </form>
             </div>
         </div>

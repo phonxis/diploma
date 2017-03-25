@@ -2,11 +2,13 @@
 
 {% load staticfiles %}
 
+{% load i18n %}
+
 {% block title %}
     {% if subject %}
-        {{ subject.title }} courses
+        {% blocktrans %}{{ subject.title }} courses{% endblocktrans %}
     {% else %}
-        All courses
+        {% trans 'All courses' %}
     {% endif %}
 {% endblock %}
 
@@ -19,13 +21,13 @@
         <div class="col-sm-3 category-list">
             <div class="">
                 <div class="">
-                    <h4>Категорія</h4>
-                    <p><a href="{% url 'course_list' %}">All</a></p>
+                    <h4>{% trans 'Category' %}</h4>
+                    <p><a href="{% url 'course_list' %}">{% trans 'All' %}</a></p>
                     {% for subj in subjects %}
                     <p>
                     <a href="{% url 'subject_course_list' subj.slug %}">
                     <!-- total_courses это аннотация queryset во вьюхе CourseListView -->
-                    {{ subj.title }}: <span>{{ subj.total_courses }} courses</span>
+                    {{ subj.title }}: <span>{{ subj.total_courses }} {% trans 'courses' %}</span>
                     </a>
                     </p>
             {% endfor %}
@@ -37,9 +39,9 @@
             <div class="intro">
                 <p class="subj-title">
                     {% if subject %}
-                        {{ subject.title }} курси
+                        {% blocktrans %}{{ subject.title }} courses{% endblocktrans %}
                     {% else %}
-                        Всі курси
+                        {% trans 'All courses' %}
                     {% endif %}
                 </p>
             </div>

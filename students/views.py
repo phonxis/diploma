@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponseRedirect, HttpResponseRedirect, JsonResponse
 from django.db import transaction
 from django.conf import settings
@@ -58,7 +59,7 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
         self.course.students.add(self.request.user)
         # если форма валидна, пользователль будет перенаправлен
         # на URL из get_success_url
-        messages.success(self.request, 'Success enrolled!')
+        messages.success(self.request, _('Success enrolled!'))
         return super(StudentEnrollCourseView, self).form_valid(form)
 
     def get_success_url(self):
@@ -338,9 +339,9 @@ def update_profile(request):
             user_form.save()
             profile_form.save()
 
-            messages.success(request, 'Profile update successfully')
+            messages.success(request, _('Profile update successfully'))
         else:
-            messages.error(request, 'Correct errors')
+            messages.error(request, _('Correct errors'))
     else:
         # отображение форм с данными из БД (которые были ранее сохранены)
         user_form = UserEditForm(instance=request.user)
@@ -371,7 +372,7 @@ def add(request, extra_context=None, next_override=None,
             image_file = request.FILES['avatar']
             avatar.avatar.save(image_file.name, image_file)
             avatar.save()
-            messages.success(request, "Successfully uploaded a new avatar.")
+            messages.success(request, _("Successfully uploaded a new avatar."))
             avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
             #return redirect(next_override or _get_next(request))
             return redirect('update_profile')

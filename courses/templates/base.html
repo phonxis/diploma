@@ -1,13 +1,15 @@
 {% load staticfiles %}
 
 {% load user_tags %}
+
+{% load change_lang_path %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Educa{% endblock %}</title>
-    <title>Document</title>
+    <title>{% block title %}AwesomenessEdu{% endblock %}</title>
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
@@ -54,28 +56,28 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
                     {% if request.user|check_instructor_group %}
-                        <li><a href="{% url 'create_course' %}">Create new course</a></li>
-                        <li><a href="{% url 'manage_course_list' %}">My courses</a></li>
+                        <li><a href="{% url 'create_course' %}">{% trans 'Create new course' %}</a></li>
+                        <li><a href="{% url 'manage_course_list' %}">{% trans 'My courses' %}</a></li>
                     {% else %}
-                        <li><a href="{% url 'course_list' %}">All Courses</a></li>
-                        <li><a href="{% url 'student_course_list' %}">My courses</a></li>
+                        <li><a href="{% url 'course_list' %}">{% trans 'All Courses' %}</a></li>
+                        <li><a href="{% url 'student_course_list' %}">{% trans 'My courses' %}</a></li>
                     {% endif %}
                     
 
-                    <li><a href="{% url 'update_profile' %}">Profile</a></li>
+                    <li><a href="{% url 'update_profile' %}">{% trans 'Profile' %}</a></li>
 
                     <li>
-                        <a href="{% url 'logout' %}">Sign out</a>
+                        <a href="{% url 'logout' %}">{% trans 'Sign out' %}</a>
                     </li>
                 {% else %}
                     <li>
-                        <a href="{% url 'login' %}">Sign in</a>
+                        <a href="{% url 'login' %}">{% trans 'Sign in' %}</a>
                     </li>
                     <li>
-                        <a href="{% url 'student_registration' %}">Sign Up</a>
+                        <a href="{% url 'student_registration' %}">{% trans 'Sign Up' %}</a>
                     </li>
 
-                    <li><a href="{% url 'instructor_registration' %}">Teach</a></li>
+                    <li><a href="{% url 'instructor_registration' %}">{% trans 'Teach' %}</a></li>
                 {% endif %}
             </ul>
         </div>
@@ -98,7 +100,22 @@
 
 {% block footer %}
 <footer class="landing-footer">
-  <div class="container">&copy; 2017 AwesomenessEdu <div class="footer-social">Twitter</div></div>
+  <div class="container">
+    &copy; 2017 AwesomenessEdu
+
+    <!-- <div class="footer-social">Twitter</div> -->
+    <div class="float-r">
+      {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+
+        {% for language in languages %}
+          <a href="/{{ language.code }}/{{ request.path|change_path }}" class="white-link">
+            {{ language.name_local }}
+          </a>
+        {% endfor %}
+    </div>
+  </div>
 </footer>
 {% endblock %}
     

@@ -4,6 +4,8 @@
 
 {% load bootstrap %}
 
+{% load i18n %}
+
 {% load user_tags %}
 
 {% block content %}
@@ -11,9 +13,9 @@
     <div class="row">
         <h1>
         {% if object %}
-            Edit Lecture {{ object.order|add:1 }}: {{ object.title }}
+            {% trans 'Edit Lecture' %} {{ object.order|add:1 }}: {{ object.title }}
         {% else %}
-            <div class="text-center">Create a new lecture</div>
+            <div class="text-center">{% trans 'Create a new lecture' %}</div>
         {% endif %}
         </h1>
 
@@ -39,19 +41,19 @@
             {% endcomment %}
 
             <div class="col-md-3 col-xs-12">
-                <h3>Lecture info</h3>
+                <h3>{% trans 'Lecture info' %}</h3>
                     <div class="small-card">
                         <div class="small-card-body">
                             <form action="" method="post" enctype="multipart/form-data">
                                 {{ form|bootstrap }}
                                 {% csrf_token %}
                                 <div class="flex-center">
-                                    <input type="submit" value="Save lecture" id="save-lec" class="btn btn-success no-margin animated infinite tada">
+                                    <input type="submit" value="{% trans 'Save lecture' %}" id="save-lec" class="btn btn-success no-margin animated infinite tada">
                                 </div>
                             </form>
                             <form action="{% url 'delete_lecture' lecture %}" method="post" class="delete-form">
                                 <div class="flex-center">
-                                    <input type="submit" class="btn btn-danger no-margin" value="Delete">
+                                    <input type="submit" class="btn btn-danger no-margin" value="{% trans 'Delete' %}">
                                 </div>
                                 {% csrf_token %}
                             </form>
@@ -66,7 +68,7 @@
                             {{ form|bootstrap }}
                             {% csrf_token %}
                             <p class="flex-center">
-                                <input type="submit" value="Save lecture" class="btn btn-success no-margin">
+                                <input type="submit" value="{% trans 'Save lecture' %}" class="btn btn-success no-margin">
                             </p>
                         </form>
                     </div>
@@ -76,7 +78,7 @@
 
     {% if lecture %}
     <div class="col-md-9 col-xs-12">
-        <h3>Lecture contents</h3>
+        <h3>{% trans 'Lecture contents' %}</h3>
         <div class="list-group small-card" id="lecture-contents">
             {% for content in object.contents.all %}
                 <div data-id="{{ content.id }}" class="list-group-item flex-one-row-center">
@@ -87,14 +89,14 @@
 
                             {% if item|name_of_model == 'text' or item|name_of_model == 'video' or item|name_of_model == 'question' %}
                                 <a href="{% url 'update_lecture_content' module lecture item|name_of_model item.id %}" class="btn btn-warning">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'Edit' %}
                                 </a>
                             {% endif %}
 
                             <form action="{% url 'delete_lecture_content' content.id %}"
                                   method="post"
                                   {% if item|name_of_model == 'file' or item|name_of_model == 'image' %}style="margin-left: auto;"{% endif %}>
-                                <input type="submit" class="btn btn-danger no-margin delete-content-submit" value="Delete">
+                                <input type="submit" class="btn btn-danger no-margin delete-content-submit" value="{% trans 'Delete' %}">
                                 {% csrf_token %}
                             </form>
                         {% endwith %}
@@ -102,47 +104,47 @@
                 </div>
             {% empty %}
                 <div class="list-group-item flex-center">
-                    <h2>This lecture has no contents yet</h2>
+                    <h2>{% trans 'This lecture has no contents yet' %}</h2>
                 </div>
             {% endfor %}
         </div>
 
-        <h3>Add new content</h3>
+        <h3>{% trans 'Add new content' %}</h3>
         <div class="small-card">
             <div class="small-card-body flex-one-row-around">
 
                 {% if allowed_text %}
                 <a href="{% url 'create_lecture_content' module lecture 'text'%}" class="btn btn-info">
-                    <i class="fa fa-file-text-o" aria-hidden="true"></i> Text
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i> {% trans 'Text' %}
                 </a>
                 {% endif %}
 
                 {% if allowed_image %}
                 <a href="{% url 'create_lecture_content' module lecture 'image' %}" class="btn btn-info">
-                    <i class="fa fa-picture-o" aria-hidden="true"></i> Image
+                    <i class="fa fa-picture-o" aria-hidden="true"></i> {% trans 'Image' %}
                 </a>
                 {% endif %}
 
                 {% if allowed_video %}
                 <a href="{% url 'create_lecture_content' module lecture 'video' %}" class="btn btn-info">
-                    <i class="fa fa-video-camera" aria-hidden="true"></i> Video
+                    <i class="fa fa-video-camera" aria-hidden="true"></i> {% trans 'Video' %}
                 </a>
                 {% endif %}
 
                 {% if allowed_file %}
                 <a href="{% url 'create_lecture_content' module lecture 'file' %}" class="btn btn-info">
-                    <i class="fa fa-file" aria-hidden="true"></i> File
+                    <i class="fa fa-file" aria-hidden="true"></i> {% trans 'File' %}
                 </a>
                 {% endif %}
 
                 {% if allowed_question %}
                 <a href="{% url 'create_lecture_content' module lecture 'question' %}" class="btn btn-info">
-                    <i class="fa fa-question" aria-hidden="true"></i> Question
+                    <i class="fa fa-question" aria-hidden="true"></i> {% trans 'Question' %}
                 </a>
                 {% endif %}
 
                 {% if allowed_nothing %}
-                    <p>Create new lecture</p>
+                    <p>{% trans 'Create new lecture' %}</p>
                 {% endif %}
             </div>
         </div>
