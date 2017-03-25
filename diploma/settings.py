@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'courses',
     'students',
 
-    # должно быть после myapps, что бы отображался кастомный
     # logout template вместо logout template из админки
     'django.contrib.admin',
 
@@ -175,7 +174,6 @@ LANGUAGES = (
     ('uk', _('Ukrainian'))
 )
 
-# где будут находиться файлы переводов
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
@@ -197,7 +195,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 
 from django.core.urlresolvers import reverse_lazy
-# куда будут перенаправлены студенты после аутентификации
 #LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
 
 LOGIN_URL = 'login'
