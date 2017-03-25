@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ckwliq4(n2v5da91bmtt(b@*yopp1%!$e@_rf5(rq@+mpzmosb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -281,3 +281,10 @@ AVATAR_ADD_TEMPLATE = 'students/student/edit_profile.html'
 #AVATAR_AUTO_GENERATE_SIZES = (160, 80)
 AVATAR_DEFAULT_SIZE = 160
 AVATAR_MAX_AVATARS_PER_USER = 1
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
