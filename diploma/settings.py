@@ -185,9 +185,11 @@ LOCALE_PATHS = (
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
+
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'courses', 'static'),
 )
+
 
 # media
 MEDIA_URL = '/media/'
