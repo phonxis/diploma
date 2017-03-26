@@ -83,6 +83,9 @@ class UsersCreationForm(UserCreationForm):
           'username': '',
           'email': ''
         }
+        help_texts = {
+          'username': '',
+        }
 
 
 # форма для изменения некоторых данных из User модели
