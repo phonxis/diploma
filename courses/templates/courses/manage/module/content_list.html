@@ -4,6 +4,10 @@
 
 {% load i18n %}
 
+{% block title %}
+    {% trans 'Course' %} "{{ module.course.title }}"
+{% endblock %}
+
 {% block content %}
 <div class="content">
     {% with course=module.course %}

@@ -6,8 +6,17 @@
 
 {% load bootstrap %}
 
+{% block title %}
+    {% if object %}
+        {% trans 'Edit content' %} "{{ object.title }}"
+    {% else %}
+        {% trans 'Add a new content' %}
+    {% endif %}
+{% endblock %}
+
 {% block css_load_file %}
-    <link rel="stylesheet" href="{% static 'css/jquery.fileupload.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/jquery.fileupload.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css/jquery.fileupload.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/trumbowyg.min.css' %}">
 {% endblock %}
 

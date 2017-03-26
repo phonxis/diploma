@@ -9,7 +9,9 @@
 {% block title %}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/base-landing.css' %}">
+<!-- LANDING CSS -->
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/base-landing.css' %}"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/base-landing.min.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -39,7 +41,7 @@
         <!-- Image wrapper -->
         <div class="">
             <h5 class="card-label"> <span class="label rgba-black-light">Category 1</span></h5>
-            <a><img src="https://mdbootstrap.com/images/regular/nature/img%20(48).jpg" class="img-responsive"></a>
+            <a><img src="{% static 'img/no-image.png' %}" class="img-responsive"></a>
         </div>
 
         <!-- Button -->
@@ -70,7 +72,7 @@
         <!-- Image wrapper -->
         <div class="">
           <h5 class="card-label"> <span class="label rgba-black-light">Category 1</span></h5>
-          <a><img src="https://mdbootstrap.com/images/regular/nature/img%20(48).jpg" class="img-responsive"></a>
+          <a><img src="{% static 'img/no-image.png' %}" class="img-responsive"></a>
         </div>
 
         <!-- Button -->
@@ -101,7 +103,7 @@
         <!-- Image wrapper -->
         <div class="">
           <h5 class="card-label"> <span class="label rgba-black-light">Category 1</span></h5>
-          <a><img src="https://mdbootstrap.com/images/regular/nature/img%20(48).jpg" class="img-responsive"></a>
+          <a><img src="{% static 'img/no-image.png' %}" class="img-responsive"></a>
         </div>
 
         <!-- Button -->
@@ -128,7 +130,7 @@
   </div><!-- .fadeIn.wow -->
 
   <div class="see-all">
-    <a href="#" class="see-all-courses">{% trans 'All courses' %} <span class="btn-floating btn-large"><i class="fa fa-chevron-right"></i></span></a>
+    <a href="{% url 'course_list' %}" class="see-all-courses">{% trans 'All courses' %} <span class="btn-floating btn-large"><i class="fa fa-chevron-right"></i></span></a>
   </div>
 
 </div>

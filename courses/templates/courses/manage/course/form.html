@@ -4,6 +4,14 @@
 
 {% load i18n %}
 
+{% block title %}
+    {% if object %}
+        {% trans 'Modifying course' %} "{{ object.title }}"
+    {% else %}
+        {% trans 'Creating new course' %}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="content">
     <h1>

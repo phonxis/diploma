@@ -8,6 +8,14 @@
 
 {% load user_tags %}
 
+{% block title %}
+    {% if object %}
+        {% trans 'Edit Lecture' %} {{ object.order|add:1 }}: {{ object.title }}
+    {% else %}
+        {% trans 'Create a new lecture' %}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="content">
     <div class="row">

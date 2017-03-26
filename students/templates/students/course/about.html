@@ -5,10 +5,12 @@
 {% load i18n %}
 
 {% block title %}
+    {% trans 'About' %}
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/semantic-sidebar.css' %}">
+<!-- <link rel="stylesheet" href="{% static 'css/semantic-sidebar.css' %}"> -->
+<link rel="stylesheet" href="{% static 'css/semantic-sidebar.min.css' %}">
 {% endblock %}
 
 {% block content %}
