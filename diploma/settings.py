@@ -127,7 +127,8 @@ DATABASES = {
 }
 
 import dj_database_url
-DATABASES['default'] = dj_database_url.config()
+DATABASES['default'] = dj_database_url.config(
+    default='postgres://gnkcqpkozlozbd:95ef32cee05885fb26001750cf4b8199a7b11f1b48eae07f55e7a9750696c9d9@ec2-54-75-237-110.eu-west-1.compute.amazonaws.com:5432/d82d04ff8cjqa5')
 # DATABASES['default'] = dj_database_url.parse(
 #     # elephantSQL
 #     #'postgres://teauolye:_-yfBiO6L0nTk-yxb_tutGpwpBw2Pg78@horton.elephantsql.com:5432/teauolye',
