@@ -22,7 +22,7 @@
     <button class="btn btn-success fadeIn wow">Приєднатися безкоштовно</button> -->
     <h1>{% trans 'Get new knowledge' %}</h1>
     <h1>{% trans 'with' %} AwesomenessEdu</h1>
-    <button class="btn btn-success fadeIn wow">{% trans 'Join for free' %}</button>
+    <a class="btn btn-success fadeIn wow" href="{% url 'student_registration' %}">{% trans 'Join for free' %}</a>
   </div>
 </div>
 
@@ -142,7 +142,7 @@
     <button class="btn btn-success">Зареєструватись</button> -->
     <h1>{% trans 'Study everywhere' %}</h1>
     <h3>{% trans 'Start now' %}</h3>
-    <button class="btn btn-success">{% trans 'Register' %}</button>
+    <a class="btn btn-success" href="{% url 'student_registration' %}">{% trans 'Register' %}</a>
   </div>
 </div>
 
