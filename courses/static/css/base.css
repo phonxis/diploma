@@ -612,18 +612,12 @@ form .btn {
     flex-direction: column;
     justify-content: center;
 }
-.fileinput-button input {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
-  opacity: 0;
-  -ms-filter: 'alpha(opacity=0)';
-  font-size: 200px !important;
-  direction: ltr;
-  cursor: pointer;
-}
 
+.fileinput-button span {
+    display: block;
+    width: 130px;
+    height: 40px;
+}
 .fixed-action-btn {
   position: fixed;
   right: 35px;
