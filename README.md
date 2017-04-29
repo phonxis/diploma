@@ -20,7 +20,6 @@
 ![](http://i.piccy.info/i9/dd9619754a2dc4e7948f373f952f572a/1493465702/86180/1140970/9.jpg)
 #### Adding Text Content Page
 ![](http://i.piccy.info/i9/afec6a074015d293b4444cf79ba331ae/1493465722/50085/1140970/10.jpg)
-#### Responsive Pages for Smartphones
+#### Responsive Pages
 <img src="http://i.piccy.info/i9/18db005a7bde9c3eb4f7fa4c658b62f8/1493465741/239610/1140970/11.jpg" width="320px" />
-#### Responsive Pages for Laptops and Tablets
 <img src="http://i.piccy.info/i9/1c3cd59296239b57c7a5c3dbc6638816/1493465761/190875/1140970/12.jpg" width="320px" />
