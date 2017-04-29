@@ -8,6 +8,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.contrib import messages
 from django.contrib.auth import REDIRECT_FIELD_NAME, login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -15,13 +16,14 @@ from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponseRedirect, JsonResponse
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from nested_formset import nestedformset_factory
 from .models import Course, Module, Content, Subject, Lecture
-from .forms import ModuleFormSet, LectureForm, QuestionForm, AnswerForm
+from .forms import ModuleFormSet, LectureForm, AnswerForm
 from students.forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm#, InstructorsCreationForm
 
 
@@ -170,7 +172,9 @@ class CourseModuleUpdateView(InstructorMixin, TemplateResponseMixin, View):
         formset = self.get_formset(data=request.POST)
         if formset.is_valid():
             formset.save()
+            messages.success(request, _('Success!'))
             return redirect('manage_course_list')
+        messages.warning(request, _('Something broken!'))
         return self.render_to_response({'course': self.course,
                                         'formset': formset})
 
@@ -197,11 +201,69 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
     def get(self, request, module_id, lecture_id=None):
         form = LectureForm(instance=self.obj)
 
+        # стандартно будут отображаться все кнопки добавления контента
+        allowed_text = True
+        allowed_image = True
+        allowed_video = True
+        allowed_file = True
+        allowed_question = True
+        # для обозначения, что ни одна из кнопок не отображается
+        allowed_nothing = False
+
+        if lecture_id:
+            # получаем контент текущей лекции
+            contents = Lecture.objects.filter(id=self.obj.id).values('contents')[0]
+
+            if contents['contents']:
+                # получаем id контента
+                type_content_id = Content.objects.filter(id=contents['contents']).values('content_type')[0]['content_type']
+                # получаем тип контента: текст, видео, файл, вопрос для теста, изображение
+                name_content = ContentType.objects.filter(id=type_content_id).values('model')[0]['model']
+
+                if name_content == 'text':
+                    # лекция содержит текствые данные. нельзя добавить видео и вопрос для теста
+                    allowed_video = False
+                    allowed_question = False
+                elif name_content == 'image':
+                    # лекция содержит изображение. нельзя добавить видео и вопрос для теста
+                    allowed_video = False
+                    allowed_question = False
+                elif name_content == 'video':
+                    # лекция содержит видео. к этой лекции больше нельзя ничего добавить
+                    allowed_text = False
+                    allowed_image = False
+                    allowed_video = False
+                    allowed_file = False
+                    allowed_question = False
+                    # указываем, что больше нельзя ничего добавить
+                    allowed_nothing = True
+                elif name_content == 'file':
+                    # лекция содержит файл. нельзя добавить видео и вопрос для теста
+                    allowed_video = False
+                    allowed_question = False
+                elif name_content == 'question':
+                    # лекция содержит вопрос для теста. можно добавить только еще один вопрос
+                    allowed_text = False
+                    allowed_image = False
+                    allowed_video = False
+                    allowed_file = False
+
+            else:
+                # если контента в этой лекции еще нет, то будут выведены все кнопки для добавления контента
+                print('No content')
+
         return self.render_to_response({
                 'form': form,
                 'module': module_id,
                 'lecture': lecture_id,
-                'object': self.obj
+                'object': self.obj,
+
+                'allowed_text': allowed_text,
+                'allowed_image': allowed_image,
+                'allowed_video': allowed_video,
+                'allowed_file': allowed_file,
+                'allowed_question': allowed_question,
+                'allowed_nothing': allowed_nothing
             })
 
     def post(self, request, module_id, lecture_id):
@@ -211,10 +273,20 @@ class LectureCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             new_obj = form.save(commit=False)
             new_obj.module = self.module
             new_obj.save()
+            messages.success(request, _('Lecture success updated!'))
             return redirect('module_lecture_list', self.module.id)
 
         else:
+            messages.success(request, 'Some error!')
             return self.render_to_response({'form': form})
+
+
+class LectureDeleteView(InstructorMixin, View):
+    def post(self, request, lecture_id):
+        lecture = get_object_or_404(Lecture, id=lecture_id, module__course__owner=request.user)
+        lecture.delete()
+        messages.success(request, _('Lecture success deleted!'))
+        return redirect('module_lecture_list', lecture.module.id)
 
 
 class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
@@ -237,17 +309,21 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
         # со всеми полями кроме тех что указаны в exclude
         # print(model._meta.model_name)
         if model._meta.model_name in ['text']:
-            # форма с полем title и data_field
+            # форма с полем data_field
             Form = modelform_factory(model, exclude=['owner',
                                                      'created',
                                                      'updated',
-                                                     'order'],) #widgets={'data_field': SummernoteWidget()})
+                                                     'title',
+                                                     'order'],
+                                            labels={'data_field': _('Type text below')}) #widgets={'data_field': SummernoteWidget()})
         elif model._meta.model_name in ['video']:
-            # форма с полем title и data_field
+            # форма с полем data_field
             Form = modelform_factory(model, exclude=['owner',
                                                      'created',
                                                      'updated',
-                                                     'order'])
+                                                     'title',
+                                                     'order'],
+                                            labels={'data_field': _('URL video')})
         elif model._meta.model_name in ['question']:
             # форма с полем data_field и title
             Form = modelform_factory(model,
@@ -255,7 +331,8 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                                              #'title',
                                              'created',
                                              'updated',
-                                             'order'])
+                                             'order'],
+                                    labels={'data_field': _('Additional info for question'), 'title': _('Question')})
         else:
             # форма для загрузки файлов и изображений
             Form = modelform_factory(model, exclude=['owner',
@@ -336,16 +413,30 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
                 if not id:
                     # если id объекта не указан, создаем новый экземпляр question
                     Content.objects.create(lecture=self.lecture, content_object=obj)
+                messages.success(request, _('Success!'))
                 return redirect('update_lecture', self.module.id, self.lecture.id)
 
-            elif model_name in ['text', 'video']:
+            elif model_name in ['text']:
+                # задаем стандартный title
+                obj.title = 'Text object'
                 obj.save()
                 if not id:
-                    # если id объекта не указан, создаем новый экземпляр video или text
+                    # если id объекта не указан, создаем новый экземпляр text
                     Content.objects.create(lecture=self.lecture, content_object=obj)
                 #return redirect('module_content_list', self.module.id)
+                messages.success(request, _('Success!'))
+                return redirect('update_lecture', self.module.id, self.lecture.id)
+            elif model_name in ['video']:
+                # задаем сстандартный title
+                obj.title = 'Video object'
+                obj.save()
+                if not id:
+                    # если id объекта не указан, создаем новый экземпляр video
+                    Content.objects.create(lecture=self.lecture, content_object=obj)
+                messages.success(request, _('Success!'))
                 return redirect('update_lecture', self.module.id, self.lecture.id)
 
+            # указываем название для файла или изображения
             obj.title = "_".join(obj.data_field.name.split('/')[-1].split('.')[:-1])
             data = {'name': obj.title}
             obj.save()
@@ -355,24 +446,48 @@ class ContentCreateUpdateView(InstructorMixin, TemplateResponseMixin, View):
             if not id:
                 # если id объекта не указан, создаем новый экземпляр file или image
                 Content.objects.create(lecture=self.lecture, content_object=obj)
+                messages.success(request, _('{} success uploaded!'.format(obj.title)))
             
             #return redirect('module_content_list', self.module.id)
+            messages.success(request, _('Success!'))
             return JsonResponse(data)
         #return self.render_to_response({'form': form, 'object': self.obj})
         #data = {'error': True}
+        messages.success(request, _('Some error!'))
         return JsonResponse(data)
 
 
-class ContentDeleteView(InstructorMixin, View):
+# class ContentDeleteView(InstructorMixin, View):
+#     def post(self, request, id):
+#         content = get_object_or_404(Content,
+#                                     id=id,
+#                                     lecture__module__course__owner=request.user)
+#         module = content.lecture.module
+#         content.content_object.delete()
+#         content.delete()
+#         # возвращаемся к списку контента лекции
+#         return redirect('update_lecture', module.id, content.lecture.id)
+#         #return redirect('module_lecture_list', module.id)
+#         #return JsonResponse({"data": "ok"})
+
+
+class ContentDeleteView(InstructorMixin, JsonRequestResponseMixin, View):
     def post(self, request, id):
         content = get_object_or_404(Content,
                                     id=id,
                                     lecture__module__course__owner=request.user)
-        module = content.lecture.module
-        content.content_object.delete()
-        content.delete()
-        # возвращаемся к списку контента модуля
-        return redirect('module_lecture_list', module.id)
+
+        if content:
+            module = content.lecture.module
+            content.content_object.delete()
+            content.delete()
+            messages.success(request, _('Success deleted!'))
+            return self.render_json_response({'deleted': 'OK'})
+            # возвращаемся к списку контента лекции
+            #return redirect('update_lecture', module.id, content.lecture.id)
+        messages.error(request, _('Failure deleted!'))
+        return self.render_json_response({'deleted': 'OK'})
+        #return redirect('module_lecture_list', module.id)
         #return JsonResponse({"data": "ok"})
 
 
@@ -474,8 +589,16 @@ class CourseDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CourseDetailView, self).get_context_data(**kwargs)
-        # довавляем в контект форму подписки на текущий объект курса
-        context['enroll_form'] = CourseEnrollForm(initial={'course': self.object})
+        # добавляем в контекст форму подписки на текущий объект курса
+        #context['enroll_form'] = CourseEnrollForm(initial={'course': self.object})
+        user_enrolled_this_course = Course.objects.filter(id=self.object.id).filter(students__id__exact=self.request.user.id).exists()
+        if user_enrolled_this_course:
+            context['enroll_form'] = None
+        else:
+            context['enroll_form'] = CourseEnrollForm(initial={'course': self.object})
+        #print(self.object.get(students__in=[self.request.user.id]).exists())
+        #print(User.objects.get(courses_joined=self.object))
+        context['lecture_count'] = Lecture.objects.filter(module__course__id=self.object.id).count()
         return context
 
 

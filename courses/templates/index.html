@@ -1,7 +1,172 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
+{% load i18n %}
+
+{% load change_lang_path %}
+
 {% block title %}{% endblock %}
 
-{% block content %}
+{% block extra_css %}
+<!-- LANDING CSS -->
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/base-landing.css' %}"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/base-landing.min.css' %}">
+{% endblock %}
 
+{% block content %}
+<div class="jumbotron">
+  <div class="welcome rgba-black-light fadeIn animated">
+    <!-- <h1>Оволодій новими знаннями</h1>
+    <h1>з AwesomenessEdu</h1>
+    <button class="btn btn-success fadeIn wow">Приєднатися безкоштовно</button> -->
+    <h1>{% trans 'Get new knowledge' %}</h1>
+    <h1>{% trans 'with' %} AwesomenessEdu</h1>
+    <a class="btn btn-success fadeIn wow" href="{% url 'student_registration' %}">{% trans 'Join for free' %}</a>
+  </div>
+</div>
+
+<div class="container popular">
+
+  <div class="hr-block fadeIn wow">
+    <hr>
+    <h2>{% trans 'Popular courses' %}</h2>
+    <hr>
+  </div>
+
+  <div class="fadeIn wow">
+    <div class="col-md-4">
+      <div class="elegant-card">
+
+        <!-- Image wrapper -->
+        <div class="">
+            <h5 class="card-label"> <span class="label rgba-black-light">Category 1</span></h5>
+            <a><img src="{% static 'img/no-image.png' %}" class="img-responsive"></a>
+        </div>
+
+        <!-- Button -->
+        <a class="btn-floating btn-large waves-effect waves-light stylish-color"><i class="fa fa-chevron-right"></i></a>
+
+        <!-- Content -->
+        <div class="card-content">
+            <h5>Lorem ipsium</h5>
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id amet, quisquam modi nobis nostrum iusto incidunt dolore assumenda delectus officia quia, sequi eum perspiciatis architecto. Ullam voluptatum, facere nihil quidem.</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+            <ul class="list-inline">
+                <li><i class="fa fa-clock-o"></i>05/10/2015</li>
+                <li><a href="#"><i class="fa fa-comments-o"></i>12</a></li>
+                <li><a href="#"><i class="fa fa-facebook"> </i>21</a></li>
+                <li><a href="#"><i class="fa fa-twitter"> </i>5</a></li>
+            </ul>
+        </div>
+      </div><!-- .elegant-card -->
+    </div><!-- .col-md-4 -->
+
+    <div class="col-md-4">
+      <div class="elegant-card">
+
+        <!-- Image wrapper -->
+        <div class="">
+          <h5 class="card-label"> <span class="label rgba-black-light">Category 1</span></h5>
+          <a><img src="{% static 'img/no-image.png' %}" class="img-responsive"></a>
+        </div>
+
+        <!-- Button -->
+        <a class="btn-floating btn-large waves-effect waves-light stylish-color"><i class="fa fa-chevron-right"></i></a>
+
+        <!-- Content -->
+        <div class="card-content">
+            <h5>Lorem ipsium</h5>
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id amet, quisquam modi nobis nostrum iusto incidunt dolore assumenda delectus officia quia, sequi eum perspiciatis architecto. Ullam voluptatum, facere nihil quidem.</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+            <ul class="list-inline">
+                <li><i class="fa fa-clock-o"></i>05/10/2015</li>
+                <li><a href="#"><i class="fa fa-comments-o"></i>12</a></li>
+                <li><a href="#"><i class="fa fa-facebook"> </i>21</a></li>
+                <li><a href="#"><i class="fa fa-twitter"> </i>5</a></li>
+            </ul>
+        </div>
+      </div><!-- .elegant-card -->
+    </div><!-- .col-md-4 -->
+
+    <div class="col-md-4">
+      <div class="elegant-card">
+
+        <!-- Image wrapper -->
+        <div class="">
+          <h5 class="card-label"> <span class="label rgba-black-light">Category 1</span></h5>
+          <a><img src="{% static 'img/no-image.png' %}" class="img-responsive"></a>
+        </div>
+
+        <!-- Button -->
+        <a class="btn-floating btn-large waves-effect waves-light stylish-color"><i class="fa fa-chevron-right"></i></a>
+
+        <!-- Content -->
+        <div class="card-content">
+          <h5>Lorem ipsium</h5>
+          <hr>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id amet, quisquam modi nobis nostrum iusto incidunt dolore assumenda delectus officia quia, sequi eum perspiciatis architecto. Ullam voluptatum, facere nihil quidem.</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+            <ul class="list-inline">
+                <li><i class="fa fa-clock-o"></i>05/10/2015</li>
+                <li><a href="#"><i class="fa fa-comments-o"></i>12</a></li>
+                <li><a href="#"><i class="fa fa-facebook"> </i>21</a></li>
+                <li><a href="#"><i class="fa fa-twitter"> </i>5</a></li>
+            </ul>
+        </div>
+      </div><!-- .elegant-card -->
+    </div><!-- .col-md-4 -->
+  </div><!-- .fadeIn.wow -->
+
+  <div class="see-all">
+    <a href="{% url 'course_list' %}" class="see-all-courses">{% trans 'All courses' %} <span class="btn-floating btn-large"><i class="fa fa-chevron-right"></i></span></a>
+  </div>
+
+</div>
+
+<div class="container reg-now">
+  <div class="welcome rgba-black-light fadeIn wow">
+    <!-- <h1>Навчайся будь-де та будь-коли</h1>
+    <h3>Почни саме зараз</h3>
+    <button class="btn btn-success">Зареєструватись</button> -->
+    <h1>{% trans 'Study everywhere' %}</h1>
+    <h3>{% trans 'Start now' %}</h3>
+    <a class="btn btn-success" href="{% url 'student_registration' %}">{% trans 'Register' %}</a>
+  </div>
+</div>
+
+
+<footer class="landing-footer">
+  <div class="container">
+    &copy; 2017 AwesomenessEdu
+
+    <!-- <div class="footer-social">Twitter</div> -->
+    <div class="float-r">
+      {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+
+        {% for language in languages %}
+          <a href="/{{ language.code }}/{{ request.path|change_path }}" class="white-link">
+            {{ language.name_local }}
+          </a>
+        {% endfor %}
+    </div>
+  </div>
+</footer>
+
+{% endblock %}
+
+{% block footer%}
 {% endblock %}

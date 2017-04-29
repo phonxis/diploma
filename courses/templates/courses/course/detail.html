@@ -1,38 +1,67 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
     {{ object.title }}
 {% endblock %}
 
 {% block content %}
 
-<div class="content">
-    <div class="container">
-        {% with subject=course.subject %}
-            <h2>{{ object.title }}</h2>
-            <div class="module">
-                <h3>Короткий опис курсу</h3>
-                <p class="text-muted">
-                    <a href="{% url 'subject_course_list' subject.slug %}">{{ subject.title }}</a>
-                    {{ course.modules.count }} модулів.
-                    {% if course.owner.get_full_name %}
-                        Інструктор: {{ course.owner.get_full_name }}
-                    {% else %}
-                        Інструктор: {{ course.owner.username }}
-                    {% endif %}
-                </p>
-                {{ object.overview|linebreaks }}
-                {% if request.user.is_authenticated %}
-                    <form action="{% url 'student_enroll_course' %}" method="POST">
-                        {{ enroll_form }}
-                        {% csrf_token %}
-                        <input type="submit" class="btn btn-fill btn-success" value="Підписатись на курс">
-                    </form>
-                {% else %}
-                    <a href="{% url 'student_registration' %}" class="btn btn-fill btn-success">Зареєструйтесь</a>
-                {% endif %}
-            </div>
-        {% endwith %}
+<div class="content content-block">
+    <div class="course-overview">
+        <div class="course-overview-title"><div>{{ object.title }} </div> <span class="label label-success"> {{ object.subject }}</span></div>
+        <div class="course-overview-description">{{ object.description }}</div>
+        <div class="course-overview-properties">
+            <div>{% trans 'Modules' %}: <br>{{object.modules.count }}</div>
+            <div>{% trans 'Lections' %}: <br>{{ lecture_count }}</div>
+            <div>{% trans 'Students' %}: <br>{{ object.students.count }}</div>
+        </div>
+
+        <div class="enroll-form">
+        {% if request.user.is_authenticated %}
+            {% if enroll_form %}
+                <form action="{% url 'student_enroll_course' %}" method="POST">
+                    {{ enroll_form }}
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-fill btn-success" value="{% trans 'Get a course' %}">
+                </form>
+            {% else %}
+                <p class="text-center">{% trans 'You have been enrolled to this course!' %}</p>
+            {% endif %}
+        {% else %}
+        <a href="{% url 'student_registration' %}" class="btn btn-fill btn-success center-block">{% trans 'Register now' %}</a>
+        {% endif %}
+        </div>
+
+        <div class="course-overview-curriculum">
+        {% for module in object.modules.all %}
+            <p class="module-title">{{ module.title }}</p>
+            {% for lecture in module.lectures.all %}
+            <p class="lecture-title">{{ lecture.title }}</p>
+            {% endfor %}
+        {% endfor %}
+        </div>
+    </div>
+    <div class="course-overview-review">
+        <h1>{% trans 'Reviews' %}</h1>
+    </div>
+    <div class="course-overview-review">
+        {% include "disqus.html" %}
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+
+$('#load-comments').click(function() {
+  $(this).hide();
+  var d = document, s = d.createElement('script');
+  s.src = '//knuba.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})
+
+</script>
 {% endblock %}

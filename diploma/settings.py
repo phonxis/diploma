@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 
+from django.utils.translation import ugettext_lazy as _
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     #'django_summernote',
 
     'avatar',
+    'rosetta',
 
     # monkey patching in this app. commented help-text paragraph
     'bootstrapform',
@@ -55,7 +58,6 @@ INSTALLED_APPS = [
     'courses',
     'students',
 
-    # должно быть после myapps, что бы отображался кастомный
     # logout template вместо logout template из админки
     'django.contrib.admin',
 
@@ -67,12 +69,16 @@ INSTALLED_APPS = [
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # for internationalization
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'courses.middleware.AjaxMessaging',
 
     # social auth
     'social_django.middleware.SocialAuthExceptionMiddleware',
@@ -121,14 +127,16 @@ DATABASES = {
 }
 
 import dj_database_url
-DATABASES['default'] = dj_database_url.parse(
-    # elephantSQL
-    #'postgres://teauolye:_-yfBiO6L0nTk-yxb_tutGpwpBw2Pg78@horton.elephantsql.com:5432/teauolye',
+DATABASES['default'] = dj_database_url.config(
+    default='postgres://gnkcqpkozlozbd:95ef32cee05885fb26001750cf4b8199a7b11f1b48eae07f55e7a9750696c9d9@ec2-54-75-237-110.eu-west-1.compute.amazonaws.com:5432/d82d04ff8cjqa5')
+# DATABASES['default'] = dj_database_url.parse(
+#     # elephantSQL
+#     #'postgres://teauolye:_-yfBiO6L0nTk-yxb_tutGpwpBw2Pg78@horton.elephantsql.com:5432/teauolye',
 
-    #heroku
-    'postgres://gnkcqpkozlozbd:95ef32cee05885fb26001750cf4b8199a7b11f1b48eae07f55e7a9750696c9d9@ec2-54-75-237-110.eu-west-1.compute.amazonaws.com:5432/d82d04ff8cjqa5',
-    conn_max_age=600
-)
+#     #heroku
+#     'postgres://gnkcqpkozlozbd:95ef32cee05885fb26001750cf4b8199a7b11f1b48eae07f55e7a9750696c9d9@ec2-54-75-237-110.eu-west-1.compute.amazonaws.com:5432/d82d04ff8cjqa5',
+#     conn_max_age=600
+# )
 
 
 # Password validation
@@ -153,7 +161,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'#en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -163,11 +171,27 @@ USE_L10N = True
 
 USE_TZ = True
 
+LANGUAGES = (
+    ('en', _('English')),
+    ('uk', _('Ukrainian'))
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'courses', 'static'),
+)
+
 
 # media
 MEDIA_URL = '/media/'
@@ -175,7 +199,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 
 from django.core.urlresolvers import reverse_lazy
-# куда будут перенаправлены студенты после аутентификации
 #LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
 
 LOGIN_URL = 'login'
@@ -260,3 +283,14 @@ REST_FRAMEWORK = {
     ]
 }
 
+AVATAR_ADD_TEMPLATE = 'students/student/edit_profile.html'
+#AVATAR_AUTO_GENERATE_SIZES = (160, 80)
+AVATAR_DEFAULT_SIZE = 160
+AVATAR_MAX_AVATARS_PER_USER = 1
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

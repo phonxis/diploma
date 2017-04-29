@@ -4,9 +4,15 @@
 
 {% load staticfiles %}
 
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Edit' %}
+{% endblock %}
+
 {% block content %}
 <div class="content">
-    <h1>Edit </h1>
+    <h1>{% trans 'Edit' %}</h1>
     <div class="module">
         <form action="." method="post" id="for-form">
             {{ form.management_form }}
@@ -27,7 +33,7 @@
                 <hr>
             {% endfor %}
             {% csrf_token %}
-            <input type="submit" class="button" value="Save">
+            <input type="submit" class="button" value="{% trans 'Save' %}">
         </form>
     </div>
 </div>

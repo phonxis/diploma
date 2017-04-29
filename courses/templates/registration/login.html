@@ -2,43 +2,56 @@
 
 {% load bootstrap %}
 
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Log in' %}
+{% endblock %}
+
 {% block content %}
 
 <div class="content">
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <div class="">
-                <h1 class="text-center">Login</h1>
-                <form action="." class="login-form user-form" method="POST">
-                    <!--{{ form.username }}
-                    {{ form.password }} -->
-                    {{ form|bootstrap }}
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ next }}" />
-                    <input type="submit" class="btn btn-primary btn-hg btn-block" value="Login" />
-                </form>
+        <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 user-form">
 
-                <a class="btn btn-lg btn-danger btn-block"
+            <h1 class="text-center">{% trans 'Log in' %}</h1>
+
+            <form action="." class="login-form" method="POST">
+                {{ form|bootstrap }}
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
+                <input type="submit" class="btn btn-primary btn-hg btn-block" value="{% trans 'Log in' %}" />
+            </form>
+
+            <hr class="login-hr">
+
+            <div class="social-auth">
+                <a class="btn btn-hg fb-bg"
                    href="{% url 'social:begin' 'facebook' %}">
-                        Login with Facebook
+                        <i class="fa fa-facebook" aria-hidden="true"></i> FB
                 </a>
-                <a class="btn btn-lg btn-danger btn-block"
-                   href="{% url 'social:begin' 'vk-oauth2' %}">
-                        Login with VK
-                </a>
-                <a class="btn btn-lg btn-danger btn-block"
+                <a class="btn btn-hg g-bg"
                    href="{% url 'social:begin' 'google-oauth2' %}">
-                        Login with Google
+                        <i class="fa fa-google" aria-hidden="true"></i> Google
                 </a>
+                <a class="btn btn-hg vk-bg"
+                   href="{% url 'social:begin' 'vk-oauth2' %}">
+                        <i class="fa fa-vk" aria-hidden="true"></i> VK
+                </a>
+            </div>
 
-                <p class="text-center">
-                    Все ще не зареєстровані?
-                    <a href="{% url 'student_registration' %}">
-                        Зареєструйтесь зараз
-                    </a>
-                </p>
-            </div> <!-- div.content -->
-        </div> <!-- div.col-md-4 -->
+            <br>
+
+            <p class="text-center">
+                {% trans 'Have not account yet?' %}
+                <a href="{% url 'student_registration' %}">
+                    {% trans 'Register now' %}
+                </a>
+            </p>
+
+        </div> <!-- div.col-md -->
     </div> <!-- div.row -->
 </div> <!-- div.content -->
+
+
 {% endblock %}

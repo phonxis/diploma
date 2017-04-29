@@ -1,37 +1,62 @@
 {% load staticfiles %}
 
 {% load user_tags %}
+
+{% load change_lang_path %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Educa{% endblock %}</title>
-    <title>Document</title>
+    <title>{% block title %}AwesomenessEdu{% endblock %}</title>
+
+    <!-- BOOTSTRAP CSS -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+
+    <!-- FONT AWESOME -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+
+    <!-- BASE STYLE -->
     <!-- <link rel="stylesheet" href="{% static 'css/base.css' %}"> -->
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'css/simple-sidebar.css' %}"> -->
-    <!-- <link rel="stylesheet" href="{% static 'css/course_react.css' %}"> -->
-    <!-- <link rel="stylesheet" href="{% static 'css/landing.css' %}"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.min.css' %}">
+
+    <!-- ANIMATION STYLE -->
+    <!-- <link rel="stylesheet" href="{% static 'css/animate.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+
     {% block css_load_file %}
     {% endblock %}
 
     {% block extra_css %}
     {% endblock %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!--<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script> -->
+
+    <!-- JQUERY -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+
+    <!-- BOOTSTRAP JS -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
+    <!-- WOW JS -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script> -->
+    <script type="text/javascript" src="{% static 'js/wow.min.js' %}"></script>
+
+    <script>
+        var ww = new WOW();
+        ww.init();
+    </script>
+
 </head>
 <body>
 <header class="navbar navbar-default"><!--navbar-fixed-top-->
-    <div class="container">
+<div class="container">
 
         <div class="navbar-header">
-            <a href="/" class="navbar-brand">phonxis</a>
+            <a href="/" class="navbar-brand">AwesomenessEdu</a>
             <button class='navbar-toggle collapsed' data-target='#navbar-main' data-toggle='collapse' aria-expanded='false' type="button">
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
@@ -43,28 +68,28 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
                     {% if request.user|check_instructor_group %}
-                        <li><a href="{% url 'create_course' %}">Create new course</a></li>
-                        <li><a href="{% url 'manage_course_list' %}">My courses</a></li>
+                        <li><a href="{% url 'create_course' %}">{% trans 'Create new course' %}</a></li>
+                        <li><a href="{% url 'manage_course_list' %}">{% trans 'My courses' %}</a></li>
                     {% else %}
-                        <li><a href="{% url 'course_list' %}">All Courses</a></li>
-                        <li><a href="{% url 'student_course_list' %}">My courses</a></li>
+                        <li><a href="{% url 'course_list' %}">{% trans 'All Courses' %}</a></li>
+                        <li><a href="{% url 'student_course_list' %}">{% trans 'My courses' %}</a></li>
                     {% endif %}
                     
 
-                    <li><a href="{% url 'update_profile' %}">Profile</a></li>
+                    <li><a href="{% url 'update_profile' %}">{% trans 'Profile' %}</a></li>
 
                     <li>
-                        <a href="{% url 'logout' %}">Sign out</a>
+                        <a href="{% url 'logout' %}">{% trans 'Sign out' %}</a>
                     </li>
                 {% else %}
                     <li>
-                        <a href="{% url 'login' %}">Sign in</a>
+                        <a href="{% url 'login' %}">{% trans 'Sign in' %}</a>
                     </li>
                     <li>
-                        <a href="{% url 'student_registration' %}">Sign Up</a>
+                        <a href="{% url 'student_registration' %}">{% trans 'Sign Up' %}</a>
                     </li>
 
-                    <li><a href="{% url 'instructor_registration' %}">Teach</a></li>
+                    <li><a href="{% url 'instructor_registration' %}">{% trans 'Teach' %}</a></li>
                 {% endif %}
             </ul>
         </div>
@@ -80,14 +105,37 @@
 
     {% include "messages.html" %}
 
-    {% block content %}
-    {% endblock %}
+{% block content %}
+
+{% endblock %}
 </main>
 
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    
-    
+{% block footer %}
+<footer class="landing-footer">
+  <div class="container">
+    &copy; 2017 AwesomenessEdu
+
+    <!-- <div class="footer-social">Twitter</div> -->
+    <div class="float-r">
+      {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+
+        {% for language in languages %}
+          <a href="/{{ language.code }}/{{ request.path|change_path }}" class="white-link">
+            {{ language.name_local }}
+          </a>
+        {% endfor %}
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+    <!-- JQUERY UI -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> -->
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+
+
     {% block js_load_file %}
     
     {% endblock %}
@@ -103,5 +151,7 @@
             {% endblock %}
         });
     </script>
+
+
 </body>
 </html>

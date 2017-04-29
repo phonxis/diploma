@@ -36,6 +36,10 @@ urlpatterns = [
     url(r'module/(?P<module_id>\d+)/lecture/(?P<lecture_id>\d+)/$',
         views.LectureCreateUpdateView.as_view(),
         name="update_lecture"),
+    # delete lecture
+    url(r'lecture/(?P<lecture_id>\d+)/delete/$',
+        views.LectureDeleteView.as_view(),
+        name="delete_lecture"),
     # create lecture content
     url(r'^module/(?P<module_id>\d+)/lecture/(?P<lecture_id>\d+)/content/(?P<model_name>\w+)/create/$',
         views.ContentCreateUpdateView.as_view(),

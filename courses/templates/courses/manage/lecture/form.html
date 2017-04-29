@@ -4,66 +4,225 @@
 
 {% load bootstrap %}
 
+{% load i18n %}
+
 {% load user_tags %}
+
+{% block title %}
+    {% if object %}
+        {% trans 'Edit Lecture' %} {{ object.order|add:1 }}: {{ object.title }}
+    {% else %}
+        {% trans 'Create a new lecture' %}
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="content">
-    <h1>
-    {% if object %}
-        Edit lecture "{{ object.title }}"
-    {% else %}
-        Add a new lecture
-    {% endif %}
-    </h1>
-    <div class="module">
-        <h2>Lecture info</h2>
-            <form action="" method="post" enctype="multipart/form-data">
-                {{ form|bootstrap }}
-                {% csrf_token %}
-                <p><input type="submit" value="Save lecture"></p>
-            </form>
-    </div>
+    <div class="row">
+        <h1>
+        {% if object %}
+            {% trans 'Edit Lecture' %} {{ object.order|add:1 }}: {{ object.title }}
+        {% else %}
+            <div class="text-center">{% trans 'Create a new lecture' %}</div>
+        {% endif %}
+        </h1>
+
+
+        {% if lecture %}
+
+            {% comment %}
+                <div class="col-md-3 col-xs-12">
+                    <h3>Lecture title</h3>
+                    <div class="small-card">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <a href="#collapseForm" class="btn btn-info" data-toggle="collapse" aria-expanded="false" aria-controls="collapseForm">
+                                Change lecture title
+                            </a>
+                            <div class="collapse in" id="collapseForm">
+                                {{ form|bootstrap }}
+                            </div>
+                            {% csrf_token %}
+                            <p><input type="submit" value="Save lecture"></p>
+                        </form>
+                    </div>
+                </div>
+            {% endcomment %}
+
+            <div class="col-md-3 col-xs-12">
+                <h3>{% trans 'Lecture info' %}</h3>
+                    <div class="small-card">
+                        <div class="small-card-body">
+                            <form action="" method="post" enctype="multipart/form-data">
+                                {{ form|bootstrap }}
+                                {% csrf_token %}
+                                <div class="flex-center">
+                                    <input type="submit" value="{% trans 'Save lecture' %}" id="save-lec" class="btn btn-success no-margin animated infinite tada">
+                                </div>
+                            </form>
+                            <form action="{% url 'delete_lecture' lecture %}" method="post" class="delete-form">
+                                <div class="flex-center">
+                                    <input type="submit" class="btn btn-danger no-margin" value="{% trans 'Delete' %}">
+                                </div>
+                                {% csrf_token %}
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        {% else %}
+            <div class="col-md-6 col-md-offset-3">
+                <div class="small-card">
+                    <div class="small-card-body">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {{ form|bootstrap }}
+                            {% csrf_token %}
+                            <p class="flex-center">
+                                <input type="submit" value="{% trans 'Save lecture' %}" class="btn btn-success no-margin">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
 
     {% if lecture %}
-    <div class="lecture">
-            <h2>Lecture {{ object.order|add:1 }}: {{ object.title }}</h2>
-            <h3>Lecture contents:</h3>
-            <div id="lecture-contents">
-                {% for content in object.contents.all %}
-                    <div data-id="{{ content.id }}">
+    <div class="col-md-9 col-xs-12">
+        <h3>{% trans 'Lecture contents' %}</h3>
+        <div class="list-group small-card" id="lecture-contents">
+            {% for content in object.contents.all %}
+                <div data-id="{{ content.id }}" class="list-group-item flex-one-row-center">
+                    <!-- <div class="small-card-body"> -->
                         {% with item=content.content_object %}
-                            <p>{{ item }} ({{ item|name_of_model }})</p>
+
+                            <div>{{ item }} ({{ item|name_of_model }})</div>
+
                             {% if item|name_of_model == 'text' or item|name_of_model == 'video' or item|name_of_model == 'question' %}
-                            <a href="{% url 'update_lecture_content' module lecture item|name_of_model item.id %}">Edit</a>
+                                <a href="{% url 'update_lecture_content' module lecture item|name_of_model item.id %}" class="btn btn-warning">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'Edit' %}
+                                </a>
                             {% endif %}
-                            <form action="{% url 'delete_lecture_content' content.id %}" method="post">
-                                <input type="submit" value="Delete">
+
+                            <form action="{% url 'delete_lecture_content' content.id %}"
+                                  method="post"
+                                  {% if item|name_of_model == 'file' or item|name_of_model == 'image' %}style="margin-left: auto;"{% endif %}>
+                                <input type="submit" class="btn btn-danger no-margin delete-content-submit" value="{% trans 'Delete' %}">
                                 {% csrf_token %}
                             </form>
                         {% endwith %}
-                    </div>
-                {% empty %}
-                    <p>This lecture has no contents yet.</p>
-                {% endfor %}
-            </div>
+                    <!-- </div> -->
+                </div>
+            {% empty %}
+                <div class="list-group-item flex-center">
+                    <h2>{% trans 'This lecture has no contents yet' %}</h2>
+                </div>
+            {% endfor %}
+        </div>
 
-            <hr>
-                <h3>Add new content:</h3>
-                <ul class="content-types">
-                    <li><a href="{% url 'create_lecture_content' module lecture 'text'%}">Text</a></li>
-                    <li><a href="{% url 'create_lecture_content' module lecture 'image' %}">Image</a></li>
-                    <li><a href="{% url 'create_lecture_content' module lecture 'video' %}">Video</a></li>
-                    <li><a href="{% url 'create_lecture_content' module lecture 'file' %}">File</a></li>
-                    <li><a href="{% url 'create_lecture_content' module lecture 'question' %}">Question for quiz</a></li>
-                </ul>
+        <h3>{% trans 'Add new content' %}</h3>
+        <div class="small-card">
+            <div class="small-card-body flex-one-row-around">
+
+                {% if allowed_text %}
+                <a href="{% url 'create_lecture_content' module lecture 'text'%}" class="btn btn-info">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i> {% trans 'Text' %}
+                </a>
+                {% endif %}
+
+                {% if allowed_image %}
+                <a href="{% url 'create_lecture_content' module lecture 'image' %}" class="btn btn-info">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i> {% trans 'Image' %}
+                </a>
+                {% endif %}
+
+                {% if allowed_video %}
+                <a href="{% url 'create_lecture_content' module lecture 'video' %}" class="btn btn-info">
+                    <i class="fa fa-video-camera" aria-hidden="true"></i> {% trans 'Video' %}
+                </a>
+                {% endif %}
+
+                {% if allowed_file %}
+                <a href="{% url 'create_lecture_content' module lecture 'file' %}" class="btn btn-info">
+                    <i class="fa fa-file" aria-hidden="true"></i> {% trans 'File' %}
+                </a>
+                {% endif %}
+
+                {% if allowed_question %}
+                <a href="{% url 'create_lecture_content' module lecture 'question' %}" class="btn btn-info">
+                    <i class="fa fa-question" aria-hidden="true"></i> {% trans 'Question' %}
+                </a>
+                {% endif %}
+
+                {% if allowed_nothing %}
+                    <p>{% trans 'Create new lecture' %}</p>
+                {% endif %}
+            </div>
+        </div>
+
         </div>
         {% endif %}
+
+
+    </div>
 </div>
 
 
 {% endblock %}
 
+
+{% block extra_js %}
+<script type="text/javascript">
+$(function () {
+
+})
+</script>
+{% endblock %}
+
+
 {% block domready %}
+
+//------------ set csrf cookie -------------------------------------------------------
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+//--------------------------------------------------------------------------------------
+
+// вывод сообщения
+  function addMessage(text, extra_tags) {
+    var message = $('<div class="alert alert-dismissible '+extra_tags+'">'+text+'</div>').hide();
+    $("#messages").append(message);
+    message.fadeIn(500);
+
+    setTimeout(function() {
+      message.fadeOut(500, function() {
+        message.remove();
+      });
+    }, 3000);
+  }
+
+
     //делаем div'и #lecture-contents сортируемым
     $('#lecture-contents').sortable({
         // этот ивент вызывается когда прекращена сортировка
@@ -85,4 +244,45 @@
             });
         }
     });
+
+// ajax запрос удаления контента
+$('.delete-content-submit').on('click', function(event) {
+        event.preventDefault();
+
+        // меняем текст кнопки
+        $(this).val('Deleting...');
+
+        // получаем прародителя текущего элемента
+        var parentDiv = $(this).parent().parent();
+
+        // создаем ссылку с id контента
+        var act = '/course/content/' + parentDiv.attr('data-id') + '/delete/';
+        $.ajax({
+            type: 'POST',
+            url: act,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: ""
+        }).error(function(e) {
+            console.log(e);
+        }).success(function(data) {
+            //console.log(data);
+
+            // удаляем контент из DOM
+            parentDiv.remove();
+
+            // выводим сообщение об удалении
+            $.each(data.django_messages, function (i, item) {
+                //console.log(item);
+                addMessage(item.message, item.extra_tags);
+            });
+
+            //console.log($('#lecture-contents').children().length);
+
+            // если весь контент этой лекции удален, то добавляем соответствующую информацию
+            if ($('#lecture-contents').children().length === 0) {
+                $('#lecture-contents').html("<div class='list-group-item flex-center'><h2>This lecture has no contents yet</h2></div>");
+            }
+        })
+    })
 {% endblock %}

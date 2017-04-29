@@ -1,0 +1,116 @@
+html,body, main {
+    height: 100%;
+}
+
+.jumbotron {
+    background: url('../img/landing_background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 100%;
+    opacity: 0.9;
+    margin-bottom: 0px;
+    box-shadow: inset 0px 0px 10px black;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.full-bg-image {
+    background: url('../img/landing_background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 100%;
+}
+
+.hr-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+  margin-top: 45px;
+  margin-bottom: 45px;
+}
+
+.hr-block hr {
+  width: 100%;
+  border-color: #000;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+.hr-block h2 {
+    margin: 0px 10px 0px 10px;
+    white-space: nowrap;
+}
+
+.see-all {
+    margin: 10px 0px 10px 0px;
+    height: 25px;
+}
+
+.see-all-courses {
+    float: right;
+    padding: 10px 5px;
+}
+
+.reg-now {
+    width: 100%;
+    min-height: 500px;
+    box-shadow: inset 0px 0px 10px black;
+    background-color: #ecf0f1;
+
+    background: url('../img/landing_welcome.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 100%;
+    opacity: 0.9;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.welcome {
+    margin: 0 auto;
+    color: #fff;
+    text-align: center;
+    padding: 10px 30px 30px 30px;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,1);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,1);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,1);
+}
+
+.landing-footer {
+    background-color: #45526E;
+    height: 50px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0px 20px;
+}
+
+.footer-social, .float-r {
+    float: right;
+}
+
+@media screen and (max-width: 768px) {
+    .landing-footer .container {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
+
+.white-link {
+    color: #fff;
+    margin-left: 5px;
+}
+.white-link:hover {
+    text-decoration: none;
+}

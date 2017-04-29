@@ -10,12 +10,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponseRedirect, HttpResponseRedirect, JsonResponse
 from django.db import transaction
+from django.conf import settings
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
-from courses.models import Course, Module, Lecture, Content, StudentLectureComplete, Quiz
+from avatar.forms import PrimaryAvatarForm, DeleteAvatarForm, UploadAvatarForm
+from avatar.models import Avatar
+from avatar.signals import avatar_updated
+from courses.models import Course, Module, Lecture, Content, StudentLectureComplete
 from .models import Profile
 from .forms import CourseEnrollForm, UsersLoginForm, UsersCreationForm, ProfileEditForm, UserEditForm
+
 
 
 class StudentRegistrationView(CreateView):
@@ -53,6 +59,7 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
         self.course.students.add(self.request.user)
         # если форма валидна, пользователль будет перенаправлен
         # на URL из get_success_url
+        messages.success(self.request, _('Success enrolled!'))
         return super(StudentEnrollCourseView, self).form_valid(form)
 
     def get_success_url(self):
@@ -209,11 +216,14 @@ class StudentCourseDetailView(DetailView):
 
         # получаем суммарное количество лекций курса
         course_lectures = Lecture.objects.filter(module__course__id=self.object.id).count()
-        # получаемколичество лекций курса пройденого определенным студентом
-        completed_lectures = StudentLectureComplete.objects.filter(student__id=request.user.id, course__id=self.object.id).count()
+        # получаем лекции курса пройденные определенным студентом
+        #completed_lectures = StudentLectureComplete.objects.filter(student__id=request.user.id, course__id=self.object.id).count()
+        completed_lectures = StudentLectureComplete.objects.filter(student__id=request.user.id, course__id=self.object.id).values('lecture__id')
+        # формируем список из id пройденных лекций
+        context['completed_lectures_ids'] = [qset_dict.get('lecture__id') for qset_dict in completed_lectures]
 
         # определяем процент пройденых лекций
-        context['lectures_completed'] = (completed_lectures / course_lectures) * 100
+        context['lectures_completed'] = (len(completed_lectures) / course_lectures) * 100
 
         return self.render_to_response(context)
 
@@ -288,9 +298,34 @@ class StudentModuleDetailView(DetailView):
 '''
 
 
+def get_avatars(user):
+    # Default set. Needs to be sliced, but that's it. Keep the natural order.
+    avatars = user.avatar_set.all()
+
+    # Current avatar
+    primary_avatar = avatars.order_by('-primary')[:1]
+    if primary_avatar:
+        avatar = primary_avatar[0]
+    else:
+        avatar = None
+
+    if settings.AVATAR_MAX_AVATARS_PER_USER == 1:
+        avatars = primary_avatar
+    else:
+        # Slice the default set now that we used
+        # the queryset for the primary avatar
+        avatars = avatars[:settings.AVATAR_MAX_AVATARS_PER_USER]
+    return (avatar, avatars)
+
+
 @login_required
 @transaction.atomic
 def update_profile(request):
+    upload_avatar_form = UploadAvatarForm(request.POST or None,
+                                     request.FILES or None,
+                                     user=request.user)
+    avatar, avatars = get_avatars(request.user)
+    #avatar = Avatar.objects.get(user__id=request.user.id, primary=True)
     if request.method == 'POST':
         # формы с подтвержденными данными пользователя, отображаются после submit формы
         user_form = UserEditForm(data=request.POST, instance=request.user)
@@ -304,9 +339,9 @@ def update_profile(request):
             user_form.save()
             profile_form.save()
 
-            messages.success(request, 'Profile update successfully')
+            messages.success(request, _('Profile update successfully'))
         else:
-            messages.error(request, 'Correct errors')
+            messages.error(request, _('Correct errors'))
     else:
         # отображение форм с данными из БД (которые были ранее сохранены)
         user_form = UserEditForm(instance=request.user)
@@ -314,9 +349,36 @@ def update_profile(request):
 
     return render(request, 'students/student/edit_profile.html', {
             'user_form': user_form,
-            'profile_form': profile_form
+            'profile_form': profile_form,
+            'upload_avatar_form': upload_avatar_form,
+            'avatar': avatar
         })
 
+
+@login_required
+def add(request, extra_context=None, next_override=None,
+        upload_form=UploadAvatarForm, *args, **kwargs):
+
+    avatar, avatars = get_avatars(request.user)
+
+    user_form = UserEditForm(instance=request.user)
+    profile_form = ProfileEditForm(instance=request.user.profile)
+    upload_avatar_form = upload_form(request.POST or None,
+                                         request.FILES or None,
+                                         user=request.user)
+    if request.method == "POST" and 'avatar' in request.FILES:
+        if upload_avatar_form.is_valid():
+            avatar = Avatar(user=request.user, primary=True)
+            image_file = request.FILES['avatar']
+            avatar.avatar.save(image_file.name, image_file)
+            avatar.save()
+            messages.success(request, _("Successfully uploaded a new avatar."))
+            avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
+            #return redirect(next_override or _get_next(request))
+            return redirect('update_profile')
+
+    #return render(request, 'students/student/edit_profile.html', context)
+    return redirect('update_profile')
 
 def course_curriculum(request, pk):
     return render(request, 'students/course/curriculum.html')
@@ -326,7 +388,12 @@ def course_about(request, pk):
     course = Course.objects.get(id=pk)
     # получаем владельца курса
     owner = User.objects.get(id=course.owner.id)
+    # получаем суммарное количество лекций курса
+    course_lectures = Lecture.objects.filter(module__course__id=course.id).count()
+    # получаем лекции курса пройденные определенным студентом
+    completed_lectures = StudentLectureComplete.objects.filter(student__id=request.user.id, course__id=course.id).values('lecture__id')
 
     return render(request, 'students/course/about.html', {'object': course,
-                                                          'owner': owner})
+                                                          'owner': owner,
+                                                          'lectures_completed': (len(completed_lectures) / course_lectures) * 100})
 

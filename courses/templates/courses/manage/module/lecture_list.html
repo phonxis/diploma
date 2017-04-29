@@ -2,54 +2,85 @@
 
 {% load user_tags %}
 
+{% load i18n %}
+
+{% block title %}
+    Course "{{ module.course.title }}"
+{% endblock %}
+
 {% block content %}
 <div class="content">
+    <div class="row">
     {% with course=module.course %}
         <h1>Course "{{ course.title }}"</h1>
-        <div class="contents">
-            <h3>Modules</h3>
-            <ul id="modules">
+        <div class="col-md-3 col-xs-12">
+            <div class="row flex-one-row">
+                <div class="col-md-6 col-xs-6"><h3>{% trans 'Modules' %}</h3></div>
+                <div class="col-md-6 col-xs-6">
+                    <a href="{% url 'update_course_module' course.id %}" class="btn btn-success">
+                        <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'Edit' %}
+                    </a>
+                </div>
+            </div>
+            
+            <ul id="modules" class="small-card list-group">
                 {% for m in course.modules.all %}
-                    <li data-id="{{ m.id }}" {% if m == module %} class="selected"{% endif %}>
+                    <li data-id="{{ m.id }}" {% if m == module %} class="list-group-item selected"{% endif %} class="list-group-item">
                         <a href="{% url 'module_lecture_list' m.id %}">
                             <span>
-                                Module <span class="order">{{ m.order|add:1 }}</span>
+                                {% trans 'Module' %} <span class="order">{{ m.order|add:1 }}</span>
                             </span>
                             <br>
                             {{ m.title }}
                         </a>
                     </li>
                 {% empty %}
-                    <li>No modules yet.</li>
+                    <li>{% trans 'No modules yet.' %}</li>
                 {% endfor %}
             </ul>
-            <p><a href="{% url 'update_course_module' course.id %}">Edit
-modules</a></p>
+            
+            {% comment %}
             {% if course.modules.count > 0 %}
-                <a href="{% url 'module_lecture_list' course.modules.first.id %}">Manage contents</a>
+                <a href="{% url 'module_lecture_list' course.modules.first.id %}">{% trans 'Manage contents' %}</a>
             {% endif %}
+            {% endcomment %}
         </div>
-        <div class="module">
-            <h2>Module {{ module.order|add:1 }}: {{ module.title }}</h2>
-            <h3>Module lectures:</h3>
 
-            <ul id="lectures">
+        <div class="col-md-9 col-xs-12">
+
+                <div class="row flex-one-row">
+                    <div class="col-md-6 col-xs-6">
+                        <h3>{% trans 'Lectures of module' %} {{ module.order|add:1 }}: {{ module.title }}</h3>
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        <a href="{% url 'create_lecture' module.id %}" class="btn btn-success">
+                            <i class="fa fa-plus" aria-hidden="true"></i> {% trans 'New Lecture' %}
+                        </a>
+                    </div>
+
+            </div>
+            
+
+            <ul id="lectures" class="list-group small-card">
             {% for lecture in module.lectures.all %}
-                <li data-id="{{ lecture.id }}">{{ lecture.title }} <a href="{% url 'update_lecture' module.id lecture.id %}"> update lecture/add content</a></li>
+                <li data-id="{{ lecture.id }}" class="list-group-item flex-one-row">
+                    <div>{{ lecture.title }}</div>
+                    <a href="{% url 'update_lecture' module.id lecture.id %}">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        {% trans 'Update' %}
+                    </a>
+                </li>
             {% empty %}
-                <li>no lectures</li>
+                <li class="list-group-item flex-center">
+                    <h2>{% trans 'No created lectures' %}</h2>
+                </li>
             {% endfor %}
             </ul>
 
 
-
-            <hr>
-            <p>add lecture</p>
-            <p><a href="{% url 'create_lecture' module.id %}">create new lecture</a></p>
-
-
         </div>
     {% endwith %}
+    </div>
 </div>
 {% endblock %}
 

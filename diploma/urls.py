@@ -3,8 +3,10 @@ from django.contrib import admin
 from django.contrib.auth import views as auth
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls.i18n import i18n_patterns
 from rest_framework import routers
 from courses.views import CourseListView, IndexView, LoginView, InstructorRegistrationView
+from students.views import add
 from students.forms import UsersLoginForm
 from courses.viewsets import QuestionViewSet, LectureViewSet, ContentViewSet, QuestionList
 
@@ -15,7 +17,7 @@ router.register(r'lectures', LectureViewSet)
 router.register(r'contents', ContentViewSet)
 
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     url(r'^admin/', admin.site.urls),
     url(r'accounts/login/$', LoginView.as_view(), name="login"),
     #url(r'^accounts/login/$', auth.login, {'authentication_form': UsersLoginForm}, name="login"),
@@ -40,7 +42,15 @@ urlpatterns = [
 
     # avatar
     url(r'^avatar/', include('avatar.urls')),
-]
+    # update avatar
+    url(r'^avatar/add-or-update/$', add, name='add_update_avatar'),
+
+    # for internationalization with rosetta
+    url(r'^rosetta/', include('rosetta.urls')),
+)
 
 urlpatterns += static(settings.MEDIA_URL,
                       document_root=settings.MEDIA_ROOT)
+
+urlpatterns += static(settings.STATIC_URL,
+                      document_root=settings.STATIC_ROOT)

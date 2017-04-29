@@ -6,17 +6,23 @@
 
 {% load user_tags %}
 
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Quiz' %}
+{% endblock %}
+
 {% block content %}
 <div class="content">
     <h1>
-    quiz
+    {% trans 'Quiz' %}
     </h1>
     <div class="module">
-        <h2>quiz info</h2>
+        <h2>{% trans 'Quiz info' %}</h2>
             <form action="" method="post" enctype="multipart/form-data">
                 {{ form|bootstrap }}
                 {% csrf_token %}
-                <p><input type="submit" value="Save quiz"></p>
+                <p><input type="submit" value="{% trans 'Save quiz' %}"></p>
             </form>
     </div>
 </div>

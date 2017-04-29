@@ -2,10 +2,21 @@
 
 {% load staticfiles %}
 
+{% load i18n %}
+
 {% load bootstrap %}
 
+{% block title %}
+    {% if object %}
+        {% trans 'Edit content' %} "{{ object.title }}"
+    {% else %}
+        {% trans 'Add a new content' %}
+    {% endif %}
+{% endblock %}
+
 {% block css_load_file %}
-    <link rel="stylesheet" href="{% static 'css/jquery.fileupload.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/jquery.fileupload.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css/jquery.fileupload.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/trumbowyg.min.css' %}">
 {% endblock %}
 
@@ -13,26 +24,34 @@
 <div class="content">
     <h1>
     {% if object %}
-        Edit content "{{ object.title }}"
+        {% trans 'Edit content' %} "{{ object.title }}"
     {% else %}
-        Add a new content
+        {% trans 'Add a new content' %}
     {% endif %}
     </h1>
-    <div class="module">
-        <h2>Course info</h2>
+    <h2>{% trans 'Course info' %}</h2>
+
+    <div class="small-card">
+        <div class="small-card-body">
         {% if form %}
             <form action="" method="post" enctype="multipart/form-data">
                 {{ form|bootstrap }}
                 {% if answer_form %}
-                    {{ answer_form }}
+                    {% for field in answer_form %}
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {{ field }}
+                        <br />
+                    {% endfor %}
+                    {{ answer_form.management_form }}
                 {% endif %}
                 {% csrf_token %}
-                <p><input type="submit" value="Save content"></p>
+                <p><input type="submit" value="Save" class="btn btn-success"></p>
             </form>
         {% else %}
         <span class="btn btn-success fileinput-button">
             <i class="glyphicon glyphicon-plus"></i>
-            <span>Add files...</span>
+            <span>{% trans 'Add file...' %}</span>
             <!-- The file input field used as target for the file upload widget -->
             <input id="fileupload" type="file" name="data_field" multiple data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
         </span>
@@ -55,8 +74,9 @@
                    style="display: none;"
                    data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'> -->
 
-            <a href="{% url 'update_lecture' module lecture %}">go back</a>
+            <a href="{% url 'update_lecture' module lecture %}">{% trans 'Go back' %}</a>
         {% endif %}
+        </div>
     </div>
 </div>
 
@@ -84,6 +104,10 @@
 
 {% block domready %}
 console.log('{{ model_name }}');
+var type_content = '{{ model_name }}';
+if (type_content !== 'video') {
+    
+
 $('#id_data_field').trumbowyg({
     btnsAdd: ['preformatted'],
     btns: [
@@ -102,4 +126,6 @@ $('#id_data_field').trumbowyg({
     ],
     autogrow: true
 });
+
+}
 {% endblock %}
