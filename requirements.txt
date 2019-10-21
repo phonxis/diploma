@@ -31,7 +31,7 @@ elasticsearch==2.2.0
 feedparser==5.2.1
 Flask==0.11.1
 gunicorn==19.4.5
-httpie==0.9.9
+httpie==1.0.3
 itsdangerous==0.24
 Jinja2==2.8
 Markdown==2.6.6
