@@ -35,7 +35,7 @@ httpie==0.9.9
 itsdangerous==0.24
 Jinja2==2.8
 Markdown==2.6.6
-markdown2==2.3.0
+markdown2==2.4.0
 MarkupSafe==0.23
 microsofttranslator==0.8
 oauthlib==1.0.3
