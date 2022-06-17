@@ -64,6 +64,6 @@ sorl-thumbnail==12.3
 tzlocal==1.2.2
 Unidecode==0.4.18
 urllib3==1.14
-Werkzeug==0.11.10
+Werkzeug==0.15.3
 whitenoise==2.0.6
 Whoosh==2.7.2
